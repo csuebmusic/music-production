@@ -1,0 +1,561 @@
+/* ========================================================================
+   music-production: handout stylesheet
+   Shared visual system for producer-facing handouts and tools.
+   Copied from csuebmusic/mus381 so this repo stands on its own.
+   Aesthetic: modern minimal, mechanical retro.
+   ======================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;700&display=swap');
+
+:root {
+  --bg: #f5f1e8;
+  --bg-alt: #ede6d6;
+  --ink: #2a2620;
+  --ink-soft: #5c544a;
+  --ink-faint: #8a8175;
+  --rule: #c9bfa8;
+  --rule-soft: #ddd3bd;
+  --accent: #a85c2e;
+  --accent-soft: #d89169;
+  --warn-bg: #f0e3d2;
+  --warn-ink: #6b3e1a;
+
+  /* Level-meter state colors (used in mixing diagrams and live meters).
+     "Good" = signal sitting safely below ceiling, "hot" = approaching
+     ceiling, "clip" = at or over ceiling. Tuned to read clearly against
+     the cream palette while staying recognizable as the audio-industry
+     green/amber/red convention. */
+  --meter-good: #5c8c4e;
+  --meter-hot:  #c08a2e;
+  --meter-clip: #a83030;
+
+  /* Gain-reduction gradient endpoints (used in compressor / dynamics
+     meters). Reads as a separate visual family from the level meters:
+     yellow at low reduction, deepening through orange to rust at heavy
+     reduction. The middle of the gradient is interpolated by CSS. */
+  --gr-light: #d9b042;
+  --gr-heavy: #b5552f;
+
+  /* Cable colors (used in signal-flow diagrams across Module 3 and
+     anywhere else cable runs are visualized). Each cable type gets its
+     own desaturated hue, distinct from --accent (devices) and from
+     each other. Used as stroke color on the cable segment, and as
+     fill on the cable info box. */
+  --cable-xlr:  #3a6b7a;  /* mic-level, balanced; teal-slate */
+  --cable-usb:  #525a5e;  /* digital data; neutral graphite */
+  --cable-ts:   #a8862e;  /* instrument-level, unbalanced; warm ochre */
+  --cable-trs:  #6b5e8c;  /* balanced line / stereo; muted plum */
+
+  --serif: 'DM Sans', -apple-system, system-ui, sans-serif;
+  --mono: 'DM Mono', 'SF Mono', Menlo, monospace;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 4rem 2rem 6rem;
+}
+
+/* --- Header --- */
+
+header.handout-header {
+  border-top: 2px solid var(--ink);
+  border-bottom: 1px solid var(--rule);
+  padding: 1.5rem 0 1rem;
+  margin-bottom: 3rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-soft);
+}
+
+header.handout-header .course { font-weight: 500; color: var(--ink); }
+header.handout-header .meta { text-align: right; }
+
+/* --- Title block --- */
+
+.title-block {
+  margin-bottom: 3rem;
+}
+
+.title-block .module-tag {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--accent);
+  margin-bottom: 0.75rem;
+}
+
+.title-block h1 {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 2.4rem;
+  line-height: 1.15;
+  margin: 0 0 0.5rem;
+  letter-spacing: -0.01em;
+}
+
+.title-block .subtitle {
+  font-family: var(--mono);
+  font-size: 0.92rem;
+  color: var(--ink-soft);
+  margin-top: 0.5rem;
+}
+
+/* --- Headings --- */
+
+h2 {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 1.4rem;
+  margin: 3.5rem 0 1rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--rule);
+  letter-spacing: -0.005em;
+}
+
+h3 {
+  font-family: var(--mono);
+  font-weight: 500;
+  font-size: 0.88rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+  margin: 2rem 0 0.75rem;
+}
+
+h4 {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 1rem;
+  margin: 1.5rem 0 0.5rem;
+}
+
+/* --- Paragraphs and inline --- */
+
+p { margin: 0 0 1rem; }
+
+p.lede {
+  font-size: 1.08rem;
+  color: var(--ink-soft);
+  margin-bottom: 2rem;
+}
+
+strong { font-weight: 700; color: var(--ink); }
+em { font-style: italic; color: var(--ink-soft); }
+
+a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+
+/* --- Inline code (keys, file names, paths) --- */
+
+code, kbd {
+  font-family: var(--mono);
+  font-size: 0.92em;
+}
+
+kbd {
+  display: inline-block;
+  padding: 0.1em 0.5em;
+  background: var(--bg-alt);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  font-size: 0.82em;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+code {
+  background: var(--bg-alt);
+  padding: 0.1em 0.4em;
+  border-radius: 2px;
+  color: var(--ink);
+}
+
+/* --- Block code --- */
+
+pre {
+  font-family: var(--mono);
+  font-size: 0.88rem;
+  background: var(--bg-alt);
+  border-left: 2px solid var(--accent);
+  padding: 1rem 1.25rem;
+  margin: 1.25rem 0;
+  overflow-x: auto;
+  line-height: 1.5;
+}
+
+pre code {
+  background: none;
+  padding: 0;
+  font-size: inherit;
+}
+
+/* --- Lists --- */
+
+ul, ol {
+  margin: 0 0 1.25rem;
+  padding-left: 1.5rem;
+}
+
+li { margin-bottom: 0.4rem; }
+li > ul, li > ol { margin-top: 0.4rem; margin-bottom: 0.4rem; }
+
+ol.steps {
+  list-style: none;
+  counter-reset: step;
+  padding-left: 0;
+}
+
+ol.steps > li {
+  counter-increment: step;
+  position: relative;
+  padding-left: 2.5rem;
+  margin-bottom: 1rem;
+  min-height: 1.6rem;
+}
+
+ol.steps > li::before {
+  content: counter(step, decimal-leading-zero);
+  position: absolute;
+  left: 0;
+  top: 0.05rem;
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--accent);
+  background: var(--bg-alt);
+  padding: 0.1em 0.45em;
+  border-radius: 2px;
+  min-width: 1.8rem;
+  text-align: center;
+}
+
+/* --- Tables --- */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.25rem 0;
+  font-size: 0.96rem;
+}
+
+th, td {
+  text-align: left;
+  padding: 0.6rem 0.75rem;
+  border-bottom: 1px solid var(--rule-soft);
+  vertical-align: top;
+}
+
+th {
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ink-soft);
+  font-weight: 500;
+  border-bottom: 1px solid var(--rule);
+}
+
+table.shortcut-table td:first-child { width: 38%; }
+table.shortcut-table td:first-child kbd { margin-right: 0.25rem; }
+
+/* --- Vocabulary lists --- */
+/* Used at the bottom of readings and tools for term/definition pairs. */
+
+.vocab dt {
+  font-family: var(--mono);
+  font-weight: 500;
+  color: var(--accent);
+  margin-top: 1rem;
+  font-size: 0.92rem;
+}
+
+.vocab dd {
+  margin-left: 0;
+  margin-bottom: 0.5rem;
+}
+
+.vocab dd > p:first-child {
+  margin-top: 0;
+}
+
+/* --- Callout boxes --- */
+
+.callout {
+  background: var(--bg-alt);
+  border-left: 2px solid var(--accent);
+  padding: 1rem 1.25rem;
+  margin: 1.5rem 0;
+  font-size: 0.96rem;
+}
+
+.callout .callout-label {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+  margin-bottom: 0.4rem;
+  font-weight: 500;
+}
+
+.callout p:last-child { margin-bottom: 0; }
+
+.callout.warn {
+  background: var(--warn-bg);
+}
+.callout.warn .callout-label { color: var(--warn-ink); }
+
+/* --- Submission card --- */
+/* For written assignments submitted via Canvas. Visually distinct from
+   .callout: full border, labeled rows, operational feel. */
+
+.submission-card {
+  background: var(--bg-alt);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  padding: 1.25rem 1.5rem;
+  margin: 1.5rem 0;
+  font-size: 0.95rem;
+}
+
+.submission-card .submission-title {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+  margin-bottom: 0.9rem;
+  font-weight: 500;
+}
+
+.submission-card .submission-row {
+  display: grid;
+  grid-template-columns: 130px 1fr;
+  gap: 0.75rem;
+  padding: 0.55rem 0;
+  border-top: 1px solid var(--rule-soft);
+  align-items: baseline;
+}
+
+.submission-card .submission-row:first-of-type {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.submission-card .submission-row:last-of-type {
+  padding-bottom: 0;
+}
+
+.submission-card .submission-label {
+  font-family: var(--mono);
+  font-size: 0.76rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ink-soft);
+  font-weight: 500;
+}
+
+.submission-card .submission-value {
+  color: var(--ink);
+  line-height: 1.5;
+}
+
+.submission-card .submission-value code {
+  font-family: var(--mono);
+  font-size: 0.88em;
+  background: var(--bg);
+  padding: 0.1em 0.35em;
+  border-radius: 2px;
+  border: 1px solid var(--rule-soft);
+}
+
+.submission-card .submission-value em {
+  font-style: italic;
+  color: var(--ink-soft);
+}
+
+/* Mobile: stack rows */
+@media (max-width: 560px) {
+  .submission-card .submission-row {
+    grid-template-columns: 1fr;
+    gap: 0.15rem;
+  }
+}
+
+/* --- Form / structure diagrams --- */
+/* For inline SVG figures showing musical form (sections across time).
+   Used in project prompts and any reading that discusses form. */
+
+figure.form-diagram {
+  margin: 1.75rem 0;
+  text-align: center;
+}
+
+figure.form-diagram svg {
+  max-width: 100%;
+  height: auto;
+}
+
+figure.form-diagram figcaption {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-soft);
+  margin-top: 0.75rem;
+  text-align: center;
+  line-height: 1.5;
+}
+
+/* --- Vocabulary / walkthrough videos --- */
+/* Short Audacity screen recordings embedded inline in readings and lab
+   handouts. Default width fills the content column (good for UI
+   walkthroughs that show the whole Audacity window). Use the
+   .vocab-video--narrow modifier for the smaller annotation-alongside
+   look that Module 2's editing-vocabulary demos use. */
+
+figure.vocab-video {
+  margin: 0.75rem 0 1.25rem 0;
+  max-width: 100%;
+}
+
+figure.vocab-video.vocab-video--narrow {
+  max-width: 480px;
+}
+
+figure.vocab-video video {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: var(--bg-alt);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+}
+
+figure.vocab-video figcaption {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-soft);
+  margin-top: 0.75rem;
+  line-height: 1.5;
+}
+
+/* Speed-control row beneath a vocab-video. Used in Module 2's editing
+   demos where slowing the playback rate helps students see exactly
+   what changed in the waveform. */
+
+.vocab-video-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.4rem;
+  font-family: var(--mono);
+  font-size: 0.78rem;
+}
+
+.vocab-video-controls .speed-label {
+  color: var(--ink-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-right: 0.25rem;
+}
+
+.vocab-video-controls .speed-btn {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  background: transparent;
+  color: var(--ink-soft);
+  border: 1px solid var(--rule);
+  padding: 0.2rem 0.55rem;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: background 0.12s, color 0.12s, border-color 0.12s;
+}
+
+.vocab-video-controls .speed-btn:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.vocab-video-controls .speed-btn.active {
+  background: var(--accent);
+  color: var(--bg);
+  border-color: var(--accent);
+}
+
+/* --- Rules and dividers --- */
+
+hr {
+  border: none;
+  border-top: 1px solid var(--rule);
+  margin: 3rem 0;
+}
+
+hr.dotted {
+  border-top: 1px dotted var(--rule);
+  margin: 2rem 0;
+}
+
+/* --- Footer --- */
+
+footer.handout-footer {
+  margin-top: 5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--rule);
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-faint);
+  display: flex;
+  justify-content: space-between;
+}
+
+/* --- Print --- */
+
+@media print {
+  body {
+    max-width: none;
+    padding: 1.5cm;
+    font-size: 11pt;
+  }
+  a { color: var(--ink); }
+  pre, .callout { break-inside: avoid; }
+  h2, h3 { break-after: avoid; }
+}
+
+/* --- Mobile --- */
+
+@media (max-width: 600px) {
+  body { padding: 2rem 1.25rem 4rem; }
+  .title-block h1 { font-size: 1.8rem; }
+  h2 { font-size: 1.2rem; }
+  header.handout-header { flex-direction: column; gap: 0.4rem; }
+  header.handout-header .meta { text-align: left; }
+}

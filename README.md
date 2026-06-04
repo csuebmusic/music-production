@@ -1,0 +1,13 @@
+# music-production
+
+Handouts and browser-based tools for the music producers Inés Thiebaut works with in private lessons, independent of any single course. Where MUS 381 ([`csuebmusic/mus381`](https://github.com/csuebmusic/mus381)) is built around one course's arc and hands off to a graduate TA, this repository follows the producer: beat-making, mixing, arrangement, DAW production, and the craft questions that come up across projects rather than inside a syllabus.
+
+Material here can borrow from the 381 handouts as a starting point, adapted for an audience that can go a step deeper than the course baseline and reframed away from course scaffolding such as the lab session routines, the NAS sync workflow, and the TA teaching notes.
+
+## Visual system
+
+Student-facing material uses the same visual language as 381: a warm cream and rust palette, DM Sans for body text and DM Mono for code, labels, and captions, all self-contained and browser-only. The CSS custom properties (`--bg`, `--bg-alt`, `--ink`, `--ink-soft`, `--accent`, `--rule`) are always referenced by name, never written as raw hex in component CSS. `assets/style.css` is a copy of the 381 stylesheet, carried here so the repo is self-contained.
+
+## Structure
+
+To be designed. The folder layout will take shape as the first handouts and tools land, rather than being imposed before there is anything to organize.
