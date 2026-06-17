@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mixing · music-production</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+
+<header class="handout-header">
+  <span class="course">~/music-production/foundations</span>
+  <span class="meta">mixing</span>
+</header>
+
+<div class="title-block">
+  <div class="module-tag">Foundations</div>
+  <h1>Mixing</h1>
+  <div class="subtitle">How the finished parts are heard: level, pan, and tone.</div>
+</div>
+
+<p class="lede">Mixing is the step after the parts exist. It does not change what any part plays; it decides how the finished parts are heard together. This reading steps back from any one DAW to name the moves a mix is built from, then takes up the three you reach for first: <strong>level</strong>, <strong>pan</strong>, and <strong>tone</strong>.</p>
+
+<p>Up to now your work has been creation: choosing sounds, playing parts, arranging them into a piece. Creation decides what happens in the music. Mixing decides how the finished parts are heard, and it does not change what any part plays. It sets how loud each part is against the others (level), where each sits from left to right (pan), how near or far it feels (space, mostly from reverb), how parts share the frequency range so they do not mask each other (tone, from EQ), and how steady each part holds its level (dynamics, from compression).</p>
+
+<div style="display:flex;flex-wrap:wrap;gap:1.5rem;justify-content:center;align-items:flex-start;margin:1.9rem 0;">
+
+<figure class="form-diagram" style="flex:1 1 260px;margin:0;">
+<svg viewBox="0 0 300 300" role="img" aria-label="A listener's head sits at the bottom of the field, facing up. A horizontal axis is pan, from L on the left to R on the right, the stereo image. A vertical axis is depth, rising from front and near at the head to back and far at the top, where reverb places a sound. Two example sounds sit at different places in the field." xmlns="http://www.w3.org/2000/svg">
+  <text x="150" y="20" text-anchor="middle" font-family="DM Mono, monospace" font-size="11" letter-spacing="0.08em" fill="var(--accent)">PAN AND DEPTH</text>
+  <rect x="38" y="36" width="224" height="240" rx="10" fill="var(--bg-alt)" stroke="var(--rule-soft)" stroke-width="1.2"/>
+
+  <line x1="150" y1="224" x2="150" y2="62" stroke="var(--ink-soft)" stroke-width="1.4"/>
+  <polygon points="146,68 154,68 150,60" fill="var(--ink-soft)"/>
+
+  <line x1="58" y1="150" x2="242" y2="150" stroke="var(--ink-soft)" stroke-width="1.4"/>
+  <polygon points="64,146 64,154 56,150" fill="var(--ink-soft)"/>
+  <polygon points="236,146 236,154 244,150" fill="var(--ink-soft)"/>
+
+  <circle cx="100" cy="100" r="5" fill="var(--accent-soft)"/>
+  <circle cx="205" cy="186" r="5" fill="var(--accent)"/>
+
+  <circle cx="150" cy="254" r="18" fill="var(--bg-alt)" stroke="var(--ink)" stroke-width="2"/>
+  <polygon points="143,236 157,236 150,226" fill="var(--ink)"/>
+  <ellipse cx="132" cy="254" rx="3.4" ry="6" fill="none" stroke="var(--ink)" stroke-width="1.6"/>
+  <ellipse cx="168" cy="254" rx="3.4" ry="6" fill="none" stroke="var(--ink)" stroke-width="1.6"/>
+
+  <text x="160" y="74" font-family="DM Mono, monospace" font-size="10" fill="var(--ink)">FAR</text>
+  <text x="160" y="86" font-family="DM Mono, monospace" font-size="8" fill="var(--ink-soft)">back &middot; reverb</text>
+  <text x="160" y="208" font-family="DM Mono, monospace" font-size="10" fill="var(--ink)">NEAR</text>
+  <text x="160" y="220" font-family="DM Mono, monospace" font-size="8" fill="var(--ink-soft)">front &middot; dry</text>
+
+  <text x="48" y="154" text-anchor="middle" font-family="DM Mono, monospace" font-size="11" fill="var(--ink)">L</text>
+  <text x="252" y="154" text-anchor="middle" font-family="DM Mono, monospace" font-size="11" fill="var(--ink)">R</text>
+</svg>
+<figcaption>Pan sets a sound left to right; reverb sets its depth near to far. Every part gets a place in this field.</figcaption>
+</figure>
+
+<figure class="form-diagram" style="flex:1 1 260px;margin:0;">
+<svg viewBox="0 0 300 300" role="img" aria-label="A mix shown as four stacked pizza layers. From bottom to top: dough, the sustaining base, such as drums and bass; sauce, the glue in the middle, such as pads; cheese, the granular middle, such as rhythmic guitar; and toppings, what sits on top, such as vocals, solos, and fills." xmlns="http://www.w3.org/2000/svg">
+  <text x="150" y="20" text-anchor="middle" font-family="DM Mono, monospace" font-size="11" letter-spacing="0.08em" fill="var(--accent)">THE MIX AS A PIZZA</text>
+
+  <rect x="38" y="44" width="224" height="50" rx="7" fill="var(--bg-alt)" stroke="var(--accent)" stroke-width="1.6"/>
+  <text x="54" y="66" font-family="DM Mono, monospace" font-size="12" fill="var(--accent)">TOPPINGS</text>
+  <text x="54" y="82" font-family="DM Mono, monospace" font-size="8.5" fill="var(--ink-soft)">on top: vocals, solos, fills</text>
+  <circle cx="224" cy="60" r="4" fill="var(--meter-good)"/>
+  <circle cx="241" cy="72" r="3.5" fill="var(--gr-heavy)"/>
+  <circle cx="228" cy="78" r="3" fill="var(--accent)"/>
+
+  <rect x="38" y="100" width="224" height="50" rx="7" fill="var(--gr-light)" fill-opacity="0.5" stroke="var(--rule)" stroke-width="1.3"/>
+  <text x="54" y="122" font-family="DM Mono, monospace" font-size="12" fill="var(--ink)">CHEESE</text>
+  <text x="54" y="138" font-family="DM Mono, monospace" font-size="8.5" fill="var(--ink-soft)">granular middle: rhythmic guitar</text>
+
+  <rect x="38" y="156" width="224" height="50" rx="7" fill="var(--accent)" fill-opacity="0.28" stroke="var(--accent)" stroke-width="1.3"/>
+  <text x="54" y="178" font-family="DM Mono, monospace" font-size="12" fill="var(--ink)">SAUCE</text>
+  <text x="54" y="194" font-family="DM Mono, monospace" font-size="8.5" fill="var(--ink-soft)">the glue in the middle: pads</text>
+
+  <rect x="38" y="212" width="224" height="56" rx="7" fill="var(--bg-alt)" stroke="var(--rule)" stroke-width="1.9"/>
+  <text x="54" y="236" font-family="DM Mono, monospace" font-size="12" fill="var(--ink)">DOUGH</text>
+  <text x="54" y="252" font-family="DM Mono, monospace" font-size="8.5" fill="var(--ink-soft)">the sustaining base: drums, bass</text>
+</svg>
+<figcaption>A mix stacks like a pizza: a base that sustains, a middle that glues and fills, and the bright things on top.</figcaption>
+</figure>
+
+</div>
+
+<p>Dynamics, how steady each part holds its level, has its own reading. The three this one takes up are the moves a mix starts from: level, pan, and tone, each in turn.</p>
+
+<h2>1 · Track levels</h2>
+
+<p>The volume of one track against the others. The first thing a mix balances. Too loud and a track overwhelms everything else; too quiet and you don't hear it at all. Most mixing decisions start here.</p>
+
+<p>Every DAW puts this on the channel as the track's <strong>volume fader</strong> (sometimes labeled gain). Pull it down to make the part quieter, push it up to make it louder.</p>
+
+<h3>Gain staging: the two-part habit</h3>
+
+<p>Good levels come down to two things, in this order:</p>
+
+<ol>
+  <li><strong>Nothing peaks.</strong> No track should hit 0 dB on the meters. When a signal reaches 0, the waveform clips flat at the top and the audio distorts. Once a track has clipped, the only fix is to lower its level and play it back again. Keep peaks comfortably below 0, with the loudest moments landing around <strong>−6 dB</strong>. That gap between your loudest peak and 0 is <strong>headroom</strong>.</li>
+  <li><strong>Tracks are balanced against each other.</strong> Once nothing is clipping, the question is whether every element sits at the right level relative to the rest. The main sound of a moment should be loudest, supporting sounds quieter. As the piece moves through sections, the balance can shift: the foreground in one section can step back in the next.</li>
+</ol>
+
+<figure>
+    <svg viewBox="0 0 720 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="gainstaging-title">
+      <title id="gainstaging-title">Gain staging: two contrasting mixes shown as level meters. Healthy mix has all tracks peaking around -7 to -9 dB, all in the green zone. Problem mix has one clipping track, two underused but balanced tracks, and one creeping into the orange zone.</title>
+
+      <!-- Section labels -->
+      <text x="160" y="22" font-family="DM Mono, monospace" font-size="13" font-weight="600" fill="var(--meter-good)" text-anchor="middle" letter-spacing="1.2">HEALTHY MIX</text>
+      <text x="540" y="22" font-family="DM Mono, monospace" font-size="13" font-weight="600" fill="var(--meter-clip)" text-anchor="middle" letter-spacing="1.2">NEEDS WORK</text>
+
+      <!-- ============= LEFT METER (HEALTHY) ============= -->
+      <!-- dB scale labels (left side of left meter) -->
+      <g font-family="DM Mono, monospace" font-size="10" fill="var(--ink-soft)" text-anchor="end">
+        <text x="32" y="55">0</text>
+        <text x="32" y="85">-3</text>
+        <text x="32" y="115">-6</text>
+        <text x="32" y="155">-12</text>
+        <text x="32" y="195">-18</text>
+        <text x="32" y="235">-24</text>
+        <text x="32" y="275">-36</text>
+      </g>
+
+      <!-- Zone labels right of scale -->
+      <g font-family="DM Mono, monospace" font-size="9" fill="var(--meter-clip)" text-anchor="start">
+        <text x="40" y="55">CLIP</text>
+      </g>
+      <g font-family="DM Mono, monospace" font-size="9" fill="var(--meter-hot)" text-anchor="start">
+        <text x="40" y="85">HOT</text>
+      </g>
+      <g font-family="DM Mono, monospace" font-size="9" fill="var(--meter-good)" text-anchor="start">
+        <text x="40" y="115">TARGET</text>
+      </g>
+
+      <!-- Reference horizontal lines across the meters -->
+      <line x1="80" y1="50" x2="280" y2="50" stroke="var(--meter-clip)" stroke-width="0.5" stroke-dasharray="2 3"/>
+      <line x1="80" y1="80" x2="280" y2="80" stroke="var(--meter-hot)" stroke-width="0.5" stroke-dasharray="2 3"/>
+      <line x1="80" y1="110" x2="280" y2="110" stroke="var(--meter-good)" stroke-width="0.5" stroke-dasharray="2 3"/>
+
+      <!-- Healthy tracks: all peaks below -6, so all-green bars -->
+      <!-- Track 1 peaks at -7 (y=120), all green -->
+      <rect x="100" y="120" width="32" height="160" fill="var(--meter-good)" opacity="0.9"/>
+      <line x1="100" y1="120" x2="132" y2="120" stroke="var(--ink)" stroke-width="2"/>
+
+      <!-- Track 2 peaks at -8 (y=130), all green -->
+      <rect x="142" y="130" width="32" height="150" fill="var(--meter-good)" opacity="0.9"/>
+      <line x1="142" y1="130" x2="174" y2="130" stroke="var(--ink)" stroke-width="2"/>
+
+      <!-- Track 3 peaks at -7 (y=120), all green (slight nudge to differ from T1 visually) -->
+      <rect x="184" y="125" width="32" height="155" fill="var(--meter-good)" opacity="0.9"/>
+      <line x1="184" y1="125" x2="216" y2="125" stroke="var(--ink)" stroke-width="2"/>
+
+      <!-- Track 4 peaks at -9 (y=140), all green -->
+      <rect x="226" y="140" width="32" height="140" fill="var(--meter-good)" opacity="0.9"/>
+      <line x1="226" y1="140" x2="258" y2="140" stroke="var(--ink)" stroke-width="2"/>
+
+      <!-- Track labels (left meter) -->
+      <g font-family="DM Mono, monospace" font-size="9" fill="var(--ink-soft)" text-anchor="middle">
+        <text x="116" y="295">T1</text>
+        <text x="158" y="295">T2</text>
+        <text x="200" y="295">T3</text>
+        <text x="242" y="295">T4</text>
+      </g>
+
+      <!-- Caption (left) -->
+      <text x="180" y="320" font-family="DM Sans, sans-serif" font-size="11" fill="var(--ink-soft)" text-anchor="middle" font-style="italic">All peaks land below −6. Headroom intact.</text>
+
+      <!-- ============= RIGHT METER (NEEDS WORK) ============= -->
+      <!-- Reference horizontal lines -->
+      <line x1="460" y1="50" x2="660" y2="50" stroke="var(--meter-clip)" stroke-width="0.5" stroke-dasharray="2 3"/>
+      <line x1="460" y1="80" x2="660" y2="80" stroke="var(--meter-hot)" stroke-width="0.5" stroke-dasharray="2 3"/>
+      <line x1="460" y1="110" x2="660" y2="110" stroke="var(--meter-good)" stroke-width="0.5" stroke-dasharray="2 3"/>
+
+      <!-- Track 1 CLIPS: green from baseline to -6 (y=110), orange -6 to -3 (y=80), red -3 to 0 (y=50). Whole bar full. -->
+      <rect x="480" y="110" width="32" height="170" fill="var(--meter-good)" opacity="0.9"/>
+      <rect x="480" y="80" width="32" height="30" fill="var(--meter-hot)" opacity="0.9"/>
+      <rect x="480" y="50" width="32" height="30" fill="var(--meter-clip)" opacity="0.9"/>
+      <line x1="480" y1="50" x2="512" y2="50" stroke="var(--meter-clip)" stroke-width="3"/>
+      <text x="496" y="42" font-family="DM Mono, monospace" font-size="10" font-weight="700" fill="var(--meter-clip)" text-anchor="middle">CLIP!</text>
+
+      <!-- Track 2 peaks at -10 (y=150), all green -->
+      <rect x="522" y="150" width="32" height="130" fill="var(--meter-good)" opacity="0.9"/>
+      <line x1="522" y1="150" x2="554" y2="150" stroke="var(--ink)" stroke-width="2"/>
+
+      <!-- Track 3 peaks at -28 (y=250), all green -->
+      <rect x="564" y="250" width="32" height="30" fill="var(--meter-good)" opacity="0.9"/>
+      <line x1="564" y1="250" x2="596" y2="250" stroke="var(--ink)" stroke-width="2"/>
+      <text x="580" y="245" font-family="DM Mono, monospace" font-size="9" fill="var(--ink-soft)" text-anchor="middle">−28</text>
+
+      <!-- Track 4 peaks at -4 (y=90): green up to -6 (y=110), orange from -6 (y=110) up to peak at -4 (y=90) -->
+      <rect x="606" y="110" width="32" height="170" fill="var(--meter-good)" opacity="0.9"/>
+      <rect x="606" y="90" width="32" height="20" fill="var(--meter-hot)" opacity="0.9"/>
+      <line x1="606" y1="90" x2="638" y2="90" stroke="var(--ink)" stroke-width="2"/>
+
+      <!-- Track labels (right meter) -->
+      <g font-family="DM Mono, monospace" font-size="9" fill="var(--ink-soft)" text-anchor="middle">
+        <text x="496" y="295">T1</text>
+        <text x="538" y="295">T2</text>
+        <text x="580" y="295">T3</text>
+        <text x="622" y="295">T4</text>
+      </g>
+
+      <!-- Caption (right) -->
+      <text x="560" y="320" font-family="DM Sans, sans-serif" font-size="11" fill="var(--ink-soft)" text-anchor="middle" font-style="italic">T1 distorts. T4 too hot. T3 quiet, but balance is the issue.</text>
+
+      <!-- Baseline -->
+      <line x1="80" y1="280" x2="280" y2="280" stroke="var(--ink-soft)" stroke-width="1"/>
+      <line x1="460" y1="280" x2="660" y2="280" stroke="var(--ink-soft)" stroke-width="1"/>
+    </svg>
+    <figcaption>Two contrasting mixes shown on level meters. The black tick on each bar marks the loudest peak that track has hit. Below −6 dB shows green; the orange and red zones above −6 indicate signal getting hot or clipping.</figcaption>
+  </figure>
+
+<p>The black tick on each bar marks the highest peak that track has reached. In the healthy mix on the left, every tick lands well below −6 dB, in the green zone, and the four tracks sit reasonably close to each other, so nothing overwhelms or disappears. In the mix that needs work, T1 has hit clip and is distorting (its bar fills the green, orange, and red zones because its peak reached all the way to 0), T4 is creeping into the orange hot zone, T2 sits comfortably in the green, and T3 is in the green but so quiet, at −28 dB, that it will be hard to hear once everything plays together.</p>
+
+<p>Watch the <strong>master meter</strong> as the piece plays. If it turns red, something is clipping: pull down whichever track is the culprit, usually the loudest element, play again, and check.</p>
+
+<p>The reliable way to set levels is two passes. First, <strong>solo each track on its own</strong> and check it against the meter: is anything clipping, is anything so quiet it will vanish? Set each track's fader so its peaks land below clipping. Then <strong>un-solo and play the whole thing</strong>. Now the question is balance: with everything together, can you hear each element at the loudness you want? Move faders in small amounts, three to six dB at a time, until nothing peaks anywhere and every part you mean to be heard can be heard.</p>
+
+<p>Soloing to check one track at a time is a habit worth building. It comes back constantly: any time you work on a single part's level or tone, soloing lets you hear what you are doing without the other parts in the way. And small adjustments matter more than large ones. A three-to-six dB change is usually enough to bring a part forward or push it back. If you find yourself making fifteen dB moves, something else is wrong: the source may be too loud, or two parts are fighting for the same frequency range, which is a tone problem rather than a level one.</p>
+
+<p>The <strong>master track</strong> is the channel every track sums into, and its fader sets how loud the whole mix plays back. Leave it alone while you balance individual parts. Reach for it only when the balance is right but the mix as a whole sits too loud or too quiet.</p>
+
+<h2>2 · Stereo pan</h2>
+
+<p>The position of a track in the stereo field, from full left to full right. Pan is what gives a mix space and width: instead of every sound stacked in the center, parts occupy different points across the stereo image, the way instruments occupy different points on a stage.</p>
+
+<p>Every channel has a <strong>pan control</strong>, usually right by the fader, running from full left to full right. Centered is the default: equal in both speakers.</p>
+
+<h3>Why two ears matter</h3>
+
+<p>You localize sound using two cues: <strong>interaural time difference</strong> (sound from the left reaches the left ear a fraction of a millisecond before the right) and <strong>interaural intensity difference</strong> (sound from the left is slightly louder in the left ear, because the head shadows the right). Together these tiny differences let your brain place a sound in space.</p>
+
+<p>When the same signal goes equally to both speakers, there is no time or intensity difference between your ears, and the brain reads the sound as straight ahead, between the speakers. That is a centered sound. Pan to one side and you change the proportion sent to each speaker, which changes the intensity difference at your ears, which moves the sound across the perceived space. Stereo width is built entirely on this trick.</p>
+
+<h3>The stereo field</h3>
+
+<p>Imagine looking down at a stage from above, two speakers in front of you and you in the audience. The space between and around the speakers is the stereo field, and different kinds of sound tend to live in different parts of it.</p>
+
+<figure>
+    <svg viewBox="0 0 720 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="stereofield-title">
+      <title id="stereofield-title">Top-down view of the stereo field showing typical placement zones: center for foundational and low-frequency sounds, slight L/R for supporting elements, wider spread for textures, hard L/R for special effects.</title>
+
+      <!-- Outer arc representing the stereo field perimeter -->
+      <path d="M 100 290 A 260 260 0 0 1 620 290" fill="none" stroke="var(--rule)" stroke-width="1.5" stroke-dasharray="4 4"/>
+
+      <!-- Mid arc -->
+      <path d="M 200 290 A 160 160 0 0 1 520 290" fill="none" stroke="var(--rule-soft)" stroke-width="1" stroke-dasharray="3 4"/>
+
+      <!-- Inner arc -->
+      <path d="M 280 290 A 80 80 0 0 1 440 290" fill="none" stroke="var(--rule-soft)" stroke-width="1" stroke-dasharray="3 4"/>
+
+      <!-- Center vertical reference line -->
+      <line x1="360" y1="35" x2="360" y2="290" stroke="var(--rule-soft)" stroke-width="0.5" stroke-dasharray="2 4"/>
+
+      <!-- Speakers -->
+      <g transform="translate(95, 285)">
+        <rect x="-10" y="0" width="20" height="14" fill="var(--ink-soft)" rx="2"/>
+        <circle cx="0" cy="7" r="4" fill="var(--accent)"/>
+        <text x="0" y="32" font-family="DM Mono, monospace" font-size="10" fill="var(--ink-soft)" text-anchor="middle">L</text>
+      </g>
+      <g transform="translate(625, 285)">
+        <rect x="-10" y="0" width="20" height="14" fill="var(--ink-soft)" rx="2"/>
+        <circle cx="0" cy="7" r="4" fill="var(--accent)"/>
+        <text x="0" y="32" font-family="DM Mono, monospace" font-size="10" fill="var(--ink-soft)" text-anchor="middle">R</text>
+      </g>
+
+      <!-- Listener (head) at bottom center -->
+      <g transform="translate(360, 320)">
+        <circle cx="0" cy="0" r="14" fill="var(--bg-alt)" stroke="var(--ink-soft)" stroke-width="1.5"/>
+        <!-- Ears -->
+        <ellipse cx="-13" cy="0" rx="3" ry="5" fill="var(--bg-alt)" stroke="var(--ink-soft)" stroke-width="1.2"/>
+        <ellipse cx="13" cy="0" rx="3" ry="5" fill="var(--bg-alt)" stroke="var(--ink-soft)" stroke-width="1.2"/>
+        <!-- Face direction marker (tiny nose) -->
+        <circle cx="0" cy="-10" r="1.5" fill="var(--ink-soft)"/>
+        <text x="0" y="32" font-family="DM Mono, monospace" font-size="10" fill="var(--ink-soft)" text-anchor="middle">YOU</text>
+      </g>
+
+      <!-- ============= POSITION MARKERS WITH LABELS ============= -->
+      <!-- CENTER (sustained drone, lead voice, anything below ~150 Hz) -->
+      <circle cx="360" cy="220" r="6" fill="var(--accent)"/>
+      <text x="360" y="245" font-family="DM Sans, sans-serif" font-size="11" font-weight="600" fill="var(--ink)" text-anchor="middle">CENTER</text>
+      <text x="360" y="262" font-family="DM Sans, sans-serif" font-size="10" fill="var(--ink-soft)" text-anchor="middle">foundation, focal,</text>
+      <text x="360" y="275" font-family="DM Sans, sans-serif" font-size="10" fill="var(--ink-soft)" text-anchor="middle">low frequencies</text>
+
+      <!-- SLIGHT L/R (around 25% pan) - supporting elements -->
+      <circle cx="280" cy="170" r="6" fill="var(--accent)" opacity="0.85"/>
+      <circle cx="440" cy="170" r="6" fill="var(--accent)" opacity="0.85"/>
+      <text x="280" y="155" font-family="DM Sans, sans-serif" font-size="11" font-weight="600" fill="var(--ink)" text-anchor="middle">SLIGHT</text>
+      <text x="440" y="155" font-family="DM Sans, sans-serif" font-size="11" font-weight="600" fill="var(--ink)" text-anchor="middle">SLIGHT</text>
+      <text x="240" y="190" font-family="DM Sans, sans-serif" font-size="10" fill="var(--ink-soft)" text-anchor="end">supporting</text>
+      <text x="240" y="203" font-family="DM Sans, sans-serif" font-size="10" fill="var(--ink-soft)" text-anchor="end">percussion</text>
+      <text x="480" y="190" font-family="DM Sans, sans-serif" font-size="10" fill="var(--ink-soft)" text-anchor="start">secondary</text>
+      <text x="480" y="203" font-family="DM Sans, sans-serif" font-size="10" fill="var(--ink-soft)" text-anchor="start">voices</text>
+
+      <!-- WIDER (around 60% pan) - textures, ambient -->
+      <circle cx="190" cy="115" r="6" fill="var(--accent-soft)"/>
+      <circle cx="530" cy="115" r="6" fill="var(--accent-soft)"/>
+      <text x="190" y="100" font-family="DM Sans, sans-serif" font-size="11" font-weight="600" fill="var(--ink)" text-anchor="middle">WIDER</text>
+      <text x="530" y="100" font-family="DM Sans, sans-serif" font-size="11" font-weight="600" fill="var(--ink)" text-anchor="middle">WIDER</text>
+      <text x="148" y="130" font-family="DM Sans, sans-serif" font-size="10" fill="var(--ink-soft)" text-anchor="end">pads,</text>
+      <text x="148" y="143" font-family="DM Sans, sans-serif" font-size="10" fill="var(--ink-soft)" text-anchor="end">textures</text>
+      <text x="572" y="130" font-family="DM Sans, sans-serif" font-size="10" fill="var(--ink-soft)" text-anchor="start">ambient,</text>
+      <text x="572" y="143" font-family="DM Sans, sans-serif" font-size="10" fill="var(--ink-soft)" text-anchor="start">layers</text>
+
+      <!-- HARD L/R (90-100% pan) - special effects -->
+      <circle cx="115" cy="55" r="6" fill="var(--accent-soft)" opacity="0.8"/>
+      <circle cx="605" cy="55" r="6" fill="var(--accent-soft)" opacity="0.8"/>
+      <text x="115" y="40" font-family="DM Sans, sans-serif" font-size="11" font-weight="600" fill="var(--ink)" text-anchor="middle">HARD L</text>
+      <text x="605" y="40" font-family="DM Sans, sans-serif" font-size="11" font-weight="600" fill="var(--ink)" text-anchor="middle">HARD R</text>
+      <text x="115" y="72" font-family="DM Sans, sans-serif" font-size="10" fill="var(--ink-soft)" text-anchor="middle">FX, ping-pong</text>
+      <text x="605" y="72" font-family="DM Sans, sans-serif" font-size="10" fill="var(--ink-soft)" text-anchor="middle">FX, ping-pong</text>
+
+      <!-- Subtle baseline -->
+      <line x1="80" y1="295" x2="640" y2="295" stroke="var(--rule)" stroke-width="1"/>
+    </svg>
+    <figcaption>The stereo field, viewed from above. The listener is at the bottom; the speakers (L and R) are in front. Different kinds of sounds tend to live at different positions across the field.</figcaption>
+  </figure>
+
+<h3>Where things tend to live</h3>
+
+<p>Pop and electronic mixing has settled conventions over decades about which sounds belong where. They are not rules, but they encode useful perceptual realities:</p>
+
+<ul>
+  <li><strong>Center (the focal foundation).</strong> Low-frequency content, anything below roughly <strong>150 Hz</strong>, belongs in the center. The reason is perceptual: your ears cannot localize low frequencies well, so panning bass to one side adds no width but makes the speakers do unequal work, which throws off the balance. The same logic applies to anything you want as the focal point of a moment: a lead voice, the kick in a beat, the sustained drone that anchors a section. Centering makes a sound feel solid and present.</li>
+  <li><strong>Slight left or right (around 20 to 40 percent).</strong> Supporting elements you want to have their own space without disappearing: hi-hats, supporting percussion, secondary voices, complementary textures.</li>
+  <li><strong>Wider (around 50 to 70 percent).</strong> Pads, ambient layers, textural material there to fill space rather than draw attention. These can often be panned generously without feeling unbalanced, because they are already diffuse.</li>
+  <li><strong>Hard left or right (90 to 100 percent).</strong> Special effects, deliberate spatial gestures, ping-pong alternations between channels. Use sparingly: hard pans call attention to themselves.</li>
+</ul>
+
+<p>The rough translation: the most foundational or lowest-pitched element of a moment usually wants the center, and supporting or textural material can spread out. On headphones the effect is clearest, so decide what role each part plays, foundation, support, or texture, and pan accordingly.</p>
+
+<p>A small pan, 20 to 40 percent, is often more effective than a hard one, because it suggests a real space rather than an artificial split. And if something with a lot of low-frequency content suddenly feels lopsided when you pan it, trust that: bring it back to center.</p>
+
+<h2>3 · EQ</h2>
+
+<p>EQ, short for <em>equalization</em>, lets you boost or cut specific frequency ranges in a sound. Think of it as a way to shape <strong>timbre</strong>, the color of a sound: the same pitch on a flute and on a violin has a different timbre because the harmonics above the fundamental are distributed differently. Another name for that distribution is the <strong>spectrum</strong>.</p>
+
+<p>EQ reshapes the spectrum: a recording with too much rumble in the low end you want to thin out, a voice that sounds dull and wants brightening up top. It is one of the most-used tools in mixing and one of the easiest to overuse. In a DAW the EQ sits on the channel as a device, shaping the signal as the piece plays without altering the underlying file, so you can change it freely, take after take.</p>
+
+<p>You add an EQ to a track the way you add any device, and it opens a graph. Here is what one looks like:</p>
+
+<figure>
+    <svg viewBox="0 0 720 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="eqcurve-title">
+      <title id="eqcurve-title">A typical EQ curve. Frequency runs along the horizontal axis from 20 Hz on the left to 20,000 Hz on the right (logarithmic spacing, as in real EQ dialogs). Amplitude in dB runs along the vertical axis. The curve shows a low cut at the left, a roughly flat middle, a gentle boost around 4 kHz, and a roll-off in the highest frequencies.</title>
+
+      <!-- Plot area background -->
+      <rect x="80" y="40" width="600" height="240" fill="var(--bg-alt)" stroke="var(--rule)" stroke-width="1"/>
+
+      <!-- Vertical gridlines at log-correct positions:
+           20 Hz=80, 100=220, 500=360, 1k=420, 5k=560, 10k=620, 20k=680 -->
+      <line x1="220" y1="40" x2="220" y2="280" stroke="var(--rule-soft)" stroke-width="0.5" stroke-dasharray="2 3"/>
+      <line x1="360" y1="40" x2="360" y2="280" stroke="var(--rule-soft)" stroke-width="0.5" stroke-dasharray="2 3"/>
+      <line x1="420" y1="40" x2="420" y2="280" stroke="var(--rule-soft)" stroke-width="0.5" stroke-dasharray="2 3"/>
+      <line x1="560" y1="40" x2="560" y2="280" stroke="var(--rule-soft)" stroke-width="0.5" stroke-dasharray="2 3"/>
+      <line x1="620" y1="40" x2="620" y2="280" stroke="var(--rule-soft)" stroke-width="0.5" stroke-dasharray="2 3"/>
+
+      <!-- Horizontal gridlines at +12, +6, 0, -6, -12 -->
+      <!-- 0 dB at y=160 (vertical center). +12 at y=40, +6 at y=100, -6 at y=220, -12 at y=280 -->
+      <line x1="80" y1="40" x2="680" y2="40" stroke="var(--rule-soft)" stroke-width="0.5" stroke-dasharray="2 3"/>
+      <line x1="80" y1="100" x2="680" y2="100" stroke="var(--rule-soft)" stroke-width="0.5" stroke-dasharray="2 3"/>
+      <line x1="80" y1="220" x2="680" y2="220" stroke="var(--rule-soft)" stroke-width="0.5" stroke-dasharray="2 3"/>
+      <line x1="80" y1="280" x2="680" y2="280" stroke="var(--rule-soft)" stroke-width="0.5" stroke-dasharray="2 3"/>
+
+      <!-- 0 dB reference line, slightly stronger -->
+      <line x1="80" y1="160" x2="680" y2="160" stroke="var(--accent)" stroke-width="1" stroke-dasharray="3 3" opacity="0.55"/>
+
+      <!-- Y-axis labels (dB) -->
+      <g font-family="DM Mono, monospace" font-size="10" fill="var(--ink-soft)" text-anchor="end">
+        <text x="73" y="44">+12</text>
+        <text x="73" y="104">+6</text>
+        <text x="73" y="164">0</text>
+        <text x="73" y="224">-6</text>
+        <text x="73" y="284">-12</text>
+      </g>
+      <text x="36" y="160" font-family="DM Mono, monospace" font-size="10" fill="var(--ink-soft)" text-anchor="middle" transform="rotate(-90, 36, 160)">AMPLITUDE (dB)</text>
+
+      <!-- X-axis labels (Hz, log-spaced) -->
+      <g font-family="DM Mono, monospace" font-size="10" fill="var(--ink-soft)" text-anchor="middle">
+        <text x="80" y="298">20</text>
+        <text x="220" y="298">100</text>
+        <text x="360" y="298">500</text>
+        <text x="420" y="298">1k</text>
+        <text x="560" y="298">5k</text>
+        <text x="620" y="298">10k</text>
+        <text x="680" y="298">20k</text>
+      </g>
+      <text x="380" y="320" font-family="DM Mono, monospace" font-size="10" fill="var(--ink-soft)" text-anchor="middle">FREQUENCY (Hz)</text>
+
+      <!-- THE EQ CURVE (re-computed for log-spaced axis):
+           - Low cut: starts at (80, 270) at 20 Hz, rises through 100 Hz (x=220) to flat by ~150 Hz (x=265)
+           - Flat at 0 dB through the mids (x=265 to ~x=460)
+           - Bell boost peaking at 4 kHz (x=540, y=115)
+           - Gentle roll-off above 10 kHz (x=620), ending at (680, 200) at 20 kHz -->
+      <path d="M 80 270
+               C 140 270, 200 215, 265 165
+               L 360 160
+               L 460 160
+               C 500 110, 580 110, 620 165
+               L 650 180
+               C 670 192, 675 196, 680 200"
+            stroke="var(--accent)" stroke-width="2.5" fill="none" />
+
+      <!-- Filled area under curve, to make the shape pop -->
+      <path d="M 80 270
+               C 140 270, 200 215, 265 165
+               L 360 160
+               L 460 160
+               C 500 110, 580 110, 620 165
+               L 650 180
+               C 670 192, 675 196, 680 200
+               L 680 280
+               L 80 280
+               Z"
+            fill="var(--accent)" opacity="0.08" />
+
+      <!-- Annotations on the curve -->
+      <!-- LOW CUT: dot at curve start (80, 270); text raised above curve to clear collision -->
+      <g>
+        <circle cx="80" cy="270" r="3" fill="var(--accent)"/>
+        <text x="88" y="235" font-family="DM Sans, sans-serif" font-size="11" font-weight="600" fill="var(--ink)" text-anchor="start">low cut</text>
+        <text x="88" y="249" font-family="DM Sans, sans-serif" font-size="10" fill="var(--ink-soft)" text-anchor="start">remove rumble</text>
+      </g>
+
+      <!-- FLAT MIDS: dot at (360, 160), exactly on the flat segment, sitting on the 0 dB line at 500 Hz -->
+      <g>
+        <circle cx="360" cy="160" r="3" fill="var(--accent)"/>
+        <text x="360" y="145" font-family="DM Sans, sans-serif" font-size="11" font-weight="600" fill="var(--ink)" text-anchor="middle">flat at 0 dB</text>
+        <text x="360" y="130" font-family="DM Sans, sans-serif" font-size="10" fill="var(--ink-soft)" text-anchor="middle">no change</text>
+      </g>
+
+      <!-- BOOST: dot at the peak of the bell at 4 kHz (x=540, y=115); text centered above -->
+      <g>
+        <circle cx="540" cy="115" r="3" fill="var(--accent)"/>
+        <text x="540" y="93" font-family="DM Sans, sans-serif" font-size="11" font-weight="600" fill="var(--ink)" text-anchor="middle">boost at 4 kHz</text>
+        <text x="540" y="107" font-family="DM Sans, sans-serif" font-size="10" fill="var(--ink-soft)" text-anchor="middle">add brightness</text>
+      </g>
+
+      <!-- HIGH ROLLOFF: dot at end of curve (680, 200) -->
+      <g>
+        <circle cx="680" cy="200" r="3" fill="var(--accent)"/>
+        <text x="672" y="225" font-family="DM Sans, sans-serif" font-size="11" font-weight="600" fill="var(--ink)" text-anchor="end">high roll-off</text>
+        <text x="672" y="239" font-family="DM Sans, sans-serif" font-size="10" fill="var(--ink-soft)" text-anchor="end">soften the air</text>
+      </g>
+    </svg>
+    <figcaption>A typical EQ curve. Frequency runs left to right (low to high) on a log scale, the way real EQ dialogs are laid out; amplitude runs up and down (boost above the dashed center line, cut below it). The curve traces what the EQ does at every frequency.</figcaption>
+  </figure>
+
+<p>An EQ opens with a graph like this: <strong>frequency</strong> on the horizontal axis, low on the left and high on the right, and <strong>amplitude in dB</strong> on the vertical axis, boost above the center line and cut below it. You shape a curve by adding control points and dragging them up or down. Where the curve sits at 0 dB, that frequency passes through unchanged; where it bows up, that frequency is boosted; where it bows down, it is cut.</p>
+
+<p>Listen for this: every EQ change reshapes the character of a sound. Cuts, curves that go below 0, tend to sound natural; boosts, curves that go above 0, are more obvious and easier to overdo. A small change at the right frequency often does more than a large change at the wrong one.</p>
+
+<hr>
+
+<h2>Read more</h2>
+
+<p>Links and further reading to come.</p>
+
+<footer class="handout-footer">
+  <span>music-production</span>
+  <span>EOF</span>
+</footer>
+
+</body>
+</html>
