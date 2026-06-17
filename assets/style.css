@@ -436,6 +436,42 @@ pre {
 }
 pre code { border: none; background: none; padding: 0; color: inherit; }
 
+kbd {
+  font-family: var(--mono);
+  display: inline-block;
+  padding: 0.1em 0.5em;
+  background: var(--bg-alt);
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  font-size: 0.82em;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+/* ----- Tables ---------------------------------------------------------- */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.25rem auto;
+  font-size: 0.96rem;
+}
+th, td {
+  text-align: left;
+  padding: 0.6rem 0.75rem;
+  border-bottom: 1px solid var(--rule-soft);
+  vertical-align: top;
+}
+th {
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ink-soft);
+  font-weight: 500;
+  border-bottom: 1px solid var(--rule);
+}
+
 /* ----- Audio players --------------------------------------------------- */
 
 audio { width: 100%; }
