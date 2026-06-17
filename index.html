@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Music Production · Handouts and Tools</title>
+  <link rel="stylesheet" href="assets/style.css">
+  <style>
+    /* Landing-page contents grid. A directory listing of the repo, styled
+       as terminal file entries: a mono path token, the page title, a
+       one-line description. */
+    .toc-section { margin: 2.8rem 0 0; }
+
+    .toc-section-desc {
+      font-family: var(--mono);
+      font-size: 0.86rem;
+      line-height: 1.5;
+      color: var(--ink-soft);
+      margin: -0.35rem 0 0;
+    }
+
+    .toc-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.9rem;
+      margin: 1.3rem 0 0;
+    }
+
+    .toc-card {
+      display: block;
+      background: var(--bg-alt);
+      border: 1px solid var(--rule);
+      border-left: 3px solid var(--rule);
+      padding: 1rem 1.15rem;
+      text-decoration: none;
+      color: var(--ink);
+      transition: border-left-color 0.12s ease, color 0.12s ease;
+    }
+    .toc-card:hover { border-left-color: var(--accent); }
+
+    .toc-path {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.02em;
+      color: var(--ink-faint);
+    }
+    .toc-path::before { content: "\25B8 "; color: var(--accent); }
+
+    .toc-title {
+      font-family: var(--serif);
+      font-weight: 700;
+      font-size: 1.05rem;
+      line-height: 1.25;
+      color: var(--ink);
+      margin: 0.35rem 0 0.4rem;
+    }
+    .toc-card:hover .toc-title { color: var(--accent-soft); }
+
+    .toc-desc {
+      font-size: 0.9rem;
+      line-height: 1.45;
+      color: var(--ink-soft);
+    }
+
+    .toc-card--wide { grid-column: 1 / -1; }
+
+    @media (max-width: 600px) {
+      .toc-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<header class="handout-header">
+  <span class="course">~/music-production</span>
+  <span class="meta">index</span>
+</header>
+
+<div class="title-block">
+  <div class="module-tag">Index</div>
+  <h1>Music Production</h1>
+  <div class="subtitle">Handouts and browser tools for the studio and the lessons.</div>
+</div>
+
+<p class="lede">Everything here is built for <strong>making records</strong>: the ideas under the craft, the gear and signal flow for capturing your own sound, and the Ableton sessions where a piece comes together. Start wherever your current project needs you. The foundations build an arc if you want one, and the listening runs alongside the rest.</p>
+
+<section class="toc-section">
+  <h2>Foundations</h2>
+  <p class="toc-section-desc">The ideas under everything you make: sound itself, editing, envelopes, mixing, dynamics.</p>
+  <div class="toc-grid">
+    <a class="toc-card" href="foundations/digital-audio.html">
+      <div class="toc-path">foundations/digital-audio.html</div>
+      <div class="toc-title">Digital Audio Fundamentals</div>
+      <div class="toc-desc">What sound is, how computers store it, and why it matters for what you make.</div>
+    </a>
+    <a class="toc-card" href="foundations/editing-envelope.html">
+      <div class="toc-path">foundations/editing-envelope.html</div>
+      <div class="toc-title">Editing concepts &amp; envelope</div>
+      <div class="toc-desc">Editing as a vocabulary, and the shape of sound over time.</div>
+    </a>
+    <a class="toc-card" href="foundations/envelopes-lfos.html">
+      <div class="toc-path">foundations/envelopes-lfos.html</div>
+      <div class="toc-title">More on envelopes &amp; LFOs</div>
+      <div class="toc-desc">An envelope is a shape. A shape can steer almost anything.</div>
+    </a>
+    <a class="toc-card" href="foundations/mixing.html">
+      <div class="toc-path">foundations/mixing.html</div>
+      <div class="toc-title">Mixing</div>
+      <div class="toc-desc">How the finished parts are heard: level, pan, and tone.</div>
+    </a>
+    <a class="toc-card" href="foundations/dynamics.html">
+      <div class="toc-path">foundations/dynamics.html</div>
+      <div class="toc-title">Dynamics, compression &amp; limiting</div>
+      <div class="toc-desc">Shaping how loud a sound is, and how loud it seems.</div>
+    </a>
+  </div>
+</section>
+
+<section class="toc-section">
+  <h2>Recording</h2>
+  <p class="toc-section-desc">Capturing your own sound, from one microphone up to the full studio.</p>
+  <div class="toc-grid">
+    <a class="toc-card" href="recording/recording-chain.html">
+      <div class="toc-path">recording/recording-chain.html</div>
+      <div class="toc-title">A Simple Recording Chain</div>
+      <div class="toc-desc">Signal flow from microphone to file.</div>
+    </a>
+    <a class="toc-card" href="recording/widening-the-flow.html">
+      <div class="toc-path">recording/widening-the-flow.html</div>
+      <div class="toc-title">Widening the Flow</div>
+      <div class="toc-desc">Other signal types, other cables, other mics, plus the boxes that connect them.</div>
+    </a>
+    <a class="toc-card" href="recording/the-mixer.html">
+      <div class="toc-path">recording/the-mixer.html</div>
+      <div class="toc-title">The Mixer</div>
+      <div class="toc-desc">Bringing many signals together on the studio console.</div>
+    </a>
+    <a class="toc-card" href="recording/studio.html">
+      <div class="toc-path">recording/studio.html</div>
+      <div class="toc-title">The Studio</div>
+      <div class="toc-desc">A guide to recording in our studio, end to end.</div>
+    </a>
+  </div>
+</section>
+
+<section class="toc-section">
+  <h2>The DAW</h2>
+  <p class="toc-section-desc">Producing in Ableton Live, from the first session to a finished mix.</p>
+  <div class="toc-grid">
+    <a class="toc-card" href="daw/the-daw-environment.html">
+      <div class="toc-path">daw/the-daw-environment.html</div>
+      <div class="toc-title">Into the DAW</div>
+      <div class="toc-desc">A map of Ableton Live, and the ideas that carry into any DAW.</div>
+    </a>
+    <a class="toc-card" href="daw/audio-editing.html">
+      <div class="toc-path">daw/audio-editing.html</div>
+      <div class="toc-title">Audio Editing in Ableton</div>
+      <div class="toc-desc">Set up Live, bring your library onto the timeline, and edit it into a short piece.</div>
+    </a>
+    <a class="toc-card" href="daw/sampling-in-practice.html">
+      <div class="toc-path">daw/sampling-in-practice.html</div>
+      <div class="toc-title">Sampling in Ableton</div>
+      <div class="toc-desc">Turn your library into instruments, then sequence a short idea.</div>
+    </a>
+    <a class="toc-card" href="daw/mixing-in-practice.html">
+      <div class="toc-path">daw/mixing-in-practice.html</div>
+      <div class="toc-title">Mixing in Ableton</div>
+      <div class="toc-desc">Commit a finished session to audio, then mix it.</div>
+    </a>
+  </div>
+</section>
+
+<section class="toc-section">
+  <h2>Listening</h2>
+  <p class="toc-section-desc">Music to put on while you work, and to learn from.</p>
+  <div class="toc-grid">
+    <a class="toc-card toc-card--wide" href="listening/listening.html">
+      <div class="toc-path">listening/listening.html</div>
+      <div class="toc-title">Listening</div>
+      <div class="toc-desc">Building new music from recorded sound: musique concr&egrave;te, field recording, and sampling.</div>
+    </a>
+  </div>
+</section>
+
+<footer class="handout-footer">
+  <span>music-production</span>
+  <span>EOF</span>
+</footer>
+
+</body>
+</html>
