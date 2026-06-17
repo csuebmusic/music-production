@@ -41,6 +41,27 @@
       border-radius: 3px;
       margin-bottom: 1.25rem;
     }
+    .synth-viz {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+    .synth-viz-panel {
+      background: var(--bg);
+      border: 1px solid var(--rule);
+      border-radius: 3px;
+      padding: 0.75rem;
+    }
+    .synth-viz-title {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--ink-soft);
+      margin-bottom: 0.5rem;
+    }
+    .synth-canvas { width: 100%; height: 150px; display: block; }
     .synth-selects {
       display: flex;
       flex-wrap: wrap;
@@ -199,6 +220,7 @@
     @media (max-width: 600px) {
       .synth-sliders { grid-template-columns: 5.5rem 1fr 5rem; gap: 0.5rem 0.75rem; }
       .wave-grid { grid-template-columns: repeat(2, 1fr); }
+      .synth-viz { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -229,7 +251,16 @@
 
 <div class="synth-tool" id="toolAmp">
   <div class="synth-tool-title">Tool 1 · ADSR to amplitude</div>
-  <canvas class="synth-scope" id="ampScope"></canvas>
+  <div class="synth-viz">
+    <div class="synth-viz-panel">
+      <div class="synth-viz-title">Control shape</div>
+      <canvas class="synth-canvas" id="ampShape"></canvas>
+    </div>
+    <div class="synth-viz-panel">
+      <div class="synth-viz-title">Output (real audio)</div>
+      <canvas class="synth-canvas" id="ampWave"></canvas>
+    </div>
+  </div>
   <div class="synth-sliders">
     <span class="synth-slider-label">Attack</span>
     <input type="range" class="synth-slider-input" id="ampA" min="2" max="2000" step="2" value="300">
@@ -571,6 +602,78 @@
     return { push: push, draw: draw, clear: clear };
   }
 
+  // Left panel: the control shape, redrawn whenever parameters change.
+  function makeShape(canvas, lo, hi) {
+    const g = canvas.getContext('2d');
+    function size() {
+      const r = canvas.getBoundingClientRect();
+      canvas.width = Math.max(260, Math.floor(r.width));
+      canvas.height = 150;
+    }
+    size();
+    window.addEventListener('resize', size);
+    function accent() { return (getComputedStyle(canvas).getPropertyValue('--accent') || '#b5651d').trim(); }
+    function draw(fn) {
+      const w = canvas.width, h = canvas.height, y0 = h - 10, y1 = 10;
+      function val2y(v) {
+        const t = Math.max(0, Math.min(1, (v - lo) / (hi - lo)));
+        return y0 - t * (y0 - y1);
+      }
+      g.clearRect(0, 0, w, h);
+      g.strokeStyle = 'rgba(127,127,127,0.3)'; g.lineWidth = 1;
+      g.beginPath(); g.moveTo(0, y0); g.lineTo(w, y0); g.stroke();
+      g.strokeStyle = accent(); g.lineWidth = 2.5;
+      g.beginPath();
+      const N = 200;
+      for (let i = 0; i <= N; i++) {
+        const x = i / N, y = val2y(fn(x));
+        if (i === 0) { g.moveTo(x * w, y); } else { g.lineTo(x * w, y); }
+      }
+      g.stroke();
+    }
+    return { draw: draw };
+  }
+
+  // Right panel: the real output, built left to right with a moving playhead.
+  function makeWave(canvas) {
+    const g = canvas.getContext('2d');
+    const COLS = 320;
+    let peaks = new Float32Array(COLS), head = -1;
+    function size() {
+      const r = canvas.getBoundingClientRect();
+      canvas.width = Math.max(260, Math.floor(r.width));
+      canvas.height = 150;
+    }
+    size();
+    window.addEventListener('resize', size);
+    function accent() { return (getComputedStyle(canvas).getPropertyValue('--accent') || '#b5651d').trim(); }
+    function soft() { return (getComputedStyle(canvas).getPropertyValue('--ink-soft') || '#51604c').trim(); }
+    function set(fx, p) {
+      const i = Math.max(0, Math.min(COLS - 1, Math.floor(fx * COLS)));
+      if (p > peaks[i]) { peaks[i] = p; }
+      head = i;
+    }
+    function draw(showHead) {
+      const w = canvas.width, h = canvas.height, cy = h / 2;
+      g.clearRect(0, 0, w, h);
+      g.strokeStyle = 'rgba(127,127,127,0.3)'; g.lineWidth = 1;
+      g.beginPath(); g.moveTo(0, cy); g.lineTo(w, cy); g.stroke();
+      g.strokeStyle = accent(); g.lineWidth = Math.max(1, w / COLS * 0.9);
+      for (let i = 0; i < COLS; i++) {
+        if (peaks[i] <= 0) { continue; }
+        const x = (i + 0.5) / COLS * w, half = Math.min(1, peaks[i]) * (h / 2 - 4);
+        g.beginPath(); g.moveTo(x, cy - half); g.lineTo(x, cy + half); g.stroke();
+      }
+      if (showHead && head >= 0) {
+        const x = (head + 0.5) / COLS * w;
+        g.strokeStyle = soft(); g.lineWidth = 1.5;
+        g.beginPath(); g.moveTo(x, 0); g.lineTo(x, h); g.stroke();
+      }
+    }
+    function reset() { peaks = new Float32Array(COLS); head = -1; draw(false); }
+    return { set: set, draw: draw, reset: reset };
+  }
+
   // Build a pad: three oscillators summed into one gain. Caller starts/stops oscs.
   function buildPad(ctx, base, type, dest) {
     const sum = ctx.createGain();
@@ -613,10 +716,11 @@
     const AO = document.getElementById('ampAOut'), DO = document.getElementById('ampDOut'),
           SO = document.getElementById('ampSOut'), RO = document.getElementById('ampROut');
     const playBtn = document.getElementById('ampPlay'), resetBtn = document.getElementById('ampReset');
-    const scope = makeScope(document.getElementById('ampScope'), 0, 1);
+    const shape = makeShape(document.getElementById('ampShape'), 0, 1);
+    const wave = makeWave(document.getElementById('ampWave'));
     const DEFAULTS = { a: 300, d: 350, s: 65, r: 600 };
     const HOLD = 0.6, PEAK = 0.22;
-    let pad = null, amp = null, raf = null, t0 = 0, dur = 0, playing = false;
+    let pad = null, amp = null, analyser = null, buf = null, raf = null, t0 = 0, dur = 0, playing = false;
 
     function readouts() {
       AO.textContent = fmtMs(+A.value); DO.textContent = fmtMs(+D.value);
@@ -631,12 +735,26 @@
       if (rt < r) { return s * (1 - rt / r); }
       return 0;
     }
+    function drawShape() {
+      const a = +A.value / 1000, d = +D.value / 1000, s = +S.value / 100, r = +R.value / 1000;
+      const total = a + d + HOLD + r;
+      shape.draw(function(x) { return envAt(x * total, a, d, s, r); });
+    }
+    function endAudio() {
+      if (pad) { pad.oscs.forEach(function(o) { try { o.stop(); } catch (e) {} }); pad = null; }
+      amp = null; analyser = null; buf = null;
+    }
+    function finish() {
+      if (raf) { cancelAnimationFrame(raf); raf = null; }
+      endAudio(); playing = false;
+      playBtn.textContent = 'Play'; playBtn.classList.remove('playing');
+      wave.draw(false);
+    }
     function stop() {
       if (raf) { cancelAnimationFrame(raf); raf = null; }
-      if (pad) { pad.oscs.forEach(function(o) { try { o.stop(); } catch (e) {} }); pad = null; }
-      amp = null; playing = false;
+      endAudio(); playing = false;
       playBtn.textContent = 'Play'; playBtn.classList.remove('playing');
-      scope.clear(); scope.draw();
+      wave.reset();
     }
     function play() {
       if (playing) { stop(); return; }
@@ -645,8 +763,9 @@
       const tone = ctx.createBiquadFilter(); tone.type = 'lowpass'; tone.frequency.value = 2400;
       amp = ctx.createGain(); amp.gain.value = 0;
       const lim = limiter(ctx);
+      analyser = ctx.createAnalyser(); analyser.fftSize = 1024; buf = new Float32Array(analyser.fftSize);
       pad = buildPad(ctx, BASE, 'sawtooth', tone);
-      tone.connect(amp); amp.connect(lim); lim.connect(ctx.destination);
+      tone.connect(amp); amp.connect(lim); lim.connect(analyser); analyser.connect(ctx.destination);
       const now = ctx.currentTime;
       amp.gain.setValueAtTime(0, now);
       amp.gain.linearRampToValueAtTime(PEAK, now + a);
@@ -655,24 +774,27 @@
       amp.gain.linearRampToValueAtTime(0, now + a + d + HOLD + r);
       dur = a + d + HOLD + r;
       pad.oscs.forEach(function(o) { o.start(now); o.stop(now + dur + 0.05); });
-      t0 = now; playing = true;
+      t0 = now; playing = true; wave.reset();
       playBtn.textContent = 'Stop'; playBtn.classList.add('playing');
       (function loop() {
         const t = ensureCtx().currentTime - t0;
-        scope.push(envAt(t, a, d, s, r)); scope.draw();
-        if (t >= dur + TAIL) { stop(); return; }
+        analyser.getFloatTimeDomainData(buf);
+        let pk = 0; for (let i = 0; i < buf.length; i++) { const v = Math.abs(buf[i]); if (v > pk) { pk = v; } }
+        if (t <= dur) { wave.set(t / dur, Math.min(1, pk / 0.18)); }
+        wave.draw(true);
+        if (t >= dur) { finish(); return; }
         raf = requestAnimationFrame(loop);
       })();
     }
     function reset() {
       stop();
       A.value = DEFAULTS.a; D.value = DEFAULTS.d; S.value = DEFAULTS.s; R.value = DEFAULTS.r;
-      readouts();
+      readouts(); drawShape();
     }
-    [A, D, S, R].forEach(function(el) { el.addEventListener('input', readouts); });
+    [A, D, S, R].forEach(function(el) { el.addEventListener('input', function() { readouts(); drawShape(); }); });
     playBtn.addEventListener('click', play);
     resetBtn.addEventListener('click', reset);
-    readouts(); scope.draw();
+    readouts(); drawShape(); wave.draw(false);
   })();
 
   // ---------- Tool 2: ADSR to pitch ----------
