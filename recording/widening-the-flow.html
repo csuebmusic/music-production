@@ -6,7 +6,7 @@
   <title>Widening the Flow · music-production</title>
   <link rel="stylesheet" href="../assets/style.css">
   <style>
-    /* Reading-specific tweaks (matches Lecture 1) */
+    /* Reading-specific tweaks (matches the recording-chain reading) */
     figure {
       margin: 2rem 0;
       text-align: center;
@@ -315,7 +315,7 @@
 
 <h3>2.1 · XLR (recap)</h3>
 
-<p>The XLR cable from Lecture 1 carries <strong>mic-level signals</strong> from microphones to interface inputs. Three pins, three conductors inside, balanced: two opposite-polarity copies of the signal and a ground. The balanced design lets the receiving end cancel out any electromagnetic noise picked up along the cable's run, which is why XLR works well for the weak mic-level signals where any added noise would be obvious.</p>
+<p>The XLR cable carries <strong>mic-level signals</strong> from microphones to interface inputs. Three pins, three conductors inside, balanced: two opposite-polarity copies of the signal and a ground. The balanced design lets the receiving end cancel out any electromagnetic noise picked up along the cable's run, which is why XLR works well for the weak mic-level signals where any added noise would be obvious.</p>
 
 <p>XLRs can also carry <strong>balanced line-level signals</strong> between professional audio gear. The cable is the same, but the signal level is different. The output of a studio preamp going into the input of a mixing console travels over XLR at line level. The output of a microphone going into the input of an interface travels over XLR at mic level. Same cable, different signal, decided by what's plugged in at each end.</p>
 
@@ -343,7 +343,7 @@
   <figcaption>A quarter-inch TS plug. Two sections separated by a single ring of insulation: the tip carries the signal, the sleeve carries the ground.</figcaption>
 </figure>
 
-<p>TS is <strong>unbalanced</strong>. There's only one copy of the signal traveling down the cable, with the ground returning the current. The balanced-cable trick from Lecture 1 (two opposite-polarity copies, summed at the far end so noise cancels) can't happen here because there's only one copy. Any electromagnetic noise the cable picks up along its run goes straight into the signal. This is why guitar cables work best when they're short, and why running a 50-foot guitar cable across a room full of stage lights produces a noticeable hum.</p>
+<p>TS is <strong>unbalanced</strong>. There's only one copy of the signal traveling down the cable, with the ground returning the current. The balanced-cable trick (two opposite-polarity copies, summed at the far end so noise cancels) can't happen here because there's only one copy. Any electromagnetic noise the cable picks up along its run goes straight into the signal. This is why guitar cables work best when they're short, and why running a 50-foot guitar cable across a room full of stage lights produces a noticeable hum.</p>
 
 <p>The good news: instrument-level signals are strong enough (around 100 millivolts) that a little picked-up noise stays small relative to the signal. The noise floor of an unbalanced cable carrying an instrument-level signal is usually fine (and the typical TS run is much shorter than a typical XLR run anyway, so there's less cable on which to pick up noise in the first place). The same cable carrying a mic-level signal would have an unacceptable signal-to-noise ratio, which is part of why mics use balanced XLR.</p>
 
@@ -522,7 +522,7 @@
 
 <h3>5.3 · The widened chain</h3>
 
-<p>With these pieces in hand, the basic recording chain from Lecture 1 can adapt to almost any source. The diagram below shows four flows ending at the same audio interface: a mic recording (the basic chain you already know), a mic recording through a hardware preamp into a line input (where the preamp does the amplification instead of the interface), a guitar recording through the interface's instrument input (no DI needed), and a guitar recording through a DI box into a mic input (the situation that arises when the gear at hand doesn't have an instrument input). All four end at the same place; they differ in how the signal gets there.</p>
+<p>With these pieces in hand, the basic recording chain can adapt to almost any source. The diagram below shows four flows ending at the same audio interface: a mic recording (the basic chain you already know), a mic recording through a hardware preamp into a line input (where the preamp does the amplification instead of the interface), a guitar recording through the interface's instrument input (no DI needed), and a guitar recording through a DI box into a mic input (the situation that arises when the gear at hand doesn't have an instrument input). All four end at the same place; they differ in how the signal gets there.</p>
 
 <figure>
   <svg viewBox="0 0 720 460" xmlns="http://www.w3.org/2000/svg"

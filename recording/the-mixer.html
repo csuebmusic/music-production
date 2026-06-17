@@ -6,7 +6,7 @@
   <title>The Mixer · music-production</title>
   <link rel="stylesheet" href="../assets/style.css">
   <style>
-    /* Reading-specific tweaks (matches Lecture 1 and Lecture 2 in this module) */
+    /* Reading-specific tweaks (matches the recording-chain and widening-the-flow readings) */
     figure {
       margin: 2rem 0;
       text-align: center;
@@ -123,13 +123,13 @@
 
 <p>From top to bottom, the controls do this:</p>
 
-<p><strong>Input section.</strong> A button labeled <strong>+48V</strong> turns phantom power on (you met this in Lecture 1). A button labeled <strong>I/P REV</strong> (input reverse) swaps two signal paths inside the channel; we come back to it in section 3. A button labeled <strong>LINE</strong> switches between the mic input on the back and the line input on the back. A red knob labeled <strong>INPUT GAIN</strong> sets how much amplification the preamp applies. Same gain knob you set in Lab 1 to land peaks at -12 to -6 dBFS in Audacity; here it's setting the level going into the mixer's own internal flow.</p>
+<p><strong>Input section.</strong> A button labeled <strong>+48V</strong> turns phantom power on (you met this earlier). A button labeled <strong>I/P REV</strong> (input reverse) swaps two signal paths inside the channel; we come back to it in section 3. A button labeled <strong>LINE</strong> switches between the mic input on the back and the line input on the back. A red knob labeled <strong>INPUT GAIN</strong> sets how much amplification the preamp applies. Same gain knob you set earlier to land peaks at -12 to -6 dBFS in Audacity; here it's setting the level going into the mixer's own internal flow.</p>
 
 <p><strong>Phase reverse and an 80 Hz high-pass filter.</strong> Two small switches. Phase reverse flips the polarity of the signal (sometimes needed when two mics on the same source are partially cancelling each other). The 80 Hz filter rolls off everything below 80 Hz, useful for cutting room rumble or wind on vocal mics.</p>
 
 <div class="callout">
   <div class="callout-label">Phase, again</div>
-  <p>You met phase in Lecture 1, inside the XLR cable: two wires carrying the same audio, one flipped upside down, summed at the interface so external noise cancels out (peak meets trough, the math collapses to silence). The phase-reverse button on the channel strip does the same flip operation, but here on the <em>whole signal</em>, on purpose. Two mics on the same source can sometimes produce signals that are partially out of phase with each other (some frequencies cancel, leaving the sound thin and hollow). Hitting phase-reverse on one of the two channels flips that channel's polarity and lets you check whether the sum gets stronger or weaker. Stronger means you'd been cancelling something; the flip fixed it. Weaker means leave the button alone.</p>
+  <p>You met phase earlier, inside the XLR cable: two wires carrying the same audio, one flipped upside down, summed at the interface so external noise cancels out (peak meets trough, the math collapses to silence). The phase-reverse button on the channel strip does the same flip operation, but here on the <em>whole signal</em>, on purpose. Two mics on the same source can sometimes produce signals that are partially out of phase with each other (some frequencies cancel, leaving the sound thin and hollow). Hitting phase-reverse on one of the two channels flips that channel's polarity and lets you check whether the sum gets stronger or weaker. Stronger means you'd been cancelling something; the flip fixed it. Weaker means leave the button alone.</p>
 </div>
 
 <p><strong>Four-band equaliser.</strong> Four pairs of knobs. Each pair is a frequency control (which band of the spectrum to affect) and a boost/cut control (how much to change it). High, high-mid, low-mid, and low. Each band can boost or cut by 15 dB. The high and low are shelving (everything above or below a frequency moves together); the two middle bands are peaking (a bell curve centered on the chosen frequency). The whole EQ section can be switched into or out of the signal path with one button.</p>
@@ -286,7 +286,7 @@
   <p>This is what people mean by a stereo <strong>bus</strong>: two subgroups treated as a left-right pair, with the channel pan knob acting as a level splitter between them. A bus is the point inside the console where many channel signals combine into one; the technical name for that combining operation is <strong>mixing</strong> (also called <strong>summing</strong>, which is more literal: the bus adds the channel signals together into one). Sub 1 is one bus, sub 2 is another; treating them as a pair gives you a stereo bus. The master mix works the same way at a larger scale, summing every channel routed to L-R into the final stereo program.</p>
 </div>
 
-<p><strong>The fader.</strong> The main level control for this channel. Where the channel sits in the final mix. The scale beside it runs from minus-infinity at the bottom (fader all the way down, signal fully attenuated, no audio passing through) up past -40, -30, -20, -10, -5, through <strong>0</strong> (a thicker line, usually marked with a small notch), and up to +5 and +10 at the top. The 0 mark is called <strong>unity gain</strong>, or just <strong>unity</strong>: the fader is passing the signal through at the same level it came in at, with no change. Above unity, the fader amplifies the signal further (up to +10 dB on this console). Below unity, it attenuates: -10 dB cuts the signal level noticeably; -20 dB cuts it sharply; further down still and the signal is barely audible. The dB scale here is the same decibel scale you saw on Audacity's meters in Lab 1, with the same warning behavior: small moves near the top of the scale do a lot, large moves near the bottom do relatively little.</p>
+<p><strong>The fader.</strong> The main level control for this channel. Where the channel sits in the final mix. The scale beside it runs from minus-infinity at the bottom (fader all the way down, signal fully attenuated, no audio passing through) up past -40, -30, -20, -10, -5, through <strong>0</strong> (a thicker line, usually marked with a small notch), and up to +5 and +10 at the top. The 0 mark is called <strong>unity gain</strong>, or just <strong>unity</strong>: the fader is passing the signal through at the same level it came in at, with no change. Above unity, the fader amplifies the signal further (up to +10 dB on this console). Below unity, it attenuates: -10 dB cuts the signal level noticeably; -20 dB cuts it sharply; further down still and the signal is barely audible. The dB scale here is the same decibel scale you saw on Audacity's meters, with the same warning behavior: small moves near the top of the scale do a lot, large moves near the bottom do relatively little.</p>
 
 <h3>The back of the console</h3>
 
@@ -309,7 +309,7 @@
 
     <div class="callout">
       <div class="callout-label">A third way to use a TRS cable</div>
-      <p>In Lecture 2 you met TRS as a cable with three conductors (tip, ring, sleeve), and saw two ways to wire it: <strong>balanced</strong> (tip = signal, ring = inverted signal, sleeve = ground), and <strong>unbalanced stereo</strong> (tip = left, ring = right, sleeve = ground).</p>
+      <p>Earlier you met TRS as a cable with three conductors (tip, ring, sleeve), and saw two ways to wire it: <strong>balanced</strong> (tip = signal, ring = inverted signal, sleeve = ground), and <strong>unbalanced stereo</strong> (tip = left, ring = right, sleeve = ground).</p>
       <p>On an insert: <strong>tip = send</strong> (the channel's signal going out to the outboard processor), <strong>ring = return</strong> (the processor's output coming back into the channel), <strong>sleeve = ground</strong>. The two signal conductors aren't a stereo pair and they aren't a balanced pair. They're a <strong>two-way loop</strong>: one carries the signal out, the other carries the processed signal back, on the same physical cable. The signal leaves the channel, runs out the tip, goes through whatever processor you've patched in, returns through the ring, and re-enters the channel further down the strip. This is what people mean when they say "insert send and return on a single TRS." One cable, two signals, opposite directions.</p>
       <p>Cables wired this way are sometimes called <strong>insert cables</strong>: a TRS plug at one end, two TS plugs at the other (one labeled "send," one labeled "return"), so you can patch the loop into a piece of gear that has separate input and output jacks.</p>
     </div>
@@ -323,7 +323,7 @@
     </div>
   </li>
   <li><strong>DIR. O/P.</strong> 1/4-inch. The channel's direct output: a tap of this channel's signal that goes straight to whatever you plug in here, independently of the channel's routing buttons. On the Toft ATB, the tap point is <strong>post-fader</strong> (the signal is taken after the channel fader, so the fader's position controls the direct-out level too).</li>
-  <li><strong>MIC.</strong> Female XLR (the large round connector at the bottom of each channel). The mic-level balanced input. Where the dynamic mic you used in Lab 1 plugs in.</li>
+  <li><strong>MIC.</strong> Female XLR (the large round connector at the bottom of each channel). The mic-level balanced input. Where the dynamic mic you used earlier plugs in.</li>
 </ul>
 
 <p>Every channel has its own copy of all five.</p>
@@ -788,7 +788,7 @@
   <li><strong>Direct out.</strong> A per-channel output that taps the channel's post-fader signal and sends it straight to a single destination (usually one track of a DAW). Independent of routing buttons.</li>
   <li><strong>Insert.</strong> A break in a channel's signal path, exposed as a send/return jack on the back of the console, where an outboard processor (compressor, EQ) can be patched in.</li>
   <li><strong>Talkback.</strong> A small microphone in the master section, plus buttons that route the engineer's voice into the aux outputs (to performers' headphones) or onto the recording (for slating takes).</li>
-  <li><strong>Monitor (the word, on this desk).</strong> Used three different ways. (1) The MON jack on the back of an input strip plus the MON LEVEL knob in the strip's middle: a second input on the strip, routing into the master mix; primarily for DAW playback during tracking. (2) The MON LEVEL and MON PAN on a submaster strip: the subgroup's route into the master mix. (3) The MON LEVEL on the master strip: the overall volume knob for the control-room speakers. Three different jobs, all labeled MON because they all sit on what engineers traditionally called the "monitoring" side of the recording process. Distinct from "monitor" in the live-sound sense of a performer's stage monitor (covered in the next lab).</li>
+  <li><strong>Monitor (the word, on this desk).</strong> Used three different ways. (1) The MON jack on the back of an input strip plus the MON LEVEL knob in the strip's middle: a second input on the strip, routing into the master mix; primarily for DAW playback during tracking. (2) The MON LEVEL and MON PAN on a submaster strip: the subgroup's route into the master mix. (3) The MON LEVEL on the master strip: the overall volume knob for the control-room speakers. Three different jobs, all labeled MON because they all sit on what engineers traditionally called the "monitoring" side of the recording process. Distinct from "monitor" in the live-sound sense of a performer's stage monitor.</li>
   <li><strong>Front-of-house (FOH).</strong> The main mix sent to the speakers facing the audience in a live show. The "front of the house" is the audience side of a venue.</li>
   <li><strong>Headphone cue (or just cue).</strong> A performer's headphone mix during tracking. Usually built from one or more aux sends.</li>
 </ul>
