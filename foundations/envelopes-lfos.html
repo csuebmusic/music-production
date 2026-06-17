@@ -1054,11 +1054,13 @@
       pad = buildPad(ctx, BASE, 'sawtooth', tone);
       tone.connect(amp); amp.connect(lim); lim.connect(ctx.destination);
       const now = ctx.currentTime;
-      // Loudness: a plain soft gate so the pitch shape is what you hear.
+      // Loudness: a soft gate so the pitch shape is what you hear, then a
+      // gentle ring-out at the base pitch so the note does not cut off.
       amp.gain.setValueAtTime(0, now);
       amp.gain.linearRampToValueAtTime(PEAK, now + 0.02);
-      amp.gain.setValueAtTime(PEAK, now + dur - 0.08);
-      amp.gain.linearRampToValueAtTime(0, now + dur);
+      amp.gain.setValueAtTime(PEAK, now + dur);
+      amp.gain.setTargetAtTime(0.0001, now + dur, 0.6);
+      amp.gain.setValueAtTime(0, now + dur + TAIL - 0.02);
       // Pitch: detune in cents along the ADSR shape, on every voice. Cents are
       // already perceptual, so a linear ramp glides evenly. No exponential needed.
       pad.oscs.forEach(function(o) {
@@ -1068,7 +1070,7 @@
         dt.linearRampToValueAtTime(curRange * 100 * p.s, now + p.a + p.d);
         dt.setValueAtTime(curRange * 100 * p.s, now + p.a + p.d + HOLD);
         dt.linearRampToValueAtTime(0, now + dur);
-        o.start(now); o.stop(now + dur + 0.05);
+        o.start(now); o.stop(now + dur + TAIL + 0.1);
       });
       t0 = now; wave.reset();
       (function loop() {
