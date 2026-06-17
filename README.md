@@ -6,8 +6,8 @@ Material here can borrow from the 381 handouts as a starting point, adapted for 
 
 ## Visual system
 
-Student-facing material uses the same visual language as 381: a warm cream and rust palette, DM Sans for body text and DM Mono for code, labels, and captions, all self-contained and browser-only. The CSS custom properties (`--bg`, `--bg-alt`, `--ink`, `--ink-soft`, `--accent`, `--rule`) are always referenced by name, never written as raw hex in component CSS. `assets/style.css` is a copy of the 381 stylesheet, carried here so the repo is self-contained.
+Producer-facing material uses a retro-geek look that is deliberately distinct from 381: a light terminal/printout aesthetic on a white page, near-black green-tinted ink, a burnt-amber accent, and DM Mono carrying the chrome (a status-bar header, bracketed `[ LABEL ]` callouts, `//` and `▸` markers, an EOF footer). It reads like a vintage software manual rather than 381's warm cream and rust. Everything is self-contained and browser-only. The CSS custom properties (`--bg`, `--bg-alt`, `--ink`, `--ink-soft`, `--accent`, `--rule`, and the meter / gain-reduction / cable families) are always referenced by name, never written as raw hex in component CSS, so diagrams ported from 381 re-skin themselves to this palette with no edits. `assets/style.css` defines the system and is owned by this repo.
 
 ## Structure
 
-To be designed. The folder layout will take shape as the first handouts and tools land, rather than being imposed before there is anything to organize.
+Topic-named files under topic folders, with the course-style order numbers and `reading-` / `handout-` / `tool-` prefixes dropped (for example `foundations/digital-audio.html`). Per-topic audio lives in `assets/audio/<topic>/`. The layout grows as materials land rather than being imposed up front.
