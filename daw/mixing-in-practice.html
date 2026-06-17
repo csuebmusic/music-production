@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mixing in Ableton · music-production</title>
+  <link rel="stylesheet" href="../assets/style.css">
+  <style>
+    /* Manual-link cards. */
+    .manual-link {
+      display: flex; align-items: center; gap: 1rem;
+      padding: 0.85rem 1.15rem; margin: 0.6rem 0;
+      background: var(--bg-alt);
+      border: 1px solid var(--rule);
+      border-left: 3px solid var(--accent);
+      border-radius: 4px;
+      text-decoration: none; color: var(--ink);
+      transition: background 0.15s ease, border-color 0.15s ease;
+    }
+    .manual-link:hover { background: var(--bg); border-color: var(--accent); }
+    .manual-link:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    .manual-link .res-icon {
+      flex: 0 0 auto; width: 32px; height: 32px; border-radius: 50%;
+      background: var(--accent); color: var(--bg);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--mono); font-size: 1rem; line-height: 1;
+    }
+    .manual-link .res-body { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; }
+    .manual-link .res-title { font-weight: 600; font-size: 0.95rem; line-height: 1.35; color: var(--ink); }
+    .manual-link .res-scope {
+      font-family: var(--mono); font-size: 0.72rem; text-transform: uppercase;
+      letter-spacing: 0.05em; color: var(--ink-soft); margin-top: 0.2rem;
+    }
+    .manual-link .res-arrow { flex: 0 0 auto; font-family: var(--mono); font-size: 1rem; color: var(--ink-soft); }
+  </style>
+</head>
+<body>
+
+<header class="handout-header">
+  <span class="course">~/music-production/daw</span>
+  <span class="meta">mixing-in-practice</span>
+</header>
+
+<div class="title-block">
+  <div class="module-tag">The DAW</div>
+  <h1>Mixing in Ableton</h1>
+  <div class="subtitle">Commit a finished session to audio, then mix it.</div>
+</div>
+
+<p class="lede">Start from a longer piece with several instruments, some played from MIDI, some recorded as audio. You commit it to audio first, then mix it. Mixing means balancing the parts so each sits in its place and the whole reads clearly, the work the Toft console does, now in Live's mixer.</p>
+
+<h2>What this covers</h2>
+
+<ol class="steps">
+  <li>Open the session and listen to it.</li>
+  <li>Save a separate mixing version.</li>
+  <li>Bounce the MIDI tracks to audio.</li>
+  <li>Consolidate every track into one clip.</li>
+  <li>Mix: levels, pan, groups, inserts (EQ, compression, a limiter), and shared sends for reverb and delay.</li>
+  <li>Export the mix.</li>
+</ol>
+
+<div class="callout">
+  <div class="callout-label">Before you start</div>
+  <p>The manual pages linked at each step are your reference. Read the step, do it, and open the manual when you want more.</p>
+</div>
+
+<hr>
+
+<h2>Get the session</h2>
+
+<p>Open the session's project folder from your working folder at <code>~/Documents/lastname/</code>, then open the Set inside it.</p>
+
+<p>Before you change anything, play it through once and listen the way a mixing engineer does on a first pass. Name the parts and their jobs: which one carries the melody, which holds the rhythm, which fill in behind. Then listen for what the mix needs. Is one part so loud it covers the others? Is something buried too low to hear? Do two parts sit in the same place so neither comes through? You are not fixing anything yet. You are finding out what the mix has to solve.</p>
+
+<hr>
+
+<h2>Make a mixing version</h2>
+
+<p>Up to now your work has been creation: choosing sounds, playing parts, arranging them into a piece. Creation decides what happens in the music. Mixing decides how the finished parts are heard, and it does not change what any part plays. It sets how loud each part is against the others (level), where each sits from left to right (pan), how near or far it feels (space, mostly from reverb), how parts share the frequency range so they do not mask each other (tone, from EQ), and how steady each part holds its level (dynamics, from compression).</p>
+
+<div style="display:flex;flex-wrap:wrap;gap:1.5rem;justify-content:center;align-items:flex-start;margin:1.9rem 0;">
+
+<figure class="form-diagram" style="flex:1 1 260px;margin:0;">
+<svg viewBox="0 0 300 300" role="img" aria-label="A listener's head sits at the bottom of the field, facing up. A horizontal axis is pan, from L on the left to R on the right, the stereo image. A vertical axis is depth, rising from front and near at the head to back and far at the top, where reverb places a sound. Two example sounds sit at different places in the field." xmlns="http://www.w3.org/2000/svg">
+  <text x="150" y="20" text-anchor="middle" font-family="DM Mono, monospace" font-size="11" letter-spacing="0.08em" fill="var(--accent)">PAN AND DEPTH</text>
+  <rect x="38" y="36" width="224" height="240" rx="10" fill="var(--bg-alt)" stroke="var(--rule-soft)" stroke-width="1.2"/>
+
+  <line x1="150" y1="224" x2="150" y2="62" stroke="var(--ink-soft)" stroke-width="1.4"/>
+  <polygon points="146,68 154,68 150,60" fill="var(--ink-soft)"/>
+
+  <line x1="58" y1="150" x2="242" y2="150" stroke="var(--ink-soft)" stroke-width="1.4"/>
+  <polygon points="64,146 64,154 56,150" fill="var(--ink-soft)"/>
+  <polygon points="236,146 236,154 244,150" fill="var(--ink-soft)"/>
+
+  <circle cx="100" cy="100" r="5" fill="var(--accent-soft)"/>
+  <circle cx="205" cy="186" r="5" fill="var(--accent)"/>
+
+  <circle cx="150" cy="254" r="18" fill="var(--bg-alt)" stroke="var(--ink)" stroke-width="2"/>
+  <polygon points="143,236 157,236 150,226" fill="var(--ink)"/>
+  <ellipse cx="132" cy="254" rx="3.4" ry="6" fill="none" stroke="var(--ink)" stroke-width="1.6"/>
+  <ellipse cx="168" cy="254" rx="3.4" ry="6" fill="none" stroke="var(--ink)" stroke-width="1.6"/>
+
+  <text x="160" y="74" font-family="DM Mono, monospace" font-size="10" fill="var(--ink)">FAR</text>
+  <text x="160" y="86" font-family="DM Mono, monospace" font-size="8" fill="var(--ink-soft)">back &middot; reverb</text>
+  <text x="160" y="208" font-family="DM Mono, monospace" font-size="10" fill="var(--ink)">NEAR</text>
+  <text x="160" y="220" font-family="DM Mono, monospace" font-size="8" fill="var(--ink-soft)">front &middot; dry</text>
+
+  <text x="48" y="154" text-anchor="middle" font-family="DM Mono, monospace" font-size="11" fill="var(--ink)">L</text>
+  <text x="252" y="154" text-anchor="middle" font-family="DM Mono, monospace" font-size="11" fill="var(--ink)">R</text>
+</svg>
+<figcaption>Pan sets a sound left to right; reverb sets its depth near to far. Every part gets a place in this field.</figcaption>
+</figure>
+
+<figure class="form-diagram" style="flex:1 1 260px;margin:0;">
+<svg viewBox="0 0 300 300" role="img" aria-label="A mix shown as four stacked pizza layers. From bottom to top: dough, the sustaining base, such as drums and bass; sauce, the glue in the middle, such as pads; cheese, the granular middle, such as rhythmic guitar; and toppings, what sits on top, such as vocals, solos, and fills." xmlns="http://www.w3.org/2000/svg">
+  <text x="150" y="20" text-anchor="middle" font-family="DM Mono, monospace" font-size="11" letter-spacing="0.08em" fill="var(--accent)">THE MIX AS A PIZZA</text>
+
+  <rect x="38" y="44" width="224" height="50" rx="7" fill="var(--bg-alt)" stroke="var(--accent)" stroke-width="1.6"/>
+  <text x="54" y="66" font-family="DM Mono, monospace" font-size="12" fill="var(--accent)">TOPPINGS</text>
+  <text x="54" y="82" font-family="DM Mono, monospace" font-size="8.5" fill="var(--ink-soft)">on top: vocals, solos, fills</text>
+  <circle cx="224" cy="60" r="4" fill="var(--meter-good)"/>
+  <circle cx="241" cy="72" r="3.5" fill="var(--gr-heavy)"/>
+  <circle cx="228" cy="78" r="3" fill="var(--accent)"/>
+
+  <rect x="38" y="100" width="224" height="50" rx="7" fill="var(--gr-light)" fill-opacity="0.5" stroke="var(--rule)" stroke-width="1.3"/>
+  <text x="54" y="122" font-family="DM Mono, monospace" font-size="12" fill="var(--ink)">CHEESE</text>
+  <text x="54" y="138" font-family="DM Mono, monospace" font-size="8.5" fill="var(--ink-soft)">granular middle: rhythmic guitar</text>
+
+  <rect x="38" y="156" width="224" height="50" rx="7" fill="var(--accent)" fill-opacity="0.28" stroke="var(--accent)" stroke-width="1.3"/>
+  <text x="54" y="178" font-family="DM Mono, monospace" font-size="12" fill="var(--ink)">SAUCE</text>
+  <text x="54" y="194" font-family="DM Mono, monospace" font-size="8.5" fill="var(--ink-soft)">the glue in the middle: pads</text>
+
+  <rect x="38" y="212" width="224" height="56" rx="7" fill="var(--bg-alt)" stroke="var(--rule)" stroke-width="1.9"/>
+  <text x="54" y="236" font-family="DM Mono, monospace" font-size="12" fill="var(--ink)">DOUGH</text>
+  <text x="54" y="252" font-family="DM Mono, monospace" font-size="8.5" fill="var(--ink-soft)">the sustaining base: drums, bass</text>
+</svg>
+<figcaption>A mix stacks like a pizza: a base that sustains, a middle that glues and fills, and the bright things on top.</figcaption>
+</figure>
+
+</div>
+
+
+<p>Mixing acts on audio, and a MIDI track is not audio yet. It holds notes and an instrument that turns those notes into sound as the piece plays, and that sound still changes the moment you edit a note or swap the instrument. You cannot set a fixed level or tone for something that can still move under you. So before mixing, you commit every MIDI track to audio, fixing its sound in place. Once every track is audio, they are all the same kind of thing, and the Live mixer becomes the Toft: one audio channel per part, with faders, sends, and a master.</p>
+
+<p>Committing a track to audio is permanent. It replaces the notes and the instrument with a plain recording, and that track can no longer change what it plays. That is why you mix on a separate saved copy. The original keeps your notes and instruments and stays open to edits. The mixing copy is the committed, all-audio version you balance. If a mix decision shows that a part was written wrong, you reopen the original, fix it there, and commit it again. Studios split the work the same way, keeping the session where a piece is written apart from the session where it is mixed.</p>
+
+<h3>Save a separate version</h3>
+
+<p>Save the session as it is first: <strong>File</strong> then <strong>Save</strong>. Then make the mixing copy with <strong>File</strong> then <strong>Save As</strong>, named for the mix so it sits beside the original. Work in that copy from here on. Every step below changes the music for good, and the original stays untouched for the day you need to go back and rewrite something.</p>
+
+<h3>Bounce the MIDI tracks to audio</h3>
+
+<p>Each MIDI track plays its instrument live as the piece runs. You turn that performance into a fixed recording in two steps: freeze, then flatten. Freezing renders the sound to a file; flattening makes that file the track's content for good.</p>
+
+<div class="callout">
+  <div class="callout-label">What bouncing means</div>
+  <p>Bouncing means printing what a track plays into a fixed audio file. The word comes from tape: engineers bounced several recorded tracks down onto one to free up room on the reel. Here you bounce each MIDI track in place, turning the instrument's live output into audio that sits right where the MIDI was. After a bounce, the track no longer plays an instrument in real time. It plays a recording of it.</p>
+</div>
+
+<p>Right-click a MIDI track's name and choose <strong>Freeze Track</strong>. Live plays the track's instrument and effects through once, records the result to an audio file, and from then on plays that file in place of the live processing. The track turns blue. Freeze exists to save computer power, and it is fully reversible: unfreeze and the notes and instrument come back, ready to edit. On its own, freeze commits nothing.</p>
+
+<p>Flatten makes it permanent. With the frozen track selected, choose <strong>Flatten</strong> from the <strong>Edit</strong> menu. Live throws out the MIDI clips and the instrument and keeps the audio it just rendered, so the MIDI track turns into a plain audio track. Do this for every MIDI track. There is no unflatten, which is the whole reason you are in the mixing copy: the original still holds every instrument and note.</p>
+
+<a class="manual-link" href="https://www.ableton.com/en/live-manual/11/computer-audio-resources-and-strategies/" target="_blank" rel="noopener noreferrer">
+  <span class="res-icon" aria-hidden="true">&sect;</span>
+  <span class="res-body">
+    <span class="res-title">Track Freeze</span>
+    <span class="res-scope">Live 11 manual</span>
+  </span>
+  <span class="res-arrow" aria-hidden="true">&#8599;</span>
+</a>
+
+<h3>Consolidate every track into one clip</h3>
+
+<p>Every track holds audio now, but many hold it as a row of short clips, the pieces the music was built from. A row of fragments is awkward to mix: each clip carries its own gain and fades, gaps fall between them, and a change you make on one clip has to be repeated on the next. Consolidating clears that up. In the Arrangement timeline, select everything with <code>Cmd-A</code> and press <code>Cmd-J</code>. For each track, Live renders its clips and the gaps between them into one continuous audio file, so the track becomes a single unbroken clip you can treat as one thing. The new files land in the project's Samples folder and travel with the Set.</p>
+
+<a class="manual-link" href="https://www.ableton.com/en/live-manual/11/arrangement-view/" target="_blank" rel="noopener noreferrer">
+  <span class="res-icon" aria-hidden="true">&sect;</span>
+  <span class="res-body">
+    <span class="res-title">Consolidate</span>
+    <span class="res-scope">Live 11 manual</span>
+  </span>
+  <span class="res-arrow" aria-hidden="true">&#8599;</span>
+</a>
+
+<p>Every track is now one unbroken clip of audio. This is the session a mixing engineer sits down to: a stack of audio channels with nothing left to build, ready to balance.</p>
+
+<p>The commitment stops here. Freezing, flattening, and consolidating were the one place you traded reversibility for a fixed recording. From now on, mixing changes nothing in those files. Every fader, pan, and device is a setting you can undo, and the audio stays whole underneath, so you can remix as much as you like. You could open a fresh project on the same files tomorrow and build a second, different mix from them. What you commit is the material. How you mix it stays as open as ever.</p>
+
+<hr>
+
+<h2>Mix</h2>
+
+<p>Switch to the mixer with <code>Tab</code>, which opens Session view. Each track now stands as a vertical channel strip, the same shape as a channel on the Toft. The strip carries the controls you mix with: a <strong>fader</strong> for how loud the track is, a <strong>pan</strong> control for where it sits left to right, and <strong>send</strong> knobs that tap a copy of the track off to a shared effect. The <strong>Master</strong> strip on the right sums every channel into the one stereo output you will export. Your music still lives in the Arrangement, so press play to hear it; this view only changes the controls in front of you. Leave the empty clip slots alone, they belong to a way of working you meet later.</p>
+
+<a class="manual-link" href="https://www.ableton.com/en/live-manual/11/mixing/" target="_blank" rel="noopener noreferrer">
+  <span class="res-icon" aria-hidden="true">&sect;</span>
+  <span class="res-body">
+    <span class="res-title">Mixing</span>
+    <span class="res-scope">Live 11 manual</span>
+  </span>
+  <span class="res-arrow" aria-hidden="true">&#8599;</span>
+</a>
+
+<h3>Set levels</h3>
+
+<p>Level is the first move and the one that fixes the most, so give it real time before reaching for anything else. Most mixes that sound wrong are not missing an effect, they are out of balance. Work with your ears rather than your eyes. One reliable way in: pull every fader down, bring up the part that carries the music to a comfortable level, then raise each other part only until you can hear it doing its job. Lead parts sit forward, supporting parts sit under them. As you go, watch the <strong>Master</strong> meter on the right and keep it out of the red, the point where the summed signal clips and distorts.</p>
+
+<h3>Place sounds with pan</h3>
+
+<p>Pan moves a track left or right across the stereo field, the space between your two ears. Its real use is separation: two parts in the same spot fight for the same place and blur together, but slide one left and the other right and the ear hears each on its own. Spread the parts out, a little one way, a little the other, and the mix opens up. Keep the lowest parts, the kick and the bass, in the center. Low frequencies are hard for the ear to locate and they carry the most energy, so centering them holds that energy even across both speakers.</p>
+
+<h3>Group related tracks</h3>
+
+<p>Once a set of tracks belongs together, the drums for instance, you can handle them as one. Select them and press <code>Cmd-G</code>. Live wraps them in a <strong>Group</strong> track (a bus, in console terms) whose fader moves all of them at once, the way a subgroup worked on the console. After you balance the pieces inside the group, one fader rides the whole kit up or down against the rest of the mix. A group also gives you one channel where you can treat the whole submix at once, which the next step uses. Grouping turns a wall of single tracks into a few blocks, drums, then bass, then the rest, which are far easier to balance against each other. Group what moves together.</p>
+
+<h3>Shape with inserts</h3>
+
+<p>An <strong>insert</strong> sits in a track's chain and processes that one signal in series, in the order you stack the devices on it. Drag a device from the browser's Audio Effects onto a track, a group, or the master to add it there. The dynamics tools come as a set, and the move that keeps a mix clean is to let each one work at a different stage rather than stacking them all on one track.</p>
+
+<p><strong>On a single track</strong>, two tools shape one part. <strong>EQ Eight</strong> lifts or cuts chosen frequency ranges, the equalizer you know. Its main job in a mix is room: when two parts crowd the same range and mask each other, cut that range on the one that needs it less and both come through. <strong>Compressor</strong> evens out a part that swings between loud and quiet, the dynamics tool you know, so it holds a steady place in the balance. Put EQ before Compressor in the chain, so the compressor reacts to the sound you have already shaped.</p>
+
+<p><strong>On a group</strong>, the <strong>Glue Compressor</strong> does a gentler job across a whole submix. It is Ableton's version of the SSL bus compressor in the studio, built to pull a set of tracks together so they read as one thing rather than several. A light touch on the drum group glues the kit. Use one Glue Compressor on the group, not one on every track inside it.</p>
+
+<p><strong>On the master</strong>, a <strong>Limiter</strong> goes last in the chain and catches the loudest peaks, setting a ceiling the signal cannot cross. That ceiling is what keeps the exported file from clipping. One Limiter, on the Master strip, at the very end.</p>
+
+<p>So the dynamics spread across three stages: Compressor on the parts that need it, Glue Compressor on the groups, Limiter on the master. Each does its own job at its own place. Reach for any of them only where you hear the need; an effect on every track is usually a level problem you skipped. Live carries more tone and dynamics devices than these, gathered in the reference, but this set is what the mix in front of you asks for.</p>
+
+<a class="manual-link" href="https://www.ableton.com/en/live-manual/11/live-audio-effect-reference/#eq-eight" target="_blank" rel="noopener noreferrer">
+  <span class="res-icon" aria-hidden="true">&sect;</span>
+  <span class="res-body">
+    <span class="res-title">EQ Eight</span>
+    <span class="res-scope">Live 11 manual</span>
+  </span>
+  <span class="res-arrow" aria-hidden="true">&#8599;</span>
+</a>
+
+<a class="manual-link" href="https://www.ableton.com/en/live-manual/11/live-audio-effect-reference/#compressor" target="_blank" rel="noopener noreferrer">
+  <span class="res-icon" aria-hidden="true">&sect;</span>
+  <span class="res-body">
+    <span class="res-title">Compressor</span>
+    <span class="res-scope">Live 11 manual</span>
+  </span>
+  <span class="res-arrow" aria-hidden="true">&#8599;</span>
+</a>
+
+<a class="manual-link" href="https://www.ableton.com/en/live-manual/11/live-audio-effect-reference/#glue-compressor" target="_blank" rel="noopener noreferrer">
+  <span class="res-icon" aria-hidden="true">&sect;</span>
+  <span class="res-body">
+    <span class="res-title">Glue Compressor</span>
+    <span class="res-scope">Live 11 manual</span>
+  </span>
+  <span class="res-arrow" aria-hidden="true">&#8599;</span>
+</a>
+
+<a class="manual-link" href="https://www.ableton.com/en/live-manual/11/live-audio-effect-reference/#limiter" target="_blank" rel="noopener noreferrer">
+  <span class="res-icon" aria-hidden="true">&sect;</span>
+  <span class="res-body">
+    <span class="res-title">Limiter</span>
+    <span class="res-scope">Live 11 manual</span>
+  </span>
+  <span class="res-arrow" aria-hidden="true">&#8599;</span>
+</a>
+
+<h3>Add space with the sends</h3>
+
+<p>The other way to place an effect is a <strong>send</strong>. Where an insert processes one track alone, a send taps a copy of a track's signal and routes it to a separate <strong>return</strong> track, where one effect treats everything sent to it. Your Set already has two returns ready: return <strong>A</strong> holds a <strong>Reverb</strong> and return <strong>B</strong> holds a <strong>Delay</strong>, shared and waiting for tracks to feed them. This is why the reverb sits on a return: you want one room that several parts share, so the mix sounds like one space rather than a stack of separate rooms, and one shared reverb costs the computer far less than ten.</p>
+
+<p>Every channel carries a <strong>Send A</strong> and a <strong>Send B</strong> knob. Turn Send A up on a track and a copy of it feeds the reverb: the dry track stays exactly where it is, and a wet, roomy copy is added on top. Turn Send B up and that track picks up the delay instead. The send knob is each track's wet amount into the shared effect, so a touch on several tracks settles them into one space.</p>
+
+<p>To change the reverb itself, click return <strong>A</strong> to select it and its <strong>Reverb</strong> opens in the device area along the bottom. Adjust it there, or swap it for a different one: drag <strong>Hybrid Reverb</strong> from the browser onto the return in place of the stock device. Hybrid Reverb is Live's larger reverb, two reverb engines running at once, and it trades a heavier load on the computer for richer, deeper spaces. Whatever you set applies to every track sending to A. Return <strong>B</strong> works the same way for its <strong>Delay</strong>, where <strong>Echo</strong> is the fuller alternative, one device that folds several delay lines together with its own filtering and modulation.</p>
+
+<a class="manual-link" href="https://www.ableton.com/en/live-manual/11/routing-and-i-o/#internal-routings" target="_blank" rel="noopener noreferrer">
+  <span class="res-icon" aria-hidden="true">&sect;</span>
+  <span class="res-body">
+    <span class="res-title">Internal Routings</span>
+    <span class="res-scope">Live 11 manual · sends and returns</span>
+  </span>
+  <span class="res-arrow" aria-hidden="true">&#8599;</span>
+</a>
+
+<a class="manual-link" href="https://www.ableton.com/en/live-manual/11/live-audio-effect-reference/#reverb" target="_blank" rel="noopener noreferrer">
+  <span class="res-icon" aria-hidden="true">&sect;</span>
+  <span class="res-body">
+    <span class="res-title">Reverb</span>
+    <span class="res-scope">Live 11 manual</span>
+  </span>
+  <span class="res-arrow" aria-hidden="true">&#8599;</span>
+</a>
+
+<a class="manual-link" href="https://www.ableton.com/en/live-manual/11/live-audio-effect-reference/#hybrid-reverb" target="_blank" rel="noopener noreferrer">
+  <span class="res-icon" aria-hidden="true">&sect;</span>
+  <span class="res-body">
+    <span class="res-title">Hybrid Reverb</span>
+    <span class="res-scope">Live 11 manual</span>
+  </span>
+  <span class="res-arrow" aria-hidden="true">&#8599;</span>
+</a>
+
+<a class="manual-link" href="https://www.ableton.com/en/live-manual/11/live-audio-effect-reference/#delay" target="_blank" rel="noopener noreferrer">
+  <span class="res-icon" aria-hidden="true">&sect;</span>
+  <span class="res-body">
+    <span class="res-title">Delay</span>
+    <span class="res-scope">Live 11 manual</span>
+  </span>
+  <span class="res-arrow" aria-hidden="true">&#8599;</span>
+</a>
+
+<a class="manual-link" href="https://www.ableton.com/en/live-manual/11/live-audio-effect-reference/#echo" target="_blank" rel="noopener noreferrer">
+  <span class="res-icon" aria-hidden="true">&sect;</span>
+  <span class="res-body">
+    <span class="res-title">Echo</span>
+    <span class="res-scope">Live 11 manual</span>
+  </span>
+  <span class="res-arrow" aria-hidden="true">&#8599;</span>
+</a>
+
+<hr>
+
+<h2>More of the set</h2>
+
+<p>Three more devices round out a useful set. The first belongs on every track. The other two are tools you reach for when a particular sound asks for them.</p>
+
+<h3>Utility, on every track</h3>
+
+<p><strong>Utility</strong> is the small device the gain-staging diagram pointed to, and it earns a place on every track. Its first job is gain: the <strong>Gain</strong> knob sets a track's level cleanly without moving the fader, which keeps the fader free for mixing and your gain staging in one predictable spot. The <strong>Width</strong> control narrows or widens the stereo image, so a pad that feels narrow can spread wider, or a part that feels too wide can pull in. <strong>Bass Mono</strong> collapses everything below a frequency you set down to the center, which keeps the kick and bass solid while the rest of the track stays in stereo. A <strong>Mono</strong> button sums the whole track to one channel, a quick check for how the mix holds up on a phone speaker or a club system.</p>
+
+<a class="manual-link" href="https://www.ableton.com/en/live-manual/11/live-audio-effect-reference/#utility" target="_blank" rel="noopener noreferrer">
+  <span class="res-icon" aria-hidden="true">&sect;</span>
+  <span class="res-body">
+    <span class="res-title">Utility</span>
+    <span class="res-scope">Live 11 manual</span>
+  </span>
+  <span class="res-arrow" aria-hidden="true">&#8599;</span>
+</a>
+
+<h3>Auto Filter, a dedicated filter</h3>
+
+<p><strong>Auto Filter</strong> is a filter on its own, the tool to reach for when EQ Eight is more than you need and you simply want to roll off a range. It carries the filter types you know, low-pass, high-pass, band-pass, and a few more, and you set the cutoff and resonance by dragging in its display. As an insert it usually sits at the end of a track's chain, after the dynamics, shaping the final tone on the way out. It can also sweep its own cutoff with an envelope or an LFO, which turns it into a moving, rhythmic filter, though for a clean mix you will mostly leave it fixed.</p>
+
+<a class="manual-link" href="https://www.ableton.com/en/live-manual/11/live-audio-effect-reference/#auto-filter" target="_blank" rel="noopener noreferrer">
+  <span class="res-icon" aria-hidden="true">&sect;</span>
+  <span class="res-body">
+    <span class="res-title">Auto Filter</span>
+    <span class="res-scope">Live 11 manual</span>
+  </span>
+  <span class="res-arrow" aria-hidden="true">&#8599;</span>
+</a>
+
+<h3>Multiband Dynamics, and a de-esser</h3>
+
+<p><strong>Multiband Dynamics</strong> splits a sound into three frequency bands, low, mid, and high, and compresses or expands each one on its own. Reach for it when a single band of a sound misbehaves: a boomy low end you want to tame, or a harsh top you want to bump down, while the rest stays as it is. Each band has an <strong>Above</strong> section that pulls down whatever gets too loud and a <strong>Below</strong> section that lifts whatever gets too quiet, set by their two thresholds.</p>
+
+<p>Its most useful trick is a <strong>de-esser</strong>, which tames the sharp <em>ess</em> and <em>sh</em> sounds in a voice. A de-esser sold on its own can cost real money, and it is mostly a multiband compressor aimed at one band. To build one, put Multiband Dynamics on the voice, then turn off the Low and Mid bands with the buttons on the left so only the High band works. Set the High band's crossover so it starts around five to eight kilohertz, where the sibilance lives, and solo that band to hear and tune the range. Then lower the High band's <strong>Above</strong> threshold until the meter dips only on each harsh <em>ess</em>. Unsolo, and the esses sit back while the rest of the voice stays untouched.</p>
+
+<a class="manual-link" href="https://www.ableton.com/en/live-manual/11/live-audio-effect-reference/#multiband-dynamics" target="_blank" rel="noopener noreferrer">
+  <span class="res-icon" aria-hidden="true">&sect;</span>
+  <span class="res-body">
+    <span class="res-title">Multiband Dynamics</span>
+    <span class="res-scope">Live 11 manual</span>
+  </span>
+  <span class="res-arrow" aria-hidden="true">&#8599;</span>
+</a>
+
+<hr>
+
+<h2>Export the mix</h2>
+
+<p>Exporting renders the <strong>Master</strong> output, the sum of every channel, down to one stereo audio file. Open the dialog with <strong>File</strong> then <strong>Export Audio/Video</strong>, or <code>Cmd-Shift-R</code>. Set it to <strong>48 kHz, 32-bit</strong>, and save it into your working folder.</p>
+
+<a class="manual-link" href="https://www.ableton.com/en/live-manual/11/managing-files-and-sets/#exporting-audio-and-video" target="_blank" rel="noopener noreferrer">
+  <span class="res-icon" aria-hidden="true">&sect;</span>
+  <span class="res-body">
+    <span class="res-title">Exporting Audio and Video</span>
+    <span class="res-scope">Live 11 manual</span>
+  </span>
+  <span class="res-arrow" aria-hidden="true">&#8599;</span>
+</a>
+
+<hr>
+
+<h2>Read more</h2>
+
+<!-- Useful links / further reading. To be populated. -->
+<p>Links and further reading to come.</p>
+
+<footer class="handout-footer">
+  <span>music-production</span>
+  <span>EOF</span>
+</footer>
+
+</body>
+</html>
