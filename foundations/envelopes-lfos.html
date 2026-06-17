@@ -472,11 +472,20 @@
   <span class="manual-arrow" aria-hidden="true">&#8599;</span>
 </a>
 
-<p>This tool wires the whole chain: a pad, a low-pass filter on it, and an LFO driving the cutoff. The scope traces the cutoff value, not the sound, as the LFO walks it up and down.</p>
+<p>This tool wires the whole chain: a pad, a low-pass filter on it, and an LFO driving the cutoff. The left panel is the LFO. The right panel is the filter's response, the curve sliding left and right as the LFO walks the cutoff up and down.</p>
 
 <div class="synth-tool" id="toolFilter">
   <div class="synth-tool-title">Tool 4 · LFO to filter cutoff</div>
-  <canvas class="synth-scope" id="filScope"></canvas>
+  <div class="synth-viz">
+    <div class="synth-viz-panel">
+      <div class="synth-viz-title">LFO</div>
+      <canvas class="synth-canvas" id="filLfo"></canvas>
+    </div>
+    <div class="synth-viz-panel">
+      <div class="synth-viz-title">Filter response</div>
+      <canvas class="synth-canvas" id="filResp"></canvas>
+    </div>
+  </div>
   <div class="synth-selects">
     <div class="synth-select">
       <label for="filShape">LFO shape</label>
@@ -728,6 +737,61 @@
     }
     function reset() { vals = new Array(COLS).fill(null); head = -1; draw(false); }
     return { set: set, draw: draw, reset: reset };
+  }
+
+  // Right panel for the filter tool: the low-pass response curve, computed
+  // analytically (RBJ biquad), so it needs no audio context and previews live.
+  function makeFilterView(canvas) {
+    const g = canvas.getContext('2d');
+    const N = 200, FMIN = 60, FMAX = 16000, DBMIN = -36, DBMAX = 18, FS = 48000;
+    const freqs = new Float32Array(N);
+    for (let i = 0; i < N; i++) { freqs[i] = FMIN * Math.pow(FMAX / FMIN, i / (N - 1)); }
+    function size() {
+      const r = canvas.getBoundingClientRect();
+      canvas.width = Math.max(260, Math.floor(r.width));
+      canvas.height = 150;
+    }
+    size();
+    window.addEventListener('resize', size);
+    function color() { return (getComputedStyle(canvas).getPropertyValue('--cable-xlr') || '#3a6b7a').trim(); }
+    function soft() { return (getComputedStyle(canvas).getPropertyValue('--ink-soft') || '#51604c').trim(); }
+    function mag(f, f0, Q) {
+      f0 = Math.max(20, Math.min(FS / 2 - 100, f0));
+      const w0 = 2 * Math.PI * f0 / FS, cw = Math.cos(w0), sw = Math.sin(w0), alpha = sw / (2 * Q);
+      const b0 = (1 - cw) / 2, b1 = 1 - cw, b2 = (1 - cw) / 2;
+      const a0 = 1 + alpha, a1 = -2 * cw, a2 = 1 - alpha;
+      const w = 2 * Math.PI * f / FS, c1 = Math.cos(w), s1 = Math.sin(w), c2 = Math.cos(2 * w), s2 = Math.sin(2 * w);
+      const Br = b0 + b1 * c1 + b2 * c2, Bi = -(b1 * s1 + b2 * s2);
+      const Ar = a0 + a1 * c1 + a2 * c2, Ai = -(a1 * s1 + a2 * s2);
+      return Math.hypot(Br, Bi) / Math.hypot(Ar, Ai);
+    }
+    function fx(i) { return i / (N - 1) * canvas.width; }
+    function dy(db) {
+      const t = Math.max(0, Math.min(1, (db - DBMIN) / (DBMAX - DBMIN)));
+      return (canvas.height - 6) - t * (canvas.height - 12);
+    }
+    function frame() {
+      const w = canvas.width, h = canvas.height;
+      g.clearRect(0, 0, w, h);
+      g.strokeStyle = 'rgba(127,127,127,0.3)'; g.lineWidth = 1;
+      g.beginPath(); g.moveTo(0, dy(0)); g.lineTo(w, dy(0)); g.stroke();
+    }
+    function draw(cutoffHz, Q) {
+      frame();
+      const w = canvas.width, h = canvas.height;
+      const ci = Math.log(Math.max(FMIN, Math.min(FMAX, cutoffHz)) / FMIN) / Math.log(FMAX / FMIN);
+      g.strokeStyle = soft(); g.lineWidth = 1; g.setLineDash([3, 3]);
+      g.beginPath(); g.moveTo(ci * w, 0); g.lineTo(ci * w, h); g.stroke(); g.setLineDash([]);
+      g.strokeStyle = color(); g.lineWidth = 2.5;
+      g.beginPath();
+      for (let i = 0; i < N; i++) {
+        const db = 20 * Math.log10(Math.max(1e-4, mag(freqs[i], cutoffHz, Q)));
+        const x = fx(i), y = dy(db);
+        if (i === 0) { g.moveTo(x, y); } else { g.lineTo(x, y); }
+      }
+      g.stroke();
+    }
+    return { draw: draw, clear: frame };
   }
 
   // Build a pad: three oscillators summed into one gain. Caller starts/stops oscs.
@@ -1102,7 +1166,8 @@
     const cutOut = document.getElementById('filCutOut'), qOut = document.getElementById('filQOut'),
           rateOut = document.getElementById('filRateOut'), depthOut = document.getElementById('filDepthOut');
     const playBtn = document.getElementById('filPlay');
-    const scope = makeScope(document.getElementById('filScope'), 0, 6000);
+    const lfoScope = makeScope(document.getElementById('filLfo'), -1, 1);
+    const filterView = makeFilterView(document.getElementById('filResp'));
     let pad = null, amp = null, filt = null, lfo = null, lfoGain = null, raf = null, t0 = 0, playing = false;
 
     function depthHz() { return (+depth.value / 100) * (+cut.value) * 0.9; }
@@ -1113,6 +1178,32 @@
       depthOut.textContent = depth.value + ' %';
     }
     function applyLfoGain() { if (lfoGain) { lfoGain.gain.value = depthHz(); } }
+    // While stopped, preview the filter at the base cutoff so the sliders respond.
+    function preview() { if (!playing) { filterView.draw(+cut.value, +q.value); } }
+    function startVoice(ctx) {
+      filt = ctx.createBiquadFilter(); filt.type = 'lowpass';
+      filt.frequency.value = +cut.value; filt.Q.value = +q.value;
+      amp = ctx.createGain(); amp.gain.value = 0;
+      const lim = limiter(ctx);
+      pad = buildPad(ctx, BASE, 'sawtooth', filt);
+      filt.connect(amp); amp.connect(lim); lim.connect(ctx.destination);
+      const now = ctx.currentTime;
+      amp.gain.setValueAtTime(0, now);
+      amp.gain.linearRampToValueAtTime(0.2, now + 0.3);
+      lfo = ctx.createOscillator(); lfo.type = shapeSel.value; lfo.frequency.value = +rate.value;
+      lfoGain = ctx.createGain(); applyLfoGain();
+      lfo.connect(lfoGain); lfoGain.connect(filt.frequency);
+      pad.oscs.forEach(function(o) { o.start(now); });
+      lfo.start(now);
+      t0 = now; lfoScope.clear();
+      (function loop() {
+        const t = ensureCtx().currentTime - t0;
+        const phase = t * (+rate.value), wv = waveAt(shapeSel.value, phase);
+        lfoScope.push(wv * (+depth.value / 100)); lfoScope.draw();
+        filterView.draw(+cut.value + depthHz() * wv, +q.value);
+        raf = requestAnimationFrame(loop);
+      })();
+    }
     function stop() {
       if (raf) { cancelAnimationFrame(raf); raf = null; }
       const ctx = actx;
@@ -1130,42 +1221,26 @@
       pad = null; amp = null; filt = null; lfo = null; lfoGain = null;
       playing = false;
       playBtn.textContent = 'Play'; playBtn.classList.remove('playing');
-      scope.clear(); scope.draw();
+      lfoScope.clear(); lfoScope.draw(); preview();
     }
     function play() {
       if (playing) { stop(); return; }
-      const ctx = ensureCtx();
-      filt = ctx.createBiquadFilter(); filt.type = 'lowpass';
-      filt.frequency.value = +cut.value; filt.Q.value = +q.value;
-      amp = ctx.createGain(); amp.gain.value = 0;
-      const lim = limiter(ctx);
-      pad = buildPad(ctx, BASE, 'sawtooth', filt);
-      filt.connect(amp); amp.connect(lim); lim.connect(ctx.destination);
-      const now = ctx.currentTime;
-      amp.gain.setValueAtTime(0, now);
-      amp.gain.linearRampToValueAtTime(0.2, now + 0.3);
-      lfo = ctx.createOscillator(); lfo.type = shapeSel.value; lfo.frequency.value = +rate.value;
-      lfoGain = ctx.createGain(); applyLfoGain();
-      lfo.connect(lfoGain); lfoGain.connect(filt.frequency);
-      pad.oscs.forEach(function(o) { o.start(now); });
-      lfo.start(now);
-      t0 = now; playing = true;
+      playing = true;
       playBtn.textContent = 'Stop'; playBtn.classList.add('playing');
-      (function loop() {
-        const t = ensureCtx().currentTime - t0;
-        const base = +cut.value;
-        scope.push(base + depthHz() * waveAt(shapeSel.value, t * (+rate.value)));
-        scope.draw();
-        raf = requestAnimationFrame(loop);
-      })();
+      const ctx = ensureCtx();
+      ctx.resume().then(function() {
+        if (playing) { startVoice(ctx); }
+      }).catch(function() {
+        playing = false; playBtn.textContent = 'Play'; playBtn.classList.remove('playing');
+      });
     }
     shapeSel.addEventListener('change', function() { if (lfo) { lfo.type = shapeSel.value; } });
-    cut.addEventListener('input', function() { readouts(); if (filt) { filt.frequency.setValueAtTime(+cut.value, ensureCtx().currentTime); } applyLfoGain(); });
-    q.addEventListener('input', function() { readouts(); if (filt) { filt.Q.setValueAtTime(+q.value, ensureCtx().currentTime); } });
+    cut.addEventListener('input', function() { readouts(); if (filt) { filt.frequency.setValueAtTime(+cut.value, ensureCtx().currentTime); } applyLfoGain(); preview(); });
+    q.addEventListener('input', function() { readouts(); if (filt) { filt.Q.setValueAtTime(+q.value, ensureCtx().currentTime); } preview(); });
     rate.addEventListener('input', function() { readouts(); if (lfo) { lfo.frequency.setValueAtTime(+rate.value, ensureCtx().currentTime); } });
     depth.addEventListener('input', function() { readouts(); applyLfoGain(); });
     playBtn.addEventListener('click', play);
-    readouts(); scope.draw();
+    readouts(); preview();
   })();
 
 })();
