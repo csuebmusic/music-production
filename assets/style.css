@@ -77,25 +77,16 @@ html, body {
 
 /* ----- Layout ---------------------------------------------------------- */
 
-.handout-header,
-.title-block,
-.lede,
-body > p,
-body > h2,
-body > h3,
-body > ol,
-body > ul,
-body > dl,
-body > hr,
-body > figure,
-body > div,
-.handout-footer {
+/* The body itself is the centered content column. Constraining the width
+   here (rather than element by element) means per-document widgets keep
+   their own vertical margins without breaking out of the column
+   horizontally, so audio players, tool panels, and figures all stay in
+   the measure. */
+body {
   max-width: 46rem;
-  margin-left: auto;
-  margin-right: auto;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 5rem;
 }
-
-body { padding: 0 1.5rem 5rem; }
 
 /* ----- Terminal status bar (the old course header) --------------------- */
 
@@ -366,5 +357,5 @@ audio { width: 100%; }
 @media (max-width: 600px) {
   html, body { font-size: 16px; }
   h1 { font-size: 1.9rem; }
-  body { padding: 0 1.1rem 4rem; }
+  body { padding: 2rem 1.1rem 4rem; }
 }
