@@ -1074,10 +1074,12 @@
       });
       t0 = now; wave.reset();
       (function loop() {
-        const t = ensureCtx().currentTime - t0;
-        if (t <= dur) { wave.set(t / dur, pitchAt(t, p.a, p.d, p.s, p.r, curRange)); }
+        const t = ensureCtx().currentTime - t0, span = dur + TAIL;
+        // Sweep the playhead across the whole sounding span, including the
+        // ring-out, so the line reaches the end as the sound fades to silence.
+        if (t <= span) { wave.set(t / span, pitchAt(t, p.a, p.d, p.s, p.r, curRange)); }
         wave.draw(true);
-        if (t >= dur + TAIL) { stop(); return; }
+        if (t >= span) { stop(); return; }
         raf = requestAnimationFrame(loop);
       })();
     }
