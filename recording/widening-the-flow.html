@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Widening the Flow · music-production</title>
+  <link rel="stylesheet" href="../assets/style.css">
+  <style>
+    /* Reading-specific tweaks (matches Lecture 1) */
+    figure {
+      margin: 2rem 0;
+      text-align: center;
+    }
+    figure svg {
+      max-width: 100%;
+      height: auto;
+    }
+    /* All figure photos share one size, sitting smaller than full
+       prose-width so they read as illustrations rather than
+       dominating the page. */
+    figure img {
+      max-width: 480px;
+      width: 100%;
+      height: auto;
+    }
+    figcaption {
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--ink-soft);
+      margin-top: 0.75rem;
+    }
+
+    .callout {
+      background: var(--bg-alt);
+      border-left: 3px solid var(--accent);
+      padding: 1rem 1.25rem;
+      margin: 1.75rem 0;
+    }
+    .callout-label {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+    }
+    .callout p { margin: 0.5rem 0; }
+    .callout p:last-child { margin-bottom: 0; }
+
+    .pause {
+      background: var(--bg-alt);
+      border: 1px dashed var(--accent);
+      padding: 1.5rem 1.75rem;
+      margin: 2rem 0;
+    }
+    .pause-label {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      margin-bottom: 0.75rem;
+    }
+    .pause h4 {
+      margin-top: 0;
+      margin-bottom: 0.5rem;
+    }
+    .pause p { margin: 0.5rem 0; }
+    .pause p:last-child { margin-bottom: 0; }
+    .pause figure { margin: 1rem 0; }
+
+    /* Annotated image: numbered markers on a raster image with a key
+       below. Size is inherited from the general `figure img` rule. */
+    figure.annotated img {
+      border: 1px solid var(--rule);
+    }
+    figure.annotated .annotation-key {
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      color: var(--ink-soft);
+      margin-top: 0.5rem;
+      padding: 0.5rem 0.75rem;
+      background: var(--bg-alt);
+      border-left: 2px solid var(--rule);
+      text-align: left;
+    }
+    figure.annotated .annotation-key strong {
+      color: var(--accent);
+    }
+  </style>
+</head>
+<body>
+
+<header class="handout-header">
+  <span class="course">~/music-production/recording</span>
+  <span class="meta">widening-the-flow</span>
+</header>
+
+<div class="title-block">
+  <div class="module-tag">Recording</div>
+  <h1>Widening the Flow</h1>
+  <div class="subtitle">Other signal types, other cables, other mics, plus the boxes that connect them.</div>
+</div>
+
+<p class="lede">The basic recording chain is a dynamic mic, an XLR cable, an audio interface, a computer. That chain works because every stage matches the one before it. This reading widens the frame to the other signal types, cables, and mics you'll meet in the wild, plus two small boxes that exist to make incompatible stages fit together: the DI box and the hardware preamp.</p>
+
+<hr>
+
+<h2>1 · The three signal levels</h2>
+
+<p>The first thing that changes when you swap one source for another is the strength of the electrical signal coming out of it. A dynamic microphone produces a tiny voltage. An electric guitar produces a stronger one. A synthesizer produces a stronger one still. These are three different <strong>signal levels</strong>, and the names for them are <strong>mic level</strong>, <strong>instrument level</strong>, and <strong>line level</strong>.</p>
+
+<p>The reason this matters is that every input on every piece of audio gear is designed for one signal level. An input designed for mic level expects a tiny signal and amplifies it heavily. Plug a line-level signal into that input and the amplification overloads, distorts, and clips. Plug a mic-level signal into a line input and the signal is so far below what the input expects that it disappears into the noise floor. The levels have to match.</p>
+
+<figure>
+  <svg viewBox="0 0 700 260" xmlns="http://www.w3.org/2000/svg"
+       role="img" aria-label="Three vertical bars showing the relative strengths of mic-level, instrument-level, and line-level signals. Mic level is a short bar labeled with millivolts. Instrument level is a medium bar labeled with tens of millivolts. Line level is a tall bar labeled with around one volt. Beneath each bar, a small caption names a typical source: all mics, electric guitar, synthesizer.">
+    <defs>
+      <pattern id="levelgrid" width="40" height="20" patternUnits="userSpaceOnUse">
+        <path d="M 40 0 L 0 0 0 20" fill="none" stroke="var(--rule-soft)" stroke-width="0.5"/>
+      </pattern>
+    </defs>
+
+    <!-- Title -->
+    <text x="350" y="22" text-anchor="middle"
+          font-family="DM Mono, monospace" font-size="11" letter-spacing="0.12em"
+          fill="var(--accent)">THE THREE SIGNAL LEVELS</text>
+
+    <!-- Grid background -->
+    <rect x="40" y="40" width="620" height="160" fill="url(#levelgrid)"/>
+    <line x1="40" y1="200" x2="660" y2="200" stroke="var(--rule)" stroke-width="1"/>
+
+    <!-- Mic-level bar -->
+    <rect x="100" y="178" width="100" height="22" fill="var(--bg-alt)"
+          stroke="var(--accent)" stroke-width="1.5"/>
+    <text x="150" y="170" text-anchor="middle"
+          font-family="DM Mono, monospace" font-size="10" fill="var(--ink-soft)">~1 mV</text>
+    <text x="150" y="195" text-anchor="middle"
+          font-family="DM Sans, sans-serif" font-size="13" font-weight="600" fill="var(--ink)">mic level</text>
+    <text x="150" y="222" text-anchor="middle"
+          font-family="DM Mono, monospace" font-size="10" fill="var(--ink-soft)">all mics</text>
+
+    <!-- Instrument-level bar -->
+    <rect x="300" y="125" width="100" height="75" fill="var(--bg-alt)"
+          stroke="var(--accent)" stroke-width="1.5"/>
+    <text x="350" y="117" text-anchor="middle"
+          font-family="DM Mono, monospace" font-size="10" fill="var(--ink-soft)">~100 mV</text>
+    <text x="350" y="166" text-anchor="middle"
+          font-family="DM Sans, sans-serif" font-size="13" font-weight="600" fill="var(--ink)">instrument</text>
+    <text x="350" y="182" text-anchor="middle"
+          font-family="DM Sans, sans-serif" font-size="13" font-weight="600" fill="var(--ink)">level</text>
+    <text x="350" y="222" text-anchor="middle"
+          font-family="DM Mono, monospace" font-size="10" fill="var(--ink-soft)">ex. electric guitar</text>
+
+    <!-- Line-level bar -->
+    <rect x="500" y="55" width="100" height="145" fill="var(--bg-alt)"
+          stroke="var(--accent)" stroke-width="1.5"/>
+    <text x="550" y="47" text-anchor="middle"
+          font-family="DM Mono, monospace" font-size="10" fill="var(--ink-soft)">~1 V</text>
+    <text x="550" y="125" text-anchor="middle"
+          font-family="DM Sans, sans-serif" font-size="13" font-weight="600" fill="var(--ink)">line level</text>
+    <text x="550" y="222" text-anchor="middle"
+          font-family="DM Mono, monospace" font-size="10" fill="var(--ink-soft)">ex. synthesizer</text>
+
+  </svg>
+  <figcaption>Three signal levels, drawn roughly to scale. A line-level signal is around a thousand times stronger than a mic-level signal.</figcaption>
+</figure>
+
+<p>The numbers above are estimates. Mic level is around a millivolt (one one-thousandth of a volt), instrument level is around a hundred millivolts, and line level is around a volt. The exact figures depend on the source, but the gap between them is the point: a line-level signal is roughly a thousand times stronger than a mic-level signal. That's a big enough gap that the input circuits handling each level have to be built differently.</p>
+
+<h3>1.1 · Mic level</h3>
+
+<p>What comes out of any microphone. The signal is weak because the energy producing it (sound waves vibrating a diaphragm) is small. A mic-level signal has to be amplified by a <strong>preamp</strong> before it can be used or recorded. Every audio interface has built-in preamps on its mic inputs. The XLR jack on the front of the PreSonus or the Behringer is a mic input, and turning the gain knob is what controls how much that preamp amplifies the signal. Preamps come in all shapes and sizes, not just built into an audio interface: a mixer's channel strip has one on each input, and a standalone hardware preamp is one in a box of its own. We'll come back to those in section 5.</p>
+
+<h3>1.2 · Instrument level</h3>
+
+<p>What comes out of an electric guitar or bass pickup. A pickup is a small coil of wire wound around a magnet; the steel strings vibrate inside the magnetic field and induce a current in the coil. That mechanism produces a signal that's stronger than a mic puts out but weaker than a typical line-level source. An instrument-level signal also has high <strong>impedance</strong>, which is an electrical property that affects how the signal travels through a cable and what kind of input it wants. A high-impedance signal plugged into a low-impedance input (like a line input) loses its high frequencies and sounds dull.</p>
+
+<div class="callout">
+  <div class="callout-label">The name is a little misleading</div>
+  <p>"Instrument level" sounds like it covers all instruments, but it really means "what comes out of a pickup." Electric guitars and electric basses have pickups built into them by default, so they produce instrument-level signals directly. Most other instruments don't. An acoustic guitar, a violin, a saxophone, a piano, your own voice: none of them produce any electrical signal on their own, so they have no signal level to speak of. To capture them you put a mic in front, which gives you mic level.</p>
+  <p>You <em>can</em> add a pickup to almost any acoustic instrument, though, and that's a common move. Aftermarket pickups exist for acoustic guitar, violin, upright bass, mandolin, even brass and wind instruments. Once installed, the instrument now has two ways of producing sound: the acoustic one (capturable with a mic, mic level) and the electrified one (capturable with a cable from the pickup, instrument level). Players often record both at once and blend them.</p>
+</div>
+
+<p>Most audio interfaces have a dedicated instrument input for this reason, often marked <strong>Hi-Z</strong> (for "high impedance") or labeled with a little guitar icon. The lab interfaces handle it two different ways. The PreSonus AudioBox USB 96 has two combo jacks on the front, both labeled <strong>Mic/Inst</strong>: each one accepts either a mic-level or an instrument-level signal, and the gain knob for that channel has <strong>Inst</strong> and <strong>Mic</strong> markings around it to guide where the level typically sits. The Behringer U-Phoria UM2 takes a simpler approach: input 1 is a combo jack labeled <strong>Mic/Line 1</strong> (mic or line, no instrument), and input 2 is a dedicated 1/4" jack labeled <strong>Inst 2</strong> for instruments only. Same job, two different layouts.</p>
+
+<h3>1.3 · Line level</h3>
+
+<p>What comes out of a synthesizer, a mixer's main outputs, a CD player's outputs, an audio interface's outputs, or any device whose job is to send audio onward to another device. Line level is the standard interchange format of professional audio: every piece of audio gear with outputs sends at line level, and every piece with inputs designed to receive from other gear expects line level.</p>
+
+<p>A line input doesn't need much amplification, because the signal is already strong. The preamp behind a line input applies far less gain than the one behind a mic input. The lab interfaces don't have dedicated line inputs, but they can accept a line-level signal on the 1/4" side of a combo jack (the Behringer is explicit about it, with its input 1 labeled <strong>Mic/Line 1</strong>). Larger interfaces with more channels often dedicate certain inputs to line level only.</p>
+
+<p>There are two flavors of line level worth knowing about. <strong>Consumer line level</strong> (called -10 dBV, the spec a CD player or a typical home stereo uses) sits at around 0.3 volts. <strong>Professional line level</strong> (called +4 dBu, used in studio gear and pro mixers) sits at around 1.2 volts, four times stronger. Plug a consumer-line source into a pro-line input and the signal is quieter than the input expects; plug a pro-line source into a consumer-line input and the signal is too hot. The lab interfaces handle both, but mismatched line levels are a common source of "why is this signal so quiet" (or so loud) in mixed-gear setups.</p>
+
+<hr>
+
+<h2>2 · Cables for each level</h2>
+
+<p>Four cable types cover almost everything you'll meet in audio work: XLR for mic and balanced line, TS for instrument, TRS for balanced line or unbalanced stereo, and RCA for consumer-line connections. The cable carries the signal between devices, but it also tells you something about what kind of signal to expect: a cable type is a strong hint about what's flowing through it.</p>
+
+<figure>
+  <svg viewBox="0 0 700 280" xmlns="http://www.w3.org/2000/svg"
+       role="img" aria-label="Three cable types shown in profile. XLR cable on the left in teal, with three pins drawn at the connector end and a three-conductor cross-section. TS cable in the middle in ochre, with a single ring on the quarter-inch plug and a two-conductor cross-section. TRS cable on the right in muted plum, with two rings on the quarter-inch plug and a three-conductor cross-section. Each cable is labeled with what it carries.">
+
+    <text x="350" y="22" text-anchor="middle"
+          font-family="DM Mono, monospace" font-size="11" letter-spacing="0.12em"
+          fill="var(--accent)">XLR, TS, AND TRS AT A GLANCE</text>
+
+    <!-- XLR -->
+    <g>
+      <!-- Body of cable, drawn as a thick stroke -->
+      <line x1="60" y1="100" x2="180" y2="100"
+            stroke="var(--cable-xlr)" stroke-width="6"/>
+      <!-- XLR connector shell -->
+      <rect x="50" y="85" width="20" height="30" rx="2"
+            fill="var(--cable-xlr)" stroke="var(--cable-xlr)" stroke-width="1"/>
+      <!-- Three pins inside -->
+      <circle cx="56" cy="95" r="1.8" fill="var(--bg)"/>
+      <circle cx="64" cy="95" r="1.8" fill="var(--bg)"/>
+      <circle cx="60" cy="108" r="1.8" fill="var(--bg)"/>
+      <!-- Label -->
+      <text x="120" y="75" text-anchor="middle"
+            font-family="DM Sans, sans-serif" font-size="14" font-weight="600"
+            fill="var(--cable-xlr)">XLR</text>
+      <text x="120" y="135" text-anchor="middle"
+            font-family="DM Mono, monospace" font-size="10"
+            fill="var(--cable-xlr)">3 conductors, balanced</text>
+      <text x="120" y="150" text-anchor="middle"
+            font-family="DM Mono, monospace" font-size="10"
+            fill="var(--cable-xlr)">carries mic level</text>
+      <text x="120" y="165" text-anchor="middle"
+            font-family="DM Mono, monospace" font-size="10"
+            fill="var(--cable-xlr)">(or balanced line)</text>
+
+      <!-- Cross-section label -->
+      <text x="120" y="200" text-anchor="middle"
+            font-family="DM Mono, monospace" font-size="9"
+            fill="var(--ink-soft)">cross-section</text>
+      <!-- Cross-section circle -->
+      <circle cx="120" cy="232" r="24"
+              fill="var(--bg-alt)" stroke="var(--cable-xlr)" stroke-width="1.5"/>
+      <!-- Three small conductors -->
+      <circle cx="113" cy="225" r="3.5" fill="var(--cable-xlr)"/>
+      <circle cx="127" cy="225" r="3.5" fill="var(--cable-xlr)"/>
+      <circle cx="120" cy="240" r="3.5" fill="var(--cable-xlr)"/>
+    </g>
+
+    <!-- TS -->
+    <g>
+      <line x1="290" y1="100" x2="410" y2="100"
+            stroke="var(--cable-ts)" stroke-width="6"/>
+      <!-- TS plug: tip-sleeve, one ring (or none, conceptually) -->
+      <rect x="280" y="93" width="22" height="14"
+            fill="var(--cable-ts)" stroke="var(--cable-ts)" stroke-width="1"/>
+      <line x1="294" y1="93" x2="294" y2="107" stroke="var(--bg)" stroke-width="1.5"/>
+      <text x="350" y="75" text-anchor="middle"
+            font-family="DM Sans, sans-serif" font-size="14" font-weight="600"
+            fill="var(--cable-ts)">TS</text>
+      <text x="350" y="135" text-anchor="middle"
+            font-family="DM Mono, monospace" font-size="10"
+            fill="var(--cable-ts)">2 conductors, unbalanced</text>
+      <text x="350" y="150" text-anchor="middle"
+            font-family="DM Mono, monospace" font-size="10"
+            fill="var(--cable-ts)">carries instrument level</text>
+      <text x="350" y="165" text-anchor="middle"
+            font-family="DM Mono, monospace" font-size="10"
+            fill="var(--cable-ts)">(the guitar cable)</text>
+
+      <text x="350" y="200" text-anchor="middle"
+            font-family="DM Mono, monospace" font-size="9"
+            fill="var(--ink-soft)">cross-section</text>
+      <circle cx="350" cy="232" r="24"
+              fill="var(--bg-alt)" stroke="var(--cable-ts)" stroke-width="1.5"/>
+      <circle cx="343" cy="232" r="3.5" fill="var(--cable-ts)"/>
+      <circle cx="357" cy="232" r="3.5" fill="var(--cable-ts)"/>
+    </g>
+
+    <!-- TRS -->
+    <g>
+      <line x1="520" y1="100" x2="640" y2="100"
+            stroke="var(--cable-trs)" stroke-width="6"/>
+      <!-- TRS plug: tip-ring-sleeve, two rings -->
+      <rect x="510" y="93" width="22" height="14"
+            fill="var(--cable-trs)" stroke="var(--cable-trs)" stroke-width="1"/>
+      <line x1="520" y1="93" x2="520" y2="107" stroke="var(--bg)" stroke-width="1.5"/>
+      <line x1="526" y1="93" x2="526" y2="107" stroke="var(--bg)" stroke-width="1.5"/>
+      <text x="580" y="75" text-anchor="middle"
+            font-family="DM Sans, sans-serif" font-size="14" font-weight="600"
+            fill="var(--cable-trs)">TRS</text>
+      <text x="580" y="135" text-anchor="middle"
+            font-family="DM Mono, monospace" font-size="10"
+            fill="var(--cable-trs)">3 conductors</text>
+      <text x="580" y="150" text-anchor="middle"
+            font-family="DM Mono, monospace" font-size="10"
+            fill="var(--cable-trs)">balanced line</text>
+      <text x="580" y="165" text-anchor="middle"
+            font-family="DM Mono, monospace" font-size="10"
+            fill="var(--cable-trs)">or unbalanced stereo</text>
+
+      <text x="580" y="200" text-anchor="middle"
+            font-family="DM Mono, monospace" font-size="9"
+            fill="var(--ink-soft)">cross-section</text>
+      <circle cx="580" cy="232" r="24"
+              fill="var(--bg-alt)" stroke="var(--cable-trs)" stroke-width="1.5"/>
+      <circle cx="573" cy="225" r="3.5" fill="var(--cable-trs)"/>
+      <circle cx="587" cy="225" r="3.5" fill="var(--cable-trs)"/>
+      <circle cx="580" cy="240" r="3.5" fill="var(--cable-trs)"/>
+    </g>
+
+  </svg>
+  <figcaption>Three of the four cables at a glance, with their connector ends and the number of conductors inside. RCA (covered in 2.4) uses a different connector tradition and isn't drawn here.</figcaption>
+</figure>
+
+<h3>2.1 · XLR (recap)</h3>
+
+<p>The XLR cable from Lecture 1 carries <strong>mic-level signals</strong> from microphones to interface inputs. Three pins, three conductors inside, balanced: two opposite-polarity copies of the signal and a ground. The balanced design lets the receiving end cancel out any electromagnetic noise picked up along the cable's run, which is why XLR works well for the weak mic-level signals where any added noise would be obvious.</p>
+
+<p>XLRs can also carry <strong>balanced line-level signals</strong> between professional audio gear. The cable is the same, but the signal level is different. The output of a studio preamp going into the input of a mixing console travels over XLR at line level. The output of a microphone going into the input of an interface travels over XLR at mic level. Same cable, different signal, decided by what's plugged in at each end.</p>
+
+<div class="callout">
+  <div class="callout-label">How can one cable carry two different signal levels?</div>
+  <p>A cable is <strong>passive</strong>: three wires and a shield, no electronics inside. It doesn't know or care what level of signal is traveling through it. Whatever voltage the device at one end puts onto the wires, the device at the other end sees. A mic-level signal (a millivolt or so) and a line-level signal (a volt or so) are both just voltages swinging up and down, and the cable carries them the same way.</p>
+  <p>What "decides" the level is the gear at each end. A microphone produces mic level because that's what its transducer puts out. A studio preamp produces line level because that's what its output circuit is designed for. The cable is just the path between them. The same logic explains why the balanced noise-rejection trick works for either level: it depends on the cable's two-wire layout, not on how strong the signal is.</p>
+</div>
+
+<figure>
+  <img src="../assets/images/widening-the-flow/xlr-pinout.jpg"
+       alt="A pair of XLR connectors, female on the left and male on the right, with the three internal conductors traced and labeled: ground, signal positive, and signal negative."
+       loading="lazy">
+  <figcaption>An XLR cable with its three conductors traced. The two signal wires carry opposite-polarity copies of the audio; the ground completes the circuit and shields the cable from interference.</figcaption>
+</figure>
+
+<h3>2.2 · TS</h3>
+
+<p>A <strong>TS cable</strong> ends in a quarter-inch plug with two metal sections separated by a single insulating ring: the <strong>tip</strong> (T) and the <strong>sleeve</strong> (S). Inside the cable there are two conductors: one for the signal, one for the ground and shield. This is the standard guitar cable, the kind that plugs a guitar into an amplifier or into the Hi-Z input on an audio interface.</p>
+
+<figure>
+  <img src="../assets/images/widening-the-flow/ts-pinout.jpg"
+       alt="A quarter-inch TS plug with the two sections labeled: Tip and Sleeve."
+       loading="lazy">
+  <figcaption>A quarter-inch TS plug. Two sections separated by a single ring of insulation: the tip carries the signal, the sleeve carries the ground.</figcaption>
+</figure>
+
+<p>TS is <strong>unbalanced</strong>. There's only one copy of the signal traveling down the cable, with the ground returning the current. The balanced-cable trick from Lecture 1 (two opposite-polarity copies, summed at the far end so noise cancels) can't happen here because there's only one copy. Any electromagnetic noise the cable picks up along its run goes straight into the signal. This is why guitar cables work best when they're short, and why running a 50-foot guitar cable across a room full of stage lights produces a noticeable hum.</p>
+
+<p>The good news: instrument-level signals are strong enough (around 100 millivolts) that a little picked-up noise stays small relative to the signal. The noise floor of an unbalanced cable carrying an instrument-level signal is usually fine (and the typical TS run is much shorter than a typical XLR run anyway, so there's less cable on which to pick up noise in the first place). The same cable carrying a mic-level signal would have an unacceptable signal-to-noise ratio, which is part of why mics use balanced XLR.</p>
+
+<h3>2.3 · TRS</h3>
+
+<p>A <strong>TRS cable</strong> ends in a quarter-inch plug that looks like a TS plug with one extra ring: the <strong>tip</strong> (T), <strong>ring</strong> (R), and <strong>sleeve</strong> (S). Three sections, three conductors inside. That third conductor opens up two different uses depending on what the gear at each end expects.</p>
+
+<figure>
+  <img src="../assets/images/widening-the-flow/trs-pinout.jpg"
+       alt="A quarter-inch TRS plug with the three sections labeled: Tip, Ring, and Sleeve."
+       loading="lazy">
+  <figcaption>A quarter-inch TRS plug. The extra ring between tip and sleeve adds a third conductor, which is what makes the cable's two different uses possible.</figcaption>
+</figure>
+
+<p>Used <strong>balanced</strong>, the three conductors carry the same noise-rejection trick as an XLR: signal, inverted signal, ground. At the receiving end, the inverted copy is flipped and summed with the original; noise picked up along the cable cancels. This is how a TRS cable carries balanced line-level signals between professional gear. The PreSonus AudioBox's Main Out jacks are TRS for exactly this reason: balanced line-level output to studio monitors. (Take a look at the back of the lab's PreSonus and you'll see them.)</p>
+
+<p>Used <strong>unbalanced</strong>, the three conductors carry a stereo signal: left, right, and ground. This is how headphones work. A pair of headphones has two speakers (one for each ear), each needing its own signal, plus a shared ground. The TRS plug at the end of a headphone cable carries left on the tip, right on the ring, and ground on the sleeve.</p>
+
+<figure>
+  <img src="../assets/images/widening-the-flow/trs-stereo-pinout.jpg"
+       alt="A TRS quarter-inch plug connected to a pair of over-ear headphones, with three colored wires traced from the plug to the headphones: left channel on the tip, right channel on the ring, and ground on the sleeve."
+       loading="lazy">
+  <figcaption>TRS carrying unbalanced stereo to a pair of headphones. Same cable, same plug, but now the three conductors are left, right, and ground rather than balanced signal and ground.</figcaption>
+</figure>
+
+<p>Same physical cable, two different jobs. Which one is happening depends entirely on what's plugged in at each end. A TRS cable between a mixer's balanced output and a studio monitor's balanced input is carrying balanced mono. A TRS cable between an interface's headphone jack and a pair of headphones is carrying unbalanced stereo. The gear decides.</p>
+
+<div class="callout">
+  <div class="callout-label">A word on mono and stereo</div>
+  <p>A <strong>mono</strong> signal is one channel of audio: one stream of sound, one waveform. A <strong>stereo</strong> signal is two channels, conventionally called left and right, played back through two speakers (or the two sides of a pair of headphones) to give the listener a sense of where sounds are positioned in space. Stereo is two complete audio signals traveling alongside each other, not a single signal split in two.</p>
+  <p>That's why a single TRS cable can carry balanced mono or unbalanced stereo, but never both at once. Three conductors, two ways to spend them: in balanced mono they're (signal+, signal-, ground), one channel with an inverted copy that cancels noise at the receiver; in unbalanced stereo they're (left, right, ground), two channels with no spare conductor for the noise-canceling copy of either one. Balancing requires a copy of the signal; stereo requires a second signal. The cable doesn't have room for both. To send stereo with the noise rejection of balanced, you run <em>two</em> cables, one balanced mono for the left channel and one balanced mono for the right. (This is why the PreSonus has two separate TRS Main Out jacks labeled L and R rather than one stereo jack: each one is a balanced mono output, and together they make a balanced stereo pair.)</p>
+</div>
+
+<h3>2.4 · RCA</h3>
+
+<p>An <strong>RCA cable</strong> ends in a small round plug with a center pin and an outer metal sleeve, designed to push straight into a matching jack rather than locking the way XLR does. RCA cables are <strong>unbalanced</strong> (no noise-rejection trick) and carry one channel of audio per plug. For stereo, you use two of them, conventionally color-coded: <strong>red</strong> for the right channel, <strong>white</strong> (or black) for the left.</p>
+
+<figure>
+  <img src="../assets/images/widening-the-flow/rca-pinout.jpg"
+       alt="A pair of RCA connectors, red and white, with labels showing red as right channel, white as left channel, and the outer shell of each connector as ground."
+       loading="lazy">
+  <figcaption>A stereo pair of RCA connectors. Red = right channel, white = left channel, the outer metal sleeve on each plug = ground.</figcaption>
+</figure>
+
+<p>RCA is the standard connector on consumer audio gear: home stereos, CD players, turntables, older DVD players, the back of a TV. It carries <strong>consumer line level</strong> (-10 dBV, the lower of the two line-level flavors from section 1.3). Studios sometimes use RCA too, mostly for connecting consumer-grade source equipment (a turntable into a phono preamp, say) into a professional setup, with the understanding that the level will be lower than pro-line gear expects.</p>
+
+<div class="callout">
+  <div class="callout-label">Too many cables?</div>
+  <p>If you're feeling like there are a lot of cables for what sounds like one job (moving audio around), you're right to notice. Each cable type exists because a specific problem needed solving at a specific moment in audio's history. XLR was the studio answer to picking up noise on long mic runs. TS was the cheap, simple answer for guitar cables where the signal was strong enough not to need balancing. TRS borrowed the quarter-inch connector to do balanced runs between pro gear, and was borrowed again to carry stereo to headphones. RCA was the consumer-hi-fi answer for cheap home audio connections. You don't need to memorize the history. You do need to know which cable plugs into which jack and what's flowing through it, and that's most of what the labels (Mic, Line, Inst, +48V) on a piece of gear are telling you.</p>
+  <p>The connectors themselves help. XLR locks into place, which matters for live work where someone might trip on a cable. Quarter-inch plugs go in and out fast, which suits guitarists who swap cables constantly. RCA pushes on, which is cheap to manufacture for consumer gear. The connector tells you something about the world the cable was designed for. The one practical interop you'll meet in the lab: a TS plug fits into a TRS jack (and vice versa) and audio flows, because the TS plug shorts the ring to the sleeve and turns the connection unbalanced. What can't work is plugging an XLR cable into a quarter-inch jack, since the connector shapes don't match.</p>
+  <p>On cost: cables span a huge price range, and the audible differences across that range are smaller than the marketing suggests. A 10-foot TS guitar cable from a reputable maker (Hosa, Live Wire, Monoprice) runs around $10 to $15 and works fine. A 10-foot XLR mic cable from the same makers is $15 to $25. Boutique cables (Mogami, Canare for the cable itself; Neutrik for connectors) cost more and are genuinely better built, with longer lifespans in heavy use; they're standard in professional studios for that reason. Cables priced in the hundreds or thousands tend to trade on claims about audio quality that don't hold up to blind tests. For most work, well-made budget cables are completely sufficient.</p>
+</div>
+
+<hr>
+
+<h2>3 · Other mic types</h2>
+
+<p>The mics in the lab are dynamics. They're workhorses, the right choice for most everyday sample-library work. As you move outside the lab, you'll meet two other transducer types that show up in any studio inventory: the <strong>condenser</strong> and (less often) the <strong>ribbon</strong>. Both are still microphones doing the same fundamental job (converting acoustic energy into electrical energy), but the mechanism inside is different, and the different mechanism produces a different sound.</p>
+
+<h3>3.1 · The condenser microphone</h3>
+
+<p>Inside a condenser mic, instead of a coil-and-magnet assembly (like the one in a dynamic mic), there are two thin metal plates held very close together, with one of them free to move. Sound waves push the movable plate back and forth, changing the distance between the two plates. The mic measures that changing distance as a changing electrical capacitance, and turns it into an output signal. The full electrical principle isn't important here; what matters is the consequence.</p>
+
+<figure class="annotated">
+  <img src="../assets/images/widening-the-flow/condenser-microphone-cross-section.webp"
+       alt="Cross-section of a condenser microphone with six numbered red arrows: an arrow approaching from the left showing the incoming sound wave, arrows pointing to two thin vertical plates at the front of the mic (the backplate and the movable diaphragm), an arrow pointing to a capacitor symbol that represents the two plates electrically, an arrow pointing to a resistor symbol that represents the impedance-converter circuit, and an arrow exiting to the right showing the output wire leaving the mic.">
+  <figcaption>The working parts of a condenser microphone</figcaption>
+  <div class="annotation-key">
+    <strong>1.</strong> Acoustic energy (the incoming sound wave)<br>
+    <strong>2.</strong> Backplate (the fixed metal plate at the rear of the capsule)<br>
+    <strong>3.</strong> Diaphragm (the movable metal plate, facing the sound)<br>
+    <strong>4.</strong> Capacitor (the two plates represented as their electrical circuit equivalent)<br>
+    <strong>5.</strong> Impedance-converter circuit (the active electronics that turn the tiny capacitance changes into a usable signal; this is what phantom power runs)<br>
+    <strong>6.</strong> Output wires (the signal leaving the mic on its way to the XLR cable)
+  </div>
+</figure>
+
+<p>Because the movable plate has no coil attached to it, it's far lighter than a dynamic mic's diaphragm. A lighter plate responds more readily to quiet sounds and to fast detail (the high-frequency transients in a hi-hat hit, the breath at the start of a sung consonant, the air around a soft acoustic guitar). Condensers capture those details with a clarity that dynamics smooth over. This is why condensers are the standard studio mic for vocals, acoustic guitar, piano, drum overheads, and anything where you want the recording to feel detailed and present.</p>
+
+<p>The trade-off is that the condenser's two-plate design needs a small electrical charge across the plates to work at all. Where does that charge come from? An audio interface (or a mixer, or a dedicated mic preamp) can send a small DC voltage up the same XLR cable that carries the audio signal back down. This is called <strong>phantom power</strong>, conventionally +48 volts, and it's the reason every interface with a mic input has a button or switch labeled <strong>+48V</strong>. Turn it on when you plug in a condenser; turn it off when you plug in a dynamic.</p>
+
+<div class="callout">
+  <div class="callout-label">Phantom power and dynamic mics</div>
+  <p>A common worry: will phantom power damage a dynamic mic if you forget to switch it off? For modern dynamic mics with balanced XLR outputs, the answer is no. The +48V appears equally on both signal pins, and the mic's circuit ignores it. Older or unusual designs (some ribbon mics in particular) can be damaged, which is why the convention is to switch phantom power off when you're not using a condenser. The rule of thumb: phantom power on only when you know the mic needs it.</p>
+</div>
+
+<h3>3.2 · The ribbon microphone</h3>
+
+<p>A ribbon mic uses a thin strip of corrugated metal foil suspended in a magnetic field. Sound waves move the ribbon back and forth, which generates a small current the same way a dynamic mic's coil does. The ribbon is much lighter than a coil, so it captures detail more like a condenser; but it has no plates, so it doesn't need phantom power (and can be damaged by it on some older designs).</p>
+
+<figure>
+  <img src="../assets/images/widening-the-flow/ribbon-microphone-cross-section.jpg"
+       alt="Cross-section diagram of a ribbon microphone showing a U-shaped magnet at the bottom with two upward-facing poles, a corrugated metal ribbon suspended vertically between the poles inside the magnetic field, and a transformer at the right side connected to the ribbon and feeding the output."
+       loading="lazy">
+  <figcaption>The working parts of a ribbon microphone. The ribbon (a thin corrugated metal strip) hangs in the field of the U-shaped magnet; movement of the ribbon induces a tiny current that the transformer steps up to a usable level at the output.</figcaption>
+</figure>
+
+<p>Ribbons have a warm, smooth, slightly darker character that engineers reach for on certain sources: brass instruments, guitar amplifiers, voiceover work. They're also fragile: a strong blast of air (a kick drum up close, someone speaking into the mic from a few inches away, a careless drop) can stretch the ribbon and ruin the mic. Ribbons are worth knowing as the third common transducer type so the vocabulary is complete.</p>
+
+<h3>3.3 · Choosing between mic types</h3>
+
+<figure>
+  <img src="../assets/images/widening-the-flow/three-mic-types-comparison.jpg"
+       alt="Three microphones photographed side by side against a white background. Left: a Shure SM57 dynamic microphone, dark grey with a black grille on top. Center: a Neumann large-diaphragm condenser microphone, silver with a prominent metal mesh grille. Right: a Royer R-121 ribbon microphone, brushed metallic finish with horizontal slats over the ribbon element."
+       loading="lazy">
+  <figcaption>The three mic types as you'd meet them in the wild. Left: a Shure SM57 (dynamic), the mic at every lab station. Center: a Neumann U87 (large-diaphragm condenser), the studio-standard vocal mic. Right: a Royer R-121, the modern standard for ribbons.</figcaption>
+</figure>
+
+<p>For a lot of work, the dynamic mic at the station is the right tool. It's rugged, it doesn't need phantom power, and its character flatters many kinds of source material.</p>
+
+<p>The conventional wisdom about where each type fits is summarized in any recording-techniques book, and it's worth knowing as a starting point. <strong>Dynamic mics</strong> handle loud sources without distorting and take physical abuse well, which is why they end up in front of kick drums, snare drums, electric guitar amps, and brass instruments, and on stage in front of vocalists who treat their mic the way a tool gets treated. <strong>Condensers</strong> capture quiet detail with more clarity than dynamics, which is why they're the studio standard for vocals, acoustic guitar, piano, drum overheads, and anything where you want the breath, the room, and the high-frequency air around a sound to come through. They need phantom power and they don't tolerate being dropped. <strong>Ribbon mics</strong> have a smoother, slightly darker character that engineers reach for on sources where a dynamic would feel harsh and a condenser would feel too forward: brass, electric guitar amps in certain recording styles, voiceover and broadcast work. None of these are rules. Plenty of great recordings have been made with the "wrong" mic for the job.</p>
+
+<p>Price spans an absurd range. A reliable workhorse dynamic (Shure SM57, Shure SM58, Sennheiser e835) costs around $100 new, and one of these will outlive everything else you own. Decent condensers start around $100 to $300 for entry-level large-diaphragm models (Rode NT1-A, Audio-Technica AT2020, AKG P220), step up to $500 to $1,500 for studio mainstays (Rode NT2-A, AKG C414, Neumann TLM 102), and reach into the thousands for the famous ones (the Neumann U87 in the photo above, around $3,500). Ribbon mics tend to start higher than condensers because the manufacturing is more delicate: $300 to $700 for entry-level (Cascade Fat Head, sE Electronics X1R), $1,000 to $1,500 for the modern standard Royer R-121 (the one in the photo), and up from there for vintage models or boutique reissues. For most home-studio and project-studio work, a $100 dynamic and a $200 condenser cover almost any need you'll have. The expensive mics are real instruments that pay for themselves in professional studios where the cost gets amortized across thousands of sessions. They're not a prerequisite for making good recordings.</p>
+
+<p>One more thing worth knowing: people in audio have strong, specific opinions about individual mic models, and you'll meet those opinions everywhere (YouTube reviews, forum threads, the engineer at the studio you visit, the producer your friend works with). "You need a U87 for that vocal." "Nothing beats a 421 on toms." "The R-121 is the only ribbon I'd reach for." Some of this is hard-earned knowledge from people who've A/B-compared dozens of mics over decades. Some of it is brand identity, peer pressure, and the human tendency to defend the gear we already own. You don't need to take sides in any of these debates yet. As you record more, you'll develop your own ears for what each mic does and what you reach for in what situation. Until then, the dynamic at your station is enough mic to make work you can be proud of.</p>
+
+<hr>
+
+<h2>4 · Polar patterns beyond cardioid</h2>
+
+<p>The dynamic mics in the lab are <strong>cardioid</strong>: most sensitive in front, less sensitive at the sides, almost deaf to sound coming from directly behind. That's one polar pattern. Many microphones, especially condensers, can switch between several patterns. Three are common enough to know by name: cardioid, omnidirectional, and figure-8 (sometimes called bi-directional). A handful of other patterns show up as variants of these three.</p>
+
+<figure>
+  <img src="../assets/images/widening-the-flow/typical-microphone-polar-patterns.png"
+       alt="A chart of six common microphone polar patterns drawn around microphone bodies. Top row: cardioid (a heart shape, full in front), super-cardioid (a tighter heart shape with a small rear lobe), and hyper-cardioid (an even tighter heart shape with a larger rear lobe). Bottom row: bi-directional (two equal lobes front and back, labeled Noise Cancelling), omni (a sphere around the mic), and shot-gun (a long narrow lobe pointing forward)."
+       loading="lazy">
+  <figcaption>Six common polar patterns. The three you'll meet most often are cardioid, omnidirectional, and bi-directional (figure-8). The other three are variants you'll encounter on specific mics for specific jobs.</figcaption>
+</figure>
+
+<p><strong>Cardioid</strong> rejects what's behind it and emphasizes what's in front. The dominant pattern for live work, where you want the mic to pick up the source and not the room (or the monitor speaker pointed at the performer). The pattern most dynamic mics are stuck with, and the pattern most condensers default to.</p>
+
+<p><strong>Omnidirectional</strong> picks up equally from every direction. A sphere around the mic. The mic doesn't favor any one direction over another; it captures the whole space around it. Useful when you want the room to be part of the recording (an orchestra at a respectful distance, a piano in a hall, an ambience track for a sound design library) or when the source moves around (a conversation between two people across a table, where pointing the mic at one of them would lose the other).</p>
+
+<p><strong>Figure-8</strong> (also called bi-directional) picks up equally from front and back, but rejects sound from the sides. Two equal lobes. Useful for capturing two sources facing each other across a mic (a duet, an interview), or for stereo mic'ing techniques that combine a cardioid and a figure-8 to capture a wide image of a single source.</p>
+
+<p>The other three patterns in the chart are variants. <strong>Super-cardioid</strong> and <strong>hyper-cardioid</strong> are tighter, more directional versions of cardioid that trade a little rejection at the back for tighter focus at the front; they're common on stage mics that need extra isolation. <strong>Shotgun</strong> is the most directional of all, a narrow forward lobe that's standard in film and television production for picking up dialogue from a distance. You'll meet them mostly in specialized contexts.</p>
+
+<p>Most condensers labeled "multi-pattern" let you switch between cardioid, omni, and figure-8 (and sometimes a few intermediate ones) using a small switch on the mic body. The polar-pattern choice is a creative decision about what to include and what to exclude. It belongs to the same family of decisions as choosing the mic itself or choosing where to place it.</p>
+
+<hr>
+
+<h2>5 · Signal modifiers: DI boxes and hardware preamps</h2>
+
+<p>By now you've seen that an input wants a specific signal level and an input shape (mic, instrument, line). What happens when the source you have and the input you have don't match? You insert a <strong>signal modifier</strong>: a small box that takes a signal at one level and outputs it at another. Two of these modifiers are common enough to know by name: the <strong>DI box</strong> and the <strong>hardware preamp</strong>.</p>
+
+<h3>5.1 · The DI box</h3>
+
+<p>"DI" stands for <strong>direct injection</strong>, or sometimes just <strong>direct input</strong>. A DI box takes an unbalanced instrument-level signal (the kind that comes out of a guitar) and outputs a balanced mic-level signal (the kind a mic input expects). It does two jobs at once: it lowers the signal level, and it converts unbalanced to balanced.</p>
+
+<figure>
+  <img src="../assets/images/widening-the-flow/radial-prodi-di-box.jpg"
+       alt="A Radial Pro DI box, a small green metal box with the labels PRO DI and PASSIVE DIRECT BOX printed on top. The front edge has a 1/4 inch INPUT jack, a -15 dB PAD switch, and a 1/4 inch THRU jack. The side panel is labeled LOW-Z OUT 600 ohm, indicating where the XLR output sits."
+       loading="lazy">
+  <figcaption>A Radial Pro DI, one of the most common passive DI boxes in live and studio use. The guitar plugs into the 1/4" INPUT on the front; the balanced mic-level XLR output sits on the side. The THRU jack passes the unbalanced signal along to a guitar amp at the same time, which lets you record direct and amp the signal simultaneously.</figcaption>
+</figure>
+
+<p>The use case: imagine a band playing live in a venue with a long stage. The guitarist's amp is at the back of the stage; the mixing console is at the back of the venue, fifty feet away. The guitarist wants to send a signal from their guitar (or from a pedal output) all the way to the mixer. Running a TS cable that distance would be a noise disaster: an unbalanced cable that long picks up enough electromagnetic interference to drown the signal. The solution: plug the guitar into a DI box at the stage end, run a long XLR cable from the DI's output to the mixer, and let the balanced cable reject the noise along the way. At the mixer, the signal enters a mic input as if it had come from a microphone.</p>
+
+<p>The studio use case is similar. If you want to record a bass guitar directly into a mic input on a mixer that has no instrument-level inputs of its own, plug the bass into a DI, plug the DI into the mic input, and you've matched the signal to what the input wants. Many DI boxes are <strong>passive</strong> (no power needed, the level change comes from a transformer inside) and some are <strong>active</strong> (powered, often by phantom power from the mic input it feeds, with extra circuitry that handles the impedance change more gracefully).</p>
+
+<h3>5.2 · The hardware preamp</h3>
+
+<p>A <strong>preamp</strong> takes a mic-level signal and amplifies it to line level. You already know that audio interfaces have built-in preamps on their mic inputs (that's what the gain knob controls). A <strong>hardware preamp</strong> is the same circuit, but as a standalone box rather than part of an interface, often built with specific design choices that give the amplification a distinctive sound. Two kinds of distinctiveness show up.</p>
+
+<figure>
+  <img src="../assets/images/widening-the-flow/rme-quadmic-preamp.jpg"
+       alt="An RME QuadMic four-channel hardware preamp, shown from the front and the back. The front panel has four identical channel strips, each with a +48V phantom power button, Lo Cut button, Phase button, a large gain knob ranging from +6 to +60 dB, and Sig and Clip LEDs. The back panel shows four combo XLR jacks labeled Microphone / Line Inputs on the right and four 1/4 inch Line Level Outputs on the left, plus a power input.">
+  <figcaption>An RME QuadMic four-channel hardware preamp, front and back. Each channel has its own gain knob, +48V switch, and signal indicators on the front. The back makes the preamp's job visible: mic-level XLR signals come in on the right, line-level outputs leave on TRS jacks on the left. A standalone preamp like this is what you add when you want more channels than your interface offers, or when you want a particular preamp's sound on the way to the recorder.</figcaption>
+</figure>
+
+<p>The first is technical: a high-quality outboard preamp can be quieter (lower self-noise) and more transparent than the budget preamps in a $100 audio interface. For very quiet sources recorded with sensitive condenser mics, the difference can be audible.</p>
+
+<p>The second is character. Some preamp designs deliberately add a coloration to the signal as they amplify it: a slight harmonic distortion that engineers describe as warmth, punch, saturation, or thickness. The Neve 1073 (a preamp originally designed in the 1970s for British studio consoles) and the API 312 (designed in the same era for American consoles) are two famously characterful preamps. Engineers reach for them not because they amplify more accurately than a clean preamp does, but because they amplify <em>less</em> accurately in a way that flatters certain sources. You'll hear people talk about "the Neve sound" or "the API sound"; that's what they mean.</p>
+
+<p>The preamps built into the lab's interfaces are clean, quiet, and more than enough. Hardware preamps are worth understanding so the vocabulary makes sense when you encounter it later. The studio world has a deep culture of preamp choice, and "what preamp did you track this on?" is a real question with real audible consequences.</p>
+
+<h3>5.3 · The widened chain</h3>
+
+<p>With these pieces in hand, the basic recording chain from Lecture 1 can adapt to almost any source. The diagram below shows four flows ending at the same audio interface: a mic recording (the basic chain you already know), a mic recording through a hardware preamp into a line input (where the preamp does the amplification instead of the interface), a guitar recording through the interface's instrument input (no DI needed), and a guitar recording through a DI box into a mic input (the situation that arises when the gear at hand doesn't have an instrument input). All four end at the same place; they differ in how the signal gets there.</p>
+
+<figure>
+  <svg viewBox="0 0 720 460" xmlns="http://www.w3.org/2000/svg"
+       role="img" aria-label="Four parallel signal flows ending at one audio interface on the right. Top flow: a dynamic mic connects to the interface via an XLR cable carrying mic level. Second flow: a dynamic mic connects to a hardware preamp via XLR mic level, then the preamp connects to the interface via a TRS cable carrying balanced line level. Third flow: a guitar connects to the interface's Hi-Z instrument input via a TS cable carrying instrument level. Fourth flow: a guitar connects to a DI box via TS instrument level, then the DI box connects to the interface via an XLR cable carrying mic level.">
+
+    <defs>
+      <marker id="ah-xlr-w" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+        <polygon points="0 0, 10 3, 0 6" fill="var(--cable-xlr)"/>
+      </marker>
+      <marker id="ah-ts-w" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+        <polygon points="0 0, 10 3, 0 6" fill="var(--cable-ts)"/>
+      </marker>
+      <marker id="ah-trs-w" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+        <polygon points="0 0, 10 3, 0 6" fill="var(--cable-trs)"/>
+      </marker>
+    </defs>
+
+    <text x="360" y="22" text-anchor="middle"
+          font-family="DM Mono, monospace" font-size="11" letter-spacing="0.12em"
+          fill="var(--accent)">FOUR PATHS INTO ONE INTERFACE</text>
+
+    <!-- Audio interface (shared destination on the right, spanning all four rows) -->
+    <g>
+      <rect x="540" y="60" width="150" height="380" rx="4"
+            fill="var(--bg-alt)" stroke="var(--accent)" stroke-width="1.5"/>
+      <text x="615" y="240" text-anchor="middle"
+            font-family="DM Sans, sans-serif" font-size="14" font-weight="600" fill="var(--ink)">Audio</text>
+      <text x="615" y="258" text-anchor="middle"
+            font-family="DM Sans, sans-serif" font-size="14" font-weight="600" fill="var(--ink)">interface</text>
+      <text x="615" y="278" text-anchor="middle"
+            font-family="DM Mono, monospace" font-size="10" fill="var(--ink-soft)">amplify, digitize</text>
+    </g>
+
+    <!-- ROW 1: Mic direct to mic input (y center 95) -->
+    <g>
+      <rect x="20" y="65" width="110" height="60" rx="4"
+            fill="var(--bg-alt)" stroke="var(--accent)" stroke-width="1.5"/>
+      <text x="75" y="92" text-anchor="middle"
+            font-family="DM Sans, sans-serif" font-size="13" font-weight="600" fill="var(--ink)">Dynamic mic</text>
+      <text x="75" y="110" text-anchor="middle"
+            font-family="DM Mono, monospace" font-size="10" fill="var(--ink-soft)">mic level</text>
+
+      <line x1="132" y1="95" x2="538" y2="95"
+            stroke="var(--cable-xlr)" stroke-width="2.5" marker-end="url(#ah-xlr-w)"/>
+      <text x="335" y="82" text-anchor="middle"
+            font-family="DM Mono, monospace" font-size="11"
+            fill="var(--cable-xlr)">XLR · mic level</text>
+      <text x="335" y="115" text-anchor="middle"
+            font-family="DM Mono, monospace" font-size="9"
+            fill="var(--cable-xlr)">→ mic input</text>
+    </g>
+
+    <!-- ROW 2: Mic through hardware preamp to line input (y center 185) -->
+    <g>
+      <rect x="20" y="155" width="110" height="60" rx="4"
+            fill="var(--bg-alt)" stroke="var(--accent)" stroke-width="1.5"/>
+      <text x="75" y="182" text-anchor="middle"
+            font-family="DM Sans, sans-serif" font-size="13" font-weight="600" fill="var(--ink)">Dynamic mic</text>
+      <text x="75" y="200" text-anchor="middle"
+            font-family="DM Mono, monospace" font-size="10" fill="var(--ink-soft)">mic level</text>
+
+      <!-- XLR from mic to preamp -->
+      <line x1="132" y1="185" x2="298" y2="185"
+            stroke="var(--cable-xlr)" stroke-width="2.5" marker-end="url(#ah-xlr-w)"/>
+      <text x="215" y="172" text-anchor="middle"
+            font-family="DM Mono, monospace" font-size="10"
+            fill="var(--cable-xlr)">XLR · mic level</text>
+
+      <!-- Hardware preamp box -->
+      <rect x="300" y="155" width="110" height="60" rx="4"
+            fill="var(--bg-alt)" stroke="var(--accent)" stroke-width="1.5"/>
+      <text x="355" y="180" text-anchor="middle"
+            font-family="DM Sans, sans-serif" font-size="13" font-weight="600" fill="var(--ink)">Hardware</text>
+      <text x="355" y="196" text-anchor="middle"
+            font-family="DM Sans, sans-serif" font-size="13" font-weight="600" fill="var(--ink)">preamp</text>
+      <text x="355" y="210" text-anchor="middle"
+            font-family="DM Mono, monospace" font-size="9" fill="var(--ink-soft)">mic → line</text>
+
+      <!-- TRS from preamp to interface line input -->
+      <line x1="412" y1="185" x2="538" y2="185"
+            stroke="var(--cable-trs)" stroke-width="2.5" marker-end="url(#ah-trs-w)"/>
+      <text x="475" y="172" text-anchor="middle"
+            font-family="DM Mono, monospace" font-size="10"
+            fill="var(--cable-trs)">TRS · line level</text>
+      <text x="475" y="205" text-anchor="middle"
+            font-family="DM Mono, monospace" font-size="9"
+            fill="var(--cable-trs)">→ line input</text>
+    </g>
+
+    <!-- ROW 3: Guitar direct to instrument input (y center 275) -->
+    <g>
+      <rect x="20" y="245" width="110" height="60" rx="4"
+            fill="var(--bg-alt)" stroke="var(--accent)" stroke-width="1.5"/>
+      <text x="75" y="272" text-anchor="middle"
+            font-family="DM Sans, sans-serif" font-size="13" font-weight="600" fill="var(--ink)">Guitar</text>
+      <text x="75" y="290" text-anchor="middle"
+            font-family="DM Mono, monospace" font-size="10" fill="var(--ink-soft)">instrument level</text>
+
+      <line x1="132" y1="275" x2="538" y2="275"
+            stroke="var(--cable-ts)" stroke-width="2.5" marker-end="url(#ah-ts-w)"/>
+      <text x="335" y="262" text-anchor="middle"
+            font-family="DM Mono, monospace" font-size="11"
+            fill="var(--cable-ts)">TS · instrument level</text>
+      <text x="335" y="295" text-anchor="middle"
+            font-family="DM Mono, monospace" font-size="9"
+            fill="var(--cable-ts)">→ Hi-Z (instrument) input</text>
+    </g>
+
+    <!-- ROW 4: Guitar through DI to mic input (y center 365) -->
+    <g>
+      <rect x="20" y="335" width="110" height="60" rx="4"
+            fill="var(--bg-alt)" stroke="var(--accent)" stroke-width="1.5"/>
+      <text x="75" y="362" text-anchor="middle"
+            font-family="DM Sans, sans-serif" font-size="13" font-weight="600" fill="var(--ink)">Guitar</text>
+      <text x="75" y="380" text-anchor="middle"
+            font-family="DM Mono, monospace" font-size="10" fill="var(--ink-soft)">instrument level</text>
+
+      <!-- TS from guitar to DI -->
+      <line x1="132" y1="365" x2="298" y2="365"
+            stroke="var(--cable-ts)" stroke-width="2.5" marker-end="url(#ah-ts-w)"/>
+      <text x="215" y="352" text-anchor="middle"
+            font-family="DM Mono, monospace" font-size="10"
+            fill="var(--cable-ts)">TS · instrument level</text>
+
+      <!-- DI box -->
+      <rect x="300" y="335" width="110" height="60" rx="4"
+            fill="var(--bg-alt)" stroke="var(--accent)" stroke-width="1.5"/>
+      <text x="355" y="368" text-anchor="middle"
+            font-family="DM Sans, sans-serif" font-size="13" font-weight="600" fill="var(--ink)">DI box</text>
+      <text x="355" y="386" text-anchor="middle"
+            font-family="DM Mono, monospace" font-size="9" fill="var(--ink-soft)">inst → mic, balance</text>
+
+      <!-- XLR from DI to interface mic input -->
+      <line x1="412" y1="365" x2="538" y2="365"
+            stroke="var(--cable-xlr)" stroke-width="2.5" marker-end="url(#ah-xlr-w)"/>
+      <text x="475" y="352" text-anchor="middle"
+            font-family="DM Mono, monospace" font-size="10"
+            fill="var(--cable-xlr)">XLR · mic level</text>
+      <text x="475" y="385" text-anchor="middle"
+            font-family="DM Mono, monospace" font-size="9"
+            fill="var(--cable-xlr)">→ mic input</text>
+    </g>
+
+  </svg>
+  <figcaption>The same destination, four ways to get there. Each cable's color names what level it carries: teal = mic, ochre = instrument, plum = balanced line.</figcaption>
+</figure>
+
+<p>What the diagram makes visible: the chain is a sequence of matching steps. At every boundary between two devices, the signal level on the cable matches the input expecting it. When a source produces a signal at the wrong level for the input you have, a signal modifier closes the gap. The DI box is one specific case (instrument level becomes balanced mic level); a hardware preamp is another (mic level becomes line level). Both are tools for making the chain fit together when it otherwise wouldn't.</p>
+
+<p>Once you can recognize the pattern, you can reason about any setup you encounter. A synth into a mixer's line input: line out, line in, levels match, done. A guitar into a mic input: levels don't match, need a DI between them. A condenser mic into an interface: mic level on XLR, interface preamp does the amplification, but the mic needs phantom power so the +48V button has to be on. Once the boundaries are named, the setup becomes a series of small, checkable decisions.</p>
+
+<hr>
+
+<h2>Vocabulary</h2>
+
+<dl class="vocab">
+  <dt>Signal level</dt>
+  <dd>The strength of the electrical signal a device produces or expects. Three levels matter in audio work: mic level (weakest, around 1 millivolt), instrument level (around 100 millivolts), and line level (strongest, around 1 volt). Every input is designed for one level; mismatched levels produce noise, distortion, or silence.</dd>
+
+  <dt>Mic level</dt>
+  <dd>The signal level produced by any microphone. Weak, around 1 millivolt. Needs a preamp before it can be used or recorded. Travels on XLR cables, balanced.</dd>
+
+  <dt>Instrument level</dt>
+  <dd>The signal level produced by electric guitar and bass pickups. Stronger than mic level, weaker than line level, around 100 millivolts. Also high-impedance, which is why it wants a dedicated Hi-Z input. Travels on TS cables, unbalanced.</dd>
+
+  <dt>Line level</dt>
+  <dd>The signal level produced by synthesizers, mixers, audio-interface outputs, and most pieces of audio gear designed to send signal onward. Strong, around 1 volt. Travels on TRS cables (balanced) or RCA cables (unbalanced consumer); also on XLR (balanced professional). Has two conventional flavors: consumer (-10 dBV, around 0.3 V) and professional (+4 dBu, around 1.2 V).</dd>
+
+  <dt>Impedance</dt>
+  <dd>An electrical property of an input or output that affects how a signal travels and how it sounds. High-impedance signals (like a guitar pickup) want high-impedance inputs (the Hi-Z input on an interface). Plugging a high-impedance signal into a low-impedance input loses the high frequencies. A DI box converts high-impedance instrument level to low-impedance mic level.</dd>
+
+  <dt>Hi-Z</dt>
+  <dd>Short for "high impedance." A label on audio-interface inputs designed to receive instrument-level signals from electric guitars or basses. Some interfaces use a guitar icon instead. The lab interfaces handle this two ways: the PreSonus marks both combo jacks <strong>Mic/Inst</strong>, while the Behringer has a separate <strong>Inst 2</strong> jack dedicated to instruments.</dd>
+
+  <dt>TS cable</dt>
+  <dd>A quarter-inch cable with two conductors and a connector that has a tip and a sleeve separated by one insulating ring. Carries unbalanced instrument-level signals. The standard guitar cable.</dd>
+
+  <dt>TRS cable</dt>
+  <dd>A quarter-inch cable with three conductors and a connector that has a tip, a ring, and a sleeve separated by two insulating rings. Can carry balanced line-level (one signal, noise-rejecting) or unbalanced stereo (two signals plus ground). What it's doing depends on what's plugged in at each end. Headphone cables are TRS carrying stereo; pro studio interconnects are TRS carrying balanced mono.</dd>
+
+  <dt>RCA cable</dt>
+  <dd>An unbalanced cable with a push-on connector that has a center pin and an outer sleeve. Carries one channel of audio per plug, so stereo uses two (red = right, white or black = left). The standard connector on consumer audio gear; carries consumer line level (-10 dBV).</dd>
+
+  <dt>Balanced cable</dt>
+  <dd>A cable that carries two opposite-polarity copies of the signal so the receiving end can cancel out picked-up noise. XLR is always balanced; TRS is balanced when used for mono interconnects; TS is never balanced.</dd>
+
+  <dt>Unbalanced cable</dt>
+  <dd>A cable that carries a single copy of the signal plus a ground return. Simpler and cheaper than balanced, but vulnerable to noise picked up along the cable's run. TS, RCA, and TRS-used-as-stereo are all unbalanced.</dd>
+
+  <dt>Mono</dt>
+  <dd>A signal made of one audio channel. One waveform, one stream of sound. The signal a single mic produces is mono. A signal sent over a balanced TRS or XLR cable between pro gear is mono (the second conductor is an inverted copy of the same channel, not a different one).</dd>
+
+  <dt>Stereo</dt>
+  <dd>A signal made of two audio channels, conventionally called left and right, played back through two speakers (or the two sides of a pair of headphones) to give the listener a sense of where sounds are positioned in space. Two complete audio signals traveling alongside each other, not one signal split in two. A TRS cable carrying stereo is unbalanced because the cable's three conductors are spent on left, right, and ground, with none left over for the noise-canceling inverted copy.</dd>
+
+  <dt>Condenser microphone</dt>
+  <dd>A mic that uses two close-spaced metal plates instead of a coil and magnet. The plate spacing changes when sound hits the diaphragm, and the mic measures that change as a changing capacitance. More sensitive to detail and high frequencies than a dynamic. Needs phantom power.</dd>
+
+  <dt>Ribbon microphone</dt>
+  <dd>A mic that uses a thin strip of corrugated metal foil suspended in a magnetic field. Captures detail like a condenser but doesn't need phantom power. Has a warm, smooth character. Fragile; not used in the lab.</dd>
+
+  <dt>Phantom power</dt>
+  <dd>A small DC voltage (conventionally +48 volts) sent up an XLR cable from an interface or mixer to power a condenser mic. The +48V switch on an audio interface turns it on or off. Turn it on when using a condenser; off when using a dynamic (or any other mic that doesn't need it).</dd>
+
+  <dt>Polar pattern</dt>
+  <dd>The shape of a microphone's sensitivity to sound from different directions. Three patterns are foundational: cardioid (front), omnidirectional (all directions equally), and figure-8 (front and back equally, rejecting the sides). Super-cardioid, hyper-cardioid, and shotgun are variants. Many condenser mics have a switch that selects between patterns.</dd>
+
+  <dt>Omnidirectional</dt>
+  <dd>A polar pattern that picks up sound equally from every direction. Useful when the room is part of the recording or when the source moves around the mic.</dd>
+
+  <dt>Figure-8</dt>
+  <dd>A polar pattern that picks up equally from front and back but rejects the sides. Also called <strong>bi-directional</strong>. Useful for capturing two sources facing each other across a mic, or as one half of a stereo mic'ing technique.</dd>
+
+  <dt>Super-cardioid, hyper-cardioid, shotgun</dt>
+  <dd>Three variants of the cardioid pattern that trade rejection at the rear for tighter focus at the front. Super- and hyper-cardioid are common on stage mics that need extra isolation from monitors and bleed; shotgun is the most directional, used to pick up dialogue at a distance in film and television production.</dd>
+
+  <dt>DI box</dt>
+  <dd>A signal modifier (short for "direct injection") that takes an unbalanced instrument-level signal and outputs a balanced mic-level signal. Lets you plug a guitar into a mic input, and lets you send an instrument signal long distances without picking up noise. Passive DIs use a transformer; active DIs are powered (sometimes by phantom power from the input they feed).</dd>
+
+  <dt>Hardware preamp</dt>
+  <dd>A standalone preamp circuit in its own box, separate from an audio interface. Takes mic level and outputs line level, often with a deliberate sonic coloration (warmth, punch, saturation) that engineers reach for as a creative tool. The Neve 1073 and the API 312 are two famously characterful examples.</dd>
+
+  <dt>Signal modifier</dt>
+  <dd>An umbrella term for the small boxes that convert a signal from one level or format to another so it fits the next stage of a chain. The DI box and the hardware preamp are the two you'll meet most often.</dd>
+</dl>
+
+<hr>
+
+<h2>Read more</h2>
+
+<!-- Useful links / further reading. To be populated. -->
+<p>Links and further reading to come.</p>
+
+<footer class="handout-footer">
+  <span>music-production</span>
+  <span>EOF</span>
+</footer>
+
+</body>
+</html>
