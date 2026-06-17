@@ -241,13 +241,13 @@
 
 <h2>1 · The envelope is a shape</h2>
 
-<p>The envelope you shaped before had three moves: a rise into the sound, a held middle, and a fall back to silence. The full version producers reach for has four, and the new one sits right after the attack.</p>
+<p>The envelope you shaped before had three moves: a rise into the sound, a held middle, and a fall back to silence. A synth envelope adds a fourth move, a short drop between the rise and the held level.</p>
 
 <h3>The four stages: A, D, S, R</h3>
 
-<p>Attack is the rise from silence to the loudest point. <strong>Decay</strong> is the fall from that peak down to a held level. <strong>Sustain</strong> is that held level, and this is the one that trips people up: sustain is not a length of time, it is a height. It is how loud the sound stays while you hold the note. Release is the fall back to silence once the note ends. Plucked and struck sounds spike on the attack, drop fast through the decay, and sit low. Pads do the opposite: a slow attack, a gentle decay, a high sustain, a long release.</p>
+<p>Attack is the rise from silence to the loudest point. <strong>Decay</strong> is the fall from that peak down to a held level. <strong>Sustain</strong> is that held level. It is a height, not a length of time: it sets how loud the sound stays while you hold the note. Release is the fall back to silence once the note ends. Plucked and struck sounds spike on the attack, drop fast through the decay, and sit low. Pads do the opposite: a slow attack, a gentle decay, a high sustain, a long release.</p>
 
-<p>Here is the same idea you shaped before, now with all four stages, driving the loudness of a pad. Move the sliders, press play, and watch the shape in the scope as you hear it.</p>
+<p>Drive that four-stage shape into the loudness of a pad.</p>
 
 <div class="synth-tool" id="toolAmp">
   <div class="synth-tool-title">Tool 1 · ADSR to amplitude</div>
@@ -290,13 +290,13 @@
 
 <h2>2 · The same shape, on pitch</h2>
 
-<p>Nothing about that shape says loudness. It is a line that goes up, settles, and comes back. So point it somewhere else.</p>
+<p>That shape carries no loudness in it. It rises, holds, and falls, and it will move whatever control you point it at. Point it at pitch and the note bends.</p>
 
 <h3>A quick word on pitch</h3>
 
-<p>Pitch is how fast a wave repeats. Speed the wave up and the pitch rises; slow it down and it drops. Raising a sound by twelve <strong>semitones</strong> (the small steps between piano keys, twelve to an octave) doubles how fast it repeats. The useful part here is that pitch can move over the life of a single note, gliding up and back down, and a shape is exactly how you describe that motion.</p>
+<p>Pitch is how fast a wave repeats. Speed the wave up and the pitch rises; slow it down and it drops. Raising a sound by twelve <strong>semitones</strong> (the small steps between piano keys, twelve to an octave) doubles how fast it repeats. Pitch can move over the life of a single note, gliding up and back down, and a shape is how you describe that motion.</p>
 
-<p>Same four sliders, same scope. This time the shape drives pitch instead of loudness. The <em>Range</em> slider sets how far the pitch travels at the peak, in semitones. Watch the line climb and fall, and hear the note bend with it.</p>
+<p>The <em>Range</em> slider sets how far the pitch travels at the peak, measured in semitones.</p>
 
 <div class="synth-tool" id="toolPitch">
   <div class="synth-tool-title">Tool 2 · ADSR to pitch</div>
@@ -334,13 +334,13 @@
 
 <h2>3 · If one shape can steer, can I have more?</h2>
 
-<p>You just used one shape, drawn by hand with four sliders, and sent it to two different controls. So the real question is whether you can have a shape that draws itself and keeps going. Yes. The most common shape maker in any synth or DAW is the <strong>LFO</strong>: a low frequency oscillator.</p>
+<p>You drew one shape by hand with four sliders and sent it to two different controls. A shape can also draw itself and keep going without you. The tool for that is the <strong>LFO</strong>, a low frequency oscillator, the most common shape maker in any synth or DAW.</p>
 
 <h3>An oscillator you do not hear</h3>
 
-<p>An oscillator makes a wave. The ones that make sound repeat fast, hundreds or thousands of times a second, inside the range your ears register: roughly 20 Hz at the low end up to 20 kHz at the top. An LFO is the same kind of wave generator running far slower than that, under 20 Hz, below the bottom of hearing. You never hear the LFO itself. Its wave is still being drawn, cycle after cycle, and that moving shape is the point. You aim it at a control and let its rise and fall move that control for you.</p>
+<p>An oscillator makes a wave. The ones that make sound repeat fast, hundreds or thousands of times a second, inside the range your ears register: roughly 20 Hz at the low end up to 20 kHz at the top. An LFO is the same kind of wave generator running far slower than that, under 20 Hz, below the bottom of hearing. You never hear the LFO itself. Its wave is still being drawn, cycle after cycle, and you aim that moving shape at a control to let its rise and fall move the control for you.</p>
 
-<p>The shapes an LFO draws are the building blocks every oscillator uses. You have met the sine; here it is again alongside its three companions.</p>
+<p>The shapes an LFO draws are the same four every oscillator uses: the sine you already know, plus triangle, sawtooth, and square.</p>
 
 <div class="wave-grid">
   <div class="wave-card">
@@ -384,9 +384,9 @@
   <div class="formula-eg">Example: 2 Hz &times; 60 = 120 BPM. Two cycles a second lands a peak on every beat at 120, which is quick.</div>
 </div>
 
-<p>That conversion is worth keeping close. A 2 Hz LFO, just barely too low to hear as a pitch, already puts a peak under your finger 120 times a minute. Most expressive LFO motion lives well below that, a fraction of a hertz up to a few hertz, which is why the controls below start slow.</p>
+<p>A 2 Hz LFO, just barely too low to hear as a pitch, already puts a peak under your finger 120 times a minute. Most expressive LFO motion lives well below that, from a fraction of a hertz up to a few hertz.</p>
 
-<p>Now point an LFO at something. Pick a shape, set the rate, and choose whether it steers pitch or stereo position. The scope shows the LFO output, the shape it is drawing in real time, while your ears track what it does to the sound.</p>
+<p>Now point an LFO at something. Pick a shape and rate, then send it to pitch or to stereo position.</p>
 
 <div class="synth-tool" id="toolLfo">
   <div class="synth-tool-title">Tool 3 · LFO to pitch or pan</div>
@@ -429,7 +429,7 @@
 
 <h2>4 · A filter, and an LFO to drive it</h2>
 
-<p>So far the shape has moved things you hear directly: how loud, how high, where in the field. The last step is the one that makes modulation feel like production. A shape can move a <em>control on another tool</em>, and let that tool change the sound. The classic pairing is an LFO and a filter.</p>
+<p>So far the shape has moved things you hear directly: how loud, how high, where in the field. A shape can also move a <em>control on another tool</em> and let that tool change the sound. The classic pairing is an LFO and a filter.</p>
 
 <h3>What a filter does</h3>
 
@@ -463,7 +463,7 @@
   <span class="manual-arrow" aria-hidden="true">&#8599;</span>
 </a>
 
-<p>Here is the whole chain: the pad, a low-pass filter on it, and an LFO connected to the cutoff. Set the base cutoff and resonance, then pick the LFO shape, rate, and depth and listen to the filter move. The scope traces the cutoff value as the LFO walks it up and down.</p>
+<p>This tool wires the whole chain: a pad, a low-pass filter on it, and an LFO driving the cutoff. The scope traces the cutoff value, not the sound, as the LFO walks it up and down.</p>
 
 <div class="synth-tool" id="toolFilter">
   <div class="synth-tool-title">Tool 4 · LFO to filter cutoff</div>
@@ -920,7 +920,7 @@
         if (panner) { panner.pan.setValueAtTime(0, ensureCtx().currentTime); }
         lfoGain.gain.value = (+depth.value / 100) * 700; // cents
         pad.oscs.forEach(function(o) { lfoGain.connect(o.detune); });
-        info.textContent = 'The LFO is bending pitch. Watch the shape, hear the wobble.';
+        info.textContent = 'The LFO is bending pitch up and down.';
       } else {
         pad.oscs.forEach(function(o) { o.detune.setValueAtTime(0, ensureCtx().currentTime); });
         lfoGain.gain.value = (+depth.value / 100); // pan units, max 1
