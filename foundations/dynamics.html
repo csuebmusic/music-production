@@ -539,7 +539,7 @@
 
   <p>This second step is so common that most compressor plugins have a dedicated knob for it, usually labeled <strong>makeup gain</strong> (sometimes "output" or "gain"). It's just a multiplier applied after the compressor does its work. The compressor squashes; makeup gain pulls the squashed version back up.</p>
 
-  <p>The Audacity compressor and the interactive tool in this reading both have a makeup gain control. Sometimes you'll want it; sometimes you won't. Compression <em>without</em> makeup gain is useful when you just want to tame a sound that's too loud, leaving the quiet parts where they are. Compression <em>with</em> makeup gain is what makes a piece feel louder. We combined them here to make the loudness change unmistakable, but they're separable choices in practice.</p>
+  <p>The compressor in an audio editor like Audacity and the interactive tool in this reading both have a makeup gain control. Sometimes you'll want it; sometimes you won't. Compression <em>without</em> makeup gain is useful when you just want to tame a sound that's too loud, leaving the quiet parts where they are. Compression <em>with</em> makeup gain is what makes a piece feel louder. We combined them here to make the loudness change unmistakable, but they're separable choices in practice.</p>
 </div>
 
 <p>Any piece you make has some dynamic range, whether you've thought about it or not. Some moments are louder, some are quieter, and that contrast is part of how the piece holds attention. Normalization, compression, and limiting are the tools you use to change that relationship deliberately. The next sections introduce them one at a time.</p>
@@ -642,7 +642,7 @@
 
   <p>This is why "dynamics processing" is a slightly deceiving name for the category. Compression and limiting are sold as loudness tools, and they are. They are also <em>color</em> tools. Every compressor imparts some character to whatever passes through it, and different compressors have different characters.</p>
 
-  <p>This isn't only marketing. The basic idea of a compressor (detect when the signal is loud, reduce the gain) is the same everywhere. But the specifics vary: how the detection works, what shape the gain reduction follows, how quickly it engages, whether the compressor deliberately adds a touch of distortion as part of its sound. A clean digital compressor like the one in Audacity does the math accurately and adds nothing else. A vintage hardware unit, or a software emulation of one, was built (or modeled) to add a specific character on top of the basic compression. People are paying for that character. They are also paying for the engineering hours spent measuring an old piece of hardware accurately enough to reproduce its quirks in software.</p>
+  <p>This isn't only marketing. The basic idea of a compressor (detect when the signal is loud, reduce the gain) is the same everywhere. But the specifics vary: how the detection works, what shape the gain reduction follows, how quickly it engages, whether the compressor deliberately adds a touch of distortion as part of its sound. A clean digital compressor like the one in an audio editor such as Audacity does the math accurately and adds nothing else. A vintage hardware unit, or a software emulation of one, was built (or modeled) to add a specific character on top of the basic compression. People are paying for that character. They are also paying for the engineering hours spent measuring an old piece of hardware accurately enough to reproduce its quirks in software.</p>
 
   <p>Choosing a compressor for a particular sound is partly about how aggressively it can reduce gain, but it is mostly about <em>which kind of character</em> you want, and how cleanly or how colorfully the compressor delivers it.</p>
 
@@ -659,11 +659,11 @@
 
 <h3>Headroom and the target level</h3>
 
-<p>Audacity's Normalize defaults to a target of 0 dB: the loudest possible level. For sample prep, this is too loud. A normalized sample at 0 dB has zero headroom: any additional processing (EQ boost, pitch shift, layering with another sample) can push it past the digital ceiling and clip.</p>
+<p>Normalize in an audio editor like Audacity defaults to a target of 0 dB: the loudest possible level. For sample prep, this is too loud. A normalized sample at 0 dB has zero headroom: any additional processing (EQ boost, pitch shift, layering with another sample) can push it past the digital ceiling and clip.</p>
 
 <p>For sample prep, normalize to <strong>-1 dB</strong>. This is common in production: it leaves a small margin so that inter-sample peaks (peaks that exist between sampled values, which can show up as clipping after digital-to-analog conversion) stay safe. You'll see -1 dB as the target in a lot of professional sample libraries and in delivery specifications for streaming platforms.</p>
 
-<h3>Normalizing in Audacity</h3>
+<h3>Normalizing in an audio editor like Audacity</h3>
 
 <p>The menu path is <code>Effect → Volume and Compression → Normalize</code>. Two settings to know:</p>
 

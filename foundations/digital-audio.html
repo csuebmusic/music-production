@@ -240,7 +240,7 @@
 
 <p><strong>Amplitude</strong> is how big the wave is, measured from the centerline to its peak. A bigger wave moves more air, hits your eardrum harder, and sounds louder. A smaller wave is quieter.</p>
 
-<p>Loudness is conventionally measured in <strong>decibels</strong> (dB). In digital audio, dB values run from 0 (the loudest a digital signal can be) downward into negative numbers. The more negative the number, the quieter the sound. So <strong>0 dB</strong> is the loudest possible (any louder and the signal would clip), and something at <strong>-12 dB</strong> is much quieter than something at <strong>-3 dB</strong>. You'll see these numbers everywhere in Audacity: the level meter shows them while you record, the volume slider on each track is in dB, and the export tool reports your file's peak level in dB.</p>
+<p>Loudness is conventionally measured in <strong>decibels</strong> (dB). In digital audio, dB values run from 0 (the loudest a digital signal can be) downward into negative numbers. The more negative the number, the quieter the sound. So <strong>0 dB</strong> is the loudest possible (any louder and the signal would clip), and something at <strong>-12 dB</strong> is much quieter than something at <strong>-3 dB</strong>. You'll see these numbers everywhere in an audio editor like Audacity: the level meter shows them while you record, the volume slider on each track is in dB, and the export tool reports your file's peak level in dB.</p>
 
 <p>You don't need to memorize the math. The one rule of thumb worth knowing is that <strong>-6 dB is half the amplitude</strong>, so a wave that peaks at -6 dB is half as tall on screen as one that peaks at 0 dB. This is what the next visual shows.</p>
 
@@ -284,7 +284,7 @@
   <figcaption>Two waves at the same frequency (same pitch), but different amplitudes. The top wave's peaks reach all the way to the loudest possible value (0 dB); the bottom wave's peaks reach only halfway, which is -6 dB. They sound like the same pitch, but the bottom one is quieter.</figcaption>
 </figure>
 
-<p><strong>Frequency</strong> (Hz) and <strong>amplitude</strong> (dB) are the two basic measurements for any wave. Hold onto both terms; they show up in every audio context you'll work in, and they show up in Audacity the moment you import a sound.</p>
+<p><strong>Frequency</strong> (Hz) and <strong>amplitude</strong> (dB) are the two basic measurements for any wave. Hold onto both terms; they show up in every audio context you'll work in, and they show up in an audio editor like Audacity the moment you import a sound.</p>
 
 <p>That's sound in the analog world: a continuous, smoothly changing physical phenomenon. A microphone is a device that catches those pressure waves and turns them into a corresponding electrical signal: a tiny voltage that wiggles in time with the air. The signal is still continuous, still analog. It's just electricity instead of air. To work with sound on a computer, we have to do something else: turn that continuous signal into <strong>numbers</strong>.</p>
 
@@ -771,7 +771,7 @@
 
 <p>Aliasing is genuinely strange-sounding. It produces inharmonic whistles, sliding tones, and a kind of sour, "off" quality on bright sounds. Once you hear it, you recognize it.</p>
 
-<p>This is why <strong>every digital audio system applies an anti-alias filter before sampling</strong>. The filter removes any content above the Nyquist limit before the ADC sees it, so there's nothing left to fold back. Your audio interface does this automatically; so does Audacity when it resamples a file to a lower rate; so do all professional ADCs. You don't have to think about it as long as you stay inside the standard tools. But knowing the filter exists tells you why "above Nyquist" isn't just a number: it's the boundary of what reality the digital system can hold.</p>
+<p>This is why <strong>every digital audio system applies an anti-alias filter before sampling</strong>. The filter removes any content above the Nyquist limit before the ADC sees it, so there's nothing left to fold back. Your audio interface does this automatically; so does an audio editor like Audacity when it resamples a file to a lower rate; so do all professional ADCs. You don't have to think about it as long as you stay inside the standard tools. But knowing the filter exists tells you why "above Nyquist" isn't just a number: it's the boundary of what reality the digital system can hold.</p>
 
 <div class="audio-compare">
   <div class="audio-compare-title">Listen: with vs. without anti-alias filtering</div>
@@ -943,7 +943,7 @@
   <div class="callout-label">Watch out: importing audio at the wrong sample rate</div>
   <p>This is one of the most common ways a project goes wrong. You're working in a 48 kHz session and you drag in a 44.1 kHz sound file (or the other way around). Most DAWs will notice the mismatch and pop up a <em>resample</em> prompt: that's the safe path. But if you click through it, dismiss it, or use a tool that doesn't ask, the file's samples get played out at the project's rate <em>without any conversion</em>. The result is exactly the tape-speed effect: the file plays back at the wrong speed, and its pitch shifts with it.</p>
   <p>Between 44.1 and 48 kHz the shift is about a semitone and a half: small enough that you might not catch it, but large enough to put a sample out of tune with the rest of your session. Drop a 44.1 kHz drum loop into a 48 kHz project without resampling and it plays slightly faster and higher than it should; do the reverse and it drags slightly slower and lower. Neither sounds obviously broken on its own. It just doesn't sit right.</p>
-  <p><strong>Resampling</strong> is what fixes this: the DAW computes a new set of samples at the project's rate, so the file keeps its original duration and pitch when played back. Always say yes to the resample prompt, or convert the file beforehand (Audacity's <em>File → Export</em> lets you set the target sample rate). The rule of thumb: <em>match the project's sample rate before audio enters the timeline</em>, not after.</p>
+  <p><strong>Resampling</strong> is what fixes this: the DAW computes a new set of samples at the project's rate, so the file keeps its original duration and pitch when played back. Always say yes to the resample prompt, or convert the file beforehand (in an audio editor like Audacity, <em>File → Export</em> lets you set the target sample rate). The rule of thumb: <em>match the project's sample rate before audio enters the timeline</em>, not after.</p>
 </div>
 
 <p>A few takeaways:</p>

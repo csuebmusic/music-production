@@ -123,7 +123,7 @@
 
 <p>From top to bottom, the controls do this:</p>
 
-<p><strong>Input section.</strong> A button labeled <strong>+48V</strong> turns phantom power on (you met this earlier). A button labeled <strong>I/P REV</strong> (input reverse) swaps two signal paths inside the channel; we come back to it in section 3. A button labeled <strong>LINE</strong> switches between the mic input on the back and the line input on the back. A red knob labeled <strong>INPUT GAIN</strong> sets how much amplification the preamp applies. Same gain knob you set earlier to land peaks at -12 to -6 dBFS in Audacity; here it's setting the level going into the mixer's own internal flow.</p>
+<p><strong>Input section.</strong> A button labeled <strong>+48V</strong> turns phantom power on (you met this earlier). A button labeled <strong>I/P REV</strong> (input reverse) swaps two signal paths inside the channel; we come back to it in section 3. A button labeled <strong>LINE</strong> switches between the mic input on the back and the line input on the back. A red knob labeled <strong>INPUT GAIN</strong> sets how much amplification the preamp applies. Same gain knob you set earlier to land peaks at -12 to -6 dBFS in an audio editor like Audacity; here it's setting the level going into the mixer's own internal flow.</p>
 
 <p><strong>Phase reverse and an 80 Hz high-pass filter.</strong> Two small switches. Phase reverse flips the polarity of the signal (sometimes needed when two mics on the same source are partially cancelling each other). The 80 Hz filter rolls off everything below 80 Hz, useful for cutting room rumble or wind on vocal mics.</p>
 
@@ -136,8 +136,8 @@
 
 <div class="callout">
   <div class="callout-label">Same operation, different surface</div>
-  <p>The EQ you used in Audacity (<span class="menu-path">Effect → EQ and Filters → Filter Curve EQ</span>) and the EQ on this channel strip do the same job: boost or cut specific frequency ranges of the signal. The surface is different. In Audacity, you click points on a curve and the software shapes the audio mathematically; on the console, you turn knobs and an analog circuit shapes the signal as the voltage flows through it.</p>
-  <p>The other difference matters more: where in the signal flow the EQ sits. Audacity's Filter Curve EQ <em>changes the audio data on the track</em> when you click Apply (destructive: you can undo it during the session, but if you save and close, the change is permanent). The console's EQ <em>shapes the signal as it passes through the channel strip</em> on its way to the output. Whatever's plugged into the input (the mic on stage, the DAW playback at mixdown) keeps making the sound it was making; only the signal coming out of the channel is shaped. Turn the EQ knobs back to flat, or hit the EQ In/Out button, and the channel returns to passing the signal through unchanged. This is non-destructive: you can change your mind freely, take after take, without ever altering the source.</p>
+  <p>The EQ you used in an audio editor like Audacity (<span class="menu-path">Effect → EQ and Filters → Filter Curve EQ</span>) and the EQ on this channel strip do the same job: boost or cut specific frequency ranges of the signal. The surface is different. In an audio editor like Audacity, you click points on a curve and the software shapes the audio mathematically; on the console, you turn knobs and an analog circuit shapes the signal as the voltage flows through it.</p>
+  <p>The other difference matters more: where in the signal flow the EQ sits. The Filter Curve EQ in an audio editor like Audacity <em>changes the audio data on the track</em> when you click Apply (destructive: you can undo it during the session, but if you save and close, the change is permanent). The console's EQ <em>shapes the signal as it passes through the channel strip</em> on its way to the output. Whatever's plugged into the input (the mic on stage, the DAW playback at mixdown) keeps making the sound it was making; only the signal coming out of the channel is shaped. Turn the EQ knobs back to flat, or hit the EQ In/Out button, and the channel returns to passing the signal through unchanged. This is non-destructive: you can change your mind freely, take after take, without ever altering the source.</p>
 </div>
 
 <p><strong>Six aux sends.</strong> Six green knobs, one per aux. Each one is a tap of the signal at this channel that goes out to a separate output on the back of the console (the AUX MASTERS jacks). The level of each tap is set independently of the channel's main fader. Aux 1 is permanently <strong>pre-fader</strong> (the tap happens before the fader, so the fader doesn't affect the aux level). Auxes 2 through 6 can be switched <strong>pre or post</strong>: pre-fader (independent of the fader) or post-fader (the fader controls them along with the main channel signal).</p>
@@ -273,7 +273,7 @@
 
 <p><strong>Monitor section.</strong> A second smaller level control, labeled <strong>MON LEVEL</strong>, with its own <strong>MON PAN</strong>. This is a second input on the same strip, with its own way into the master mix, and it's the reason this console is called <em>in-line</em>. We'll unpack the monitor section in section 3.</p>
 
-<p><strong>Solo and mute.</strong> Two small buttons near the bottom. <strong>SOLO</strong> isolates this channel in the control-room speakers (the same solo you used in Audacity, but in hardware). <strong>MUTE</strong> silences the channel without changing the fader position.</p>
+<p><strong>Solo and mute.</strong> Two small buttons near the bottom. <strong>SOLO</strong> isolates this channel in the control-room speakers (the same solo you used in an audio editor like Audacity, but in hardware). <strong>MUTE</strong> silences the channel without changing the fader position.</p>
 
 <p><strong>Channel pan.</strong> A red knob that places this channel left or right in the stereo image.</p>
 
@@ -286,7 +286,7 @@
   <p>This is what people mean by a stereo <strong>bus</strong>: two subgroups treated as a left-right pair, with the channel pan knob acting as a level splitter between them. A bus is the point inside the console where many channel signals combine into one; the technical name for that combining operation is <strong>mixing</strong> (also called <strong>summing</strong>, which is more literal: the bus adds the channel signals together into one). Sub 1 is one bus, sub 2 is another; treating them as a pair gives you a stereo bus. The master mix works the same way at a larger scale, summing every channel routed to L-R into the final stereo program.</p>
 </div>
 
-<p><strong>The fader.</strong> The main level control for this channel. Where the channel sits in the final mix. The scale beside it runs from minus-infinity at the bottom (fader all the way down, signal fully attenuated, no audio passing through) up past -40, -30, -20, -10, -5, through <strong>0</strong> (a thicker line, usually marked with a small notch), and up to +5 and +10 at the top. The 0 mark is called <strong>unity gain</strong>, or just <strong>unity</strong>: the fader is passing the signal through at the same level it came in at, with no change. Above unity, the fader amplifies the signal further (up to +10 dB on this console). Below unity, it attenuates: -10 dB cuts the signal level noticeably; -20 dB cuts it sharply; further down still and the signal is barely audible. The dB scale here is the same decibel scale you saw on Audacity's meters, with the same warning behavior: small moves near the top of the scale do a lot, large moves near the bottom do relatively little.</p>
+<p><strong>The fader.</strong> The main level control for this channel. Where the channel sits in the final mix. The scale beside it runs from minus-infinity at the bottom (fader all the way down, signal fully attenuated, no audio passing through) up past -40, -30, -20, -10, -5, through <strong>0</strong> (a thicker line, usually marked with a small notch), and up to +5 and +10 at the top. The 0 mark is called <strong>unity gain</strong>, or just <strong>unity</strong>: the fader is passing the signal through at the same level it came in at, with no change. Above unity, the fader amplifies the signal further (up to +10 dB on this console). Below unity, it attenuates: -10 dB cuts the signal level noticeably; -20 dB cuts it sharply; further down still and the signal is barely audible. The dB scale here is the same decibel scale you saw on the meters in an audio editor like Audacity, with the same warning behavior: small moves near the top of the scale do a lot, large moves near the bottom do relatively little.</p>
 
 <h3>The back of the console</h3>
 
@@ -373,7 +373,7 @@
 
 <h3>Bargraph meter</h3>
 
-<p>Twelve segments running from -20 dBFS at the bottom to +15 dBFS at the top. Same dBFS scale as Audacity's meter, with the same green / yellow / red zones. The meter shows the level of <em>either</em> the subgroup output going to the DAW, or the tape return coming back, depending on the TAPE switch in the section below.</p>
+<p>Twelve segments running from -20 dBFS at the bottom to +15 dBFS at the top. Same dBFS scale as the meter in an audio editor like Audacity, with the same green / yellow / red zones. The meter shows the level of <em>either</em> the subgroup output going to the DAW, or the tape return coming back, depending on the TAPE switch in the section below.</p>
 
 <h3>Tape Return (middle section, with: Aux 5 &amp; 6 Level, Pan, Solo)</h3>
 
@@ -599,7 +599,7 @@
 
 <p><strong>PHONES LEVEL.</strong> A pink knob that sets the headphone jack's level (the jack near the top of the strip). Separate knob, separate position, separate function from the monitor level a few controls down.</p>
 
-<p><strong>Master bargraph meters.</strong> A 12-segment L/R pair showing the final stereo output. The main metering reference: same dBFS scale as Audacity's meter, same green/yellow/red zones. Faster response than the VU meters at the top of the section, useful for catching peaks the VU needles would smooth over.</p>
+<p><strong>Master bargraph meters.</strong> A 12-segment L/R pair showing the final stereo output. The main metering reference: same dBFS scale as the meter in an audio editor like Audacity, same green/yellow/red zones. Faster response than the VU meters at the top of the section, useful for catching peaks the VU needles would smooth over.</p>
 
 <h3>Two outputs from the master section: MASTER O/P and the speakers</h3>
 
