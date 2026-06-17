@@ -795,12 +795,9 @@
       playBtn.textContent = 'Play'; playBtn.classList.remove('playing');
       wave.reset();
     }
-    function play() {
-      if (playing) { stop(); return; }
-      const ctx = ensureCtx();
+    function startVoice(ctx) {
       const a = +A.value / 1000, d = +D.value / 1000, s = +S.value / 100, r = +R.value / 1000;
       dur = a + d + HOLD + r;
-      // Start the live audio synchronously, inside the click, so sound is guaranteed.
       analyser = ctx.createAnalyser(); analyser.fftSize = 1024; buf = new Float32Array(analyser.fftSize);
       const chain = buildChain(ctx, analyser);
       analyser.connect(ctx.destination);
@@ -808,8 +805,7 @@
       const now = ctx.currentTime;
       scheduleEnv(amp.gain, now, a, d, s, r);
       pad.oscs.forEach(function(o) { o.start(now); o.stop(now + dur + 0.05); });
-      t0 = now; playing = true; wave.reset();
-      playBtn.textContent = 'Stop'; playBtn.classList.add('playing');
+      t0 = now; wave.reset();
       // Find the real full-amplitude peak in parallel; until it lands, use an estimate.
       let K = 0.45;
       calibrate(a, d, s, r, dur, ctx.sampleRate).then(function(k) { K = k; }).catch(function() {});
@@ -822,6 +818,19 @@
         if (t >= dur) { finish(); return; }
         raf = requestAnimationFrame(loop);
       })();
+    }
+    function play() {
+      if (playing) { stop(); return; }
+      playing = true;
+      playBtn.textContent = 'Stop'; playBtn.classList.add('playing');
+      const ctx = ensureCtx();
+      // Resume inside the click, then start once the context is running. A
+      // suspended context freezes the gain automation and silences the note.
+      ctx.resume().then(function() {
+        if (playing) { startVoice(ctx); }
+      }).catch(function() {
+        playing = false; playBtn.textContent = 'Play'; playBtn.classList.remove('playing');
+      });
     }
     function reset() {
       stop();
