@@ -395,7 +395,7 @@
 
 <p>A 2 Hz LFO, just barely too low to hear as a pitch, already puts a peak under your finger 120 times a minute. Most expressive LFO motion lives well below that, from a fraction of a hertz up to a few hertz.</p>
 
-<p>Now point an LFO at something. Pick a shape and rate, then send it to pitch or to stereo position. The Depth slider sets how much of the LFO reaches its target: at half depth the wave swings the control half as far, and the LFO on the left sits at half height to show it.</p>
+<p>Now point an LFO at something. Pick a shape and rate, then send it to pitch or to stereo position. Send it to pitch and the slider sets how far the note rises above its base, in semitones. Send it to pan and the slider sets how wide the sound swings between your ears. Either way the LFO on the left grows with the slider, so a small amount draws a small wave.</p>
 
 <div class="synth-tool" id="toolLfo">
   <div class="synth-tool-title">Tool 3 · LFO to pitch or pan</div>
@@ -432,9 +432,9 @@
     <input type="range" class="synth-slider-input" id="lfoRate" min="0.1" max="8" step="0.1" value="2">
     <span class="synth-slider-readout" id="lfoRateOut">2.0 Hz</span>
 
-    <span class="synth-slider-label">Depth</span>
-    <input type="range" class="synth-slider-input" id="lfoDepth" min="0" max="100" step="1" value="40">
-    <span class="synth-slider-readout" id="lfoDepthOut">40 %</span>
+    <span class="synth-slider-label" id="lfoDepthLabel">Range</span>
+    <input type="range" class="synth-slider-input" id="lfoDepth" min="0" max="12" step="1" value="7">
+    <span class="synth-slider-readout" id="lfoDepthOut">7 st</span>
   </div>
   <div class="synth-controls">
     <button class="synth-btn" id="lfoPlay">Play</button>
@@ -610,7 +610,7 @@
     function draw() {
       const w = canvas.width, h = canvas.height;
       g.clearRect(0, 0, w, h);
-      const mid = (LO < 0 && HI > 0) ? 0 : (LO + HI) / 2;
+      const mid = (LO <= 0 && HI >= 0) ? 0 : (LO + HI) / 2;
       g.strokeStyle = 'rgba(127,127,127,0.35)';
       g.lineWidth = 1;
       g.beginPath();
@@ -802,6 +802,40 @@
       g.stroke();
     }
     return { draw: draw, clear: frame };
+  }
+
+  // Right panel for the pan target: a needle that swings left to right.
+  function makeNeedle(canvas) {
+    const g = canvas.getContext('2d');
+    function size() {
+      const r = canvas.getBoundingClientRect();
+      canvas.width = Math.max(260, Math.floor(r.width));
+      canvas.height = 150;
+    }
+    size();
+    window.addEventListener('resize', size);
+    function color() { return (getComputedStyle(canvas).getPropertyValue('--cable-xlr') || '#3a6b7a').trim(); }
+    function soft() { return (getComputedStyle(canvas).getPropertyValue('--ink-soft') || '#51604c').trim(); }
+    function draw(pan) {
+      const w = canvas.width, h = canvas.height;
+      const cx = w / 2, cy = h - 20, len = h - 50, MAX = Math.PI / 3;
+      const p = Math.max(-1, Math.min(1, pan));
+      g.clearRect(0, 0, w, h);
+      g.strokeStyle = 'rgba(127,127,127,0.3)'; g.lineWidth = 1;
+      g.beginPath(); g.arc(cx, cy, len, -Math.PI / 2 - MAX, -Math.PI / 2 + MAX); g.stroke();
+      g.fillStyle = soft(); g.font = '600 12px \'DM Mono\', monospace';
+      g.textAlign = 'center'; g.textBaseline = 'middle';
+      const aL = -Math.PI / 2 - MAX, aC = -Math.PI / 2, aR = -Math.PI / 2 + MAX;
+      g.fillText('L', cx + (len + 12) * Math.cos(aL), cy + (len + 12) * Math.sin(aL));
+      g.fillText('C', cx + (len + 12) * Math.cos(aC), cy + (len + 12) * Math.sin(aC));
+      g.fillText('R', cx + (len + 12) * Math.cos(aR), cy + (len + 12) * Math.sin(aR));
+      const ang = -Math.PI / 2 + p * MAX;
+      g.strokeStyle = color(); g.lineWidth = 2.5; g.lineCap = 'round';
+      g.beginPath(); g.moveTo(cx, cy); g.lineTo(cx + len * Math.cos(ang), cy + len * Math.sin(ang)); g.stroke();
+      g.lineCap = 'butt';
+      g.fillStyle = color(); g.beginPath(); g.arc(cx, cy, 3.5, 0, 2 * Math.PI); g.fill();
+    }
+    return { draw: draw };
   }
 
   // Build a pad: three oscillators summed into one gain. Caller starts/stops oscs.
@@ -1082,44 +1116,49 @@
     const shapeSel = document.getElementById('lfoShape'), targetSel = document.getElementById('lfoTarget');
     const rate = document.getElementById('lfoRate'), depth = document.getElementById('lfoDepth');
     const rateOut = document.getElementById('lfoRateOut'), depthOut = document.getElementById('lfoDepthOut');
+    const depthLabelEl = document.getElementById('lfoDepthLabel');
     const info = document.getElementById('lfoInfo'), playBtn = document.getElementById('lfoPlay');
     const outTitle = document.getElementById('lfoOutTitle');
     const lfoScope = makeScope(document.getElementById('lfoWave'), -1, 1);
-    const outScope = makeScope(document.getElementById('lfoOut'), -7, 7, '--cable-xlr');
-    const PITCH_ST = 7; // max semitones at full depth
+    const outScope = makeScope(document.getElementById('lfoOut'), 0, 12, '--cable-xlr');
+    const needle = makeNeedle(document.getElementById('lfoOut'));
+    let pitchSt = 7, panPct = 60; // remembered amounts per target
     let pad = null, amp = null, panner = null, lfo = null, lfoGain = null, raf = null, t0 = 0, playing = false;
 
-    function depthLabel() {
-      if (targetSel.value === 'pitch') {
-        depthOut.textContent = '\u00b1' + ((+depth.value / 100) * PITCH_ST).toFixed(1) + ' st';
-      } else {
-        depthOut.textContent = depth.value + ' %';
-      }
-    }
+    function isPitch() { return targetSel.value === 'pitch'; }
+    function depthLabel() { depthOut.textContent = depth.value + (isPitch() ? ' st' : ' %'); }
     function readouts() {
       rateOut.textContent = (+rate.value).toFixed(1) + ' Hz (' + Math.round(+rate.value * 60) + ' BPM)';
       depthLabel();
     }
-    // Match the output panel's axis and label to the current target.
-    function syncOut() {
-      if (targetSel.value === 'pitch') {
-        outScope.setRange(-PITCH_ST, PITCH_ST); outTitle.textContent = 'Pitch (semitones)';
+    function drawOutIdle() { if (isPitch()) { outScope.draw(); } else { needle.draw(0); } }
+    // Reshape the slider and output panel to match the current target.
+    function syncControls() {
+      if (isPitch()) {
+        depthLabelEl.textContent = 'Range';
+        depth.min = '0'; depth.max = '12'; depth.step = '1'; depth.value = pitchSt;
+        outTitle.textContent = 'Pitch (semitones)';
       } else {
-        outScope.setRange(-1, 1); outTitle.textContent = 'Stereo position';
+        depthLabelEl.textContent = 'Depth';
+        depth.min = '0'; depth.max = '100'; depth.step = '1'; depth.value = panPct;
+        outTitle.textContent = 'Stereo position';
       }
-      outScope.clear(); outScope.draw();
+      depthLabel(); outScope.clear(); drawOutIdle();
     }
     function routeLfo() {
       if (!lfo) { return; }
+      const now = ensureCtx().currentTime;
       try { lfoGain.disconnect(); } catch (e) {}
-      if (targetSel.value === 'pitch') {
-        if (panner) { panner.pan.setValueAtTime(0, ensureCtx().currentTime); }
-        lfoGain.gain.value = (+depth.value / 100) * PITCH_ST * 100; // cents
-        pad.oscs.forEach(function(o) { lfoGain.connect(o.detune); });
-        info.textContent = 'The LFO is bending pitch up and down.';
+      if (isPitch()) {
+        if (panner) { panner.pan.setValueAtTime(0, now); }
+        // Unipolar: detune rides 0 (base note) up to N semitones, never below.
+        const cents = (+depth.value) * 50;
+        pad.oscs.forEach(function(o) { o.detune.setValueAtTime(cents, now); lfoGain.connect(o.detune); });
+        lfoGain.gain.value = cents;
+        info.textContent = 'The LFO is lifting pitch from the base note up and back.';
       } else {
-        pad.oscs.forEach(function(o) { o.detune.setValueAtTime(0, ensureCtx().currentTime); });
-        lfoGain.gain.value = (+depth.value / 100); // pan units, max 1
+        pad.oscs.forEach(function(o) { o.detune.setValueAtTime(0, now); });
+        lfoGain.gain.value = (+depth.value) / 100;
         lfoGain.connect(panner.pan);
         info.textContent = 'The LFO is moving stereo position between your ears.';
       }
@@ -1143,9 +1182,14 @@
       t0 = now; lfoScope.clear(); outScope.clear();
       (function loop() {
         const t = ensureCtx().currentTime - t0;
-        const wv = waveAt(shapeSel.value, t * (+rate.value)), dn = +depth.value / 100;
-        lfoScope.push(wv * dn); lfoScope.draw();
-        outScope.push(targetSel.value === 'pitch' ? wv * dn * PITCH_ST : wv * dn); outScope.draw();
+        const wv = waveAt(shapeSel.value, t * (+rate.value));
+        if (isPitch()) {
+          lfoScope.push(wv * (+depth.value / 12)); lfoScope.draw();
+          outScope.push((+depth.value) * (wv + 1) / 2); outScope.draw();
+        } else {
+          lfoScope.push(wv * (+depth.value / 100)); lfoScope.draw();
+          needle.draw(wv * (+depth.value / 100));
+        }
         raf = requestAnimationFrame(loop);
       })();
     }
@@ -1166,7 +1210,7 @@
       pad = null; amp = null; panner = null; lfo = null; lfoGain = null;
       playing = false;
       playBtn.textContent = 'Play'; playBtn.classList.remove('playing');
-      lfoScope.clear(); lfoScope.draw(); outScope.clear(); outScope.draw();
+      lfoScope.clear(); lfoScope.draw(); outScope.clear(); drawOutIdle();
     }
     function play() {
       if (playing) { stop(); return; }
@@ -1180,11 +1224,14 @@
       });
     }
     shapeSel.addEventListener('change', function() { if (lfo) { lfo.type = shapeSel.value; } });
-    targetSel.addEventListener('change', function() { depthLabel(); syncOut(); routeLfo(); });
+    targetSel.addEventListener('change', function() { syncControls(); routeLfo(); });
     rate.addEventListener('input', function() { readouts(); if (lfo) { lfo.frequency.setValueAtTime(+rate.value, ensureCtx().currentTime); } });
-    depth.addEventListener('input', function() { depthLabel(); if (lfoGain) { routeLfo(); } });
+    depth.addEventListener('input', function() {
+      if (isPitch()) { pitchSt = +depth.value; } else { panPct = +depth.value; }
+      depthLabel(); if (lfoGain) { routeLfo(); }
+    });
     playBtn.addEventListener('click', play);
-    readouts(); syncOut();
+    readouts(); syncControls();
   })();
 
   // ---------- Tool 4: LFO to filter cutoff ----------
