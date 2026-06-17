@@ -892,6 +892,12 @@
 
 <p>That principle (record with headroom, commit later) is one of the most important practices in audio. It matters most the moment you start recording your own sources.</p>
 
+<div class="callout">
+  <div class="callout-label">Dither: the noise you add on purpose</div>
+  <p>Quantization noise has a standard fix, and it sounds backwards: you add a little noise to cover it. When a file drops to a lower bit depth, dither mixes in a tiny amount of random noise first. That randomness lets sounds quieter than a single step still register instead of rounding to silence, and it turns the harsh, signal-locked rounding error into a smooth, even hiss the ear ignores. You get more low-level detail, not less.</p>
+  <p>You meet it at export. Ableton's export dialog turns on a Dither Options menu whenever you render below 32-bit. Your normal export is 32-bit, so it stays off, which is exactly what Ableton recommends. Reach for it only on a final reduction to 16-bit (a CD master, or a hand-off where someone asks for 16-bit): leave it on the default, Triangular, and apply it once, as the last thing that happens to the file. Dithering twice layers noise on noise.</p>
+</div>
+
 <hr>
 
 <h2>7 · File formats</h2>
