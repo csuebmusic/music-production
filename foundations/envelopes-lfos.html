@@ -395,7 +395,7 @@
 
 <p>A 2 Hz LFO, just barely too low to hear as a pitch, already puts a peak under your finger 120 times a minute. Most expressive LFO motion lives well below that, from a fraction of a hertz up to a few hertz.</p>
 
-<p>Now point an LFO at something. Pick a shape and rate, then send it to pitch or to its stereo position, called pan in software. The slider sets how far it reaches, and the LFO on the left grows with it.</p>
+<p>Now point an LFO at something. Pick a shape and rate, then send it to pitch or to its stereo position, called pan in software. On pitch the note swings the range above and below where it started, a vibrato; on pan it slides between your ears. The LFO on the left grows with the slider.</p>
 
 <div class="synth-tool" id="toolLfo">
   <div class="synth-tool-title">Tool 3 · LFO to pitch or pan</div>
@@ -434,7 +434,7 @@
 
     <span class="synth-slider-label" id="lfoDepthLabel">Range</span>
     <input type="range" class="synth-slider-input" id="lfoDepth" min="0" max="12" step="1" value="7">
-    <span class="synth-slider-readout" id="lfoDepthOut">7 st</span>
+    <span class="synth-slider-readout" id="lfoDepthOut">&#177;7 st</span>
   </div>
   <div class="synth-controls">
     <button class="synth-btn" id="lfoPlay">Play</button>
@@ -631,7 +631,7 @@
   }
 
   // Scrolling scope that plots control values pushed each frame.
-  function makeScope(canvas, lo, hi, colorVar) {
+  function makeScope(canvas, lo, hi, colorVar, labels) {
     const g = canvas.getContext('2d');
     const N = 260;
     const buf = [];
@@ -671,6 +671,23 @@
         if (i === 0) { g.moveTo(x, y); } else { g.lineTo(x, y); }
       }
       g.stroke();
+      if (labels) {
+        g.font = '600 11px \'DM Mono\', monospace';
+        g.textAlign = 'left';
+        const ink = (getComputedStyle(canvas).getPropertyValue('--ink-soft') || '#51604c').trim();
+        const lab = function(txt, ly, base) {
+          g.textBaseline = base;
+          const tw = g.measureText(txt).width, ph = 15;
+          const py = base === 'top' ? ly - 1 : base === 'bottom' ? ly - ph + 1 : ly - ph / 2;
+          g.fillStyle = 'rgba(255,255,255,0.72)';
+          g.fillRect(4, py, tw + 6, ph);
+          g.fillStyle = ink;
+          g.fillText(txt, 7, ly);
+        };
+        if (labels.top) { lab(labels.top, 6, 'top'); }
+        if (labels.mid) { lab(labels.mid, val2y(mid), 'middle'); }
+        if (labels.bottom) { lab(labels.bottom, h - 6, 'bottom'); }
+      }
     }
     return { push: push, draw: draw, clear: clear, setRange: setRange };
   }
@@ -1169,13 +1186,13 @@
     const info = document.getElementById('lfoInfo'), playBtn = document.getElementById('lfoPlay');
     const outTitle = document.getElementById('lfoOutTitle');
     const lfoScope = makeScope(document.getElementById('lfoWave'), -1, 1);
-    const outScope = makeScope(document.getElementById('lfoOut'), 0, 12, '--cable-xlr');
+    const outScope = makeScope(document.getElementById('lfoOut'), -12, 12, '--cable-xlr', { top: 'higher', mid: 'base', bottom: 'lower' });
     const needle = makeNeedle(document.getElementById('lfoOut'));
     let pitchSt = 7, panPct = 60; // remembered amounts per target
     let pad = null, amp = null, panner = null, lfo = null, lfoGain = null, raf = null, t0 = 0, playing = false;
 
     function isPitch() { return targetSel.value === 'pitch'; }
-    function depthLabel() { depthOut.textContent = depth.value + (isPitch() ? ' st' : ' %'); }
+    function depthLabel() { depthOut.textContent = isPitch() ? ('\u00b1' + depth.value + ' st') : (depth.value + ' %'); }
     function readouts() {
       rateOut.textContent = (+rate.value).toFixed(1) + ' Hz (' + Math.round(+rate.value * 60) + ' BPM)';
       depthLabel();
@@ -1200,11 +1217,10 @@
       try { lfoGain.disconnect(); } catch (e) {}
       if (isPitch()) {
         if (panner) { panner.pan.setValueAtTime(0, now); }
-        // Unipolar: detune rides 0 (base note) up to N semitones, never below.
-        const cents = (+depth.value) * 50;
-        pad.oscs.forEach(function(o) { o.detune.setValueAtTime(cents, now); lfoGain.connect(o.detune); });
-        lfoGain.gain.value = cents;
-        info.textContent = 'The LFO is lifting pitch from the base note up and back.';
+        // Vibrato: detune swings the range above and below the base note.
+        pad.oscs.forEach(function(o) { o.detune.setValueAtTime(0, now); lfoGain.connect(o.detune); });
+        lfoGain.gain.value = (+depth.value) * 100;
+        info.textContent = 'The LFO is bending pitch above and below the base note.';
       } else {
         pad.oscs.forEach(function(o) { o.detune.setValueAtTime(0, now); });
         lfoGain.gain.value = (+depth.value) / 100;
@@ -1234,7 +1250,7 @@
         const wv = waveAt(shapeSel.value, t * (+rate.value));
         if (isPitch()) {
           lfoScope.push(wv * (+depth.value / 12)); lfoScope.draw();
-          outScope.push((+depth.value) * (wv + 1) / 2); outScope.draw();
+          outScope.push((+depth.value) * wv); outScope.draw();
         } else {
           lfoScope.push(wv * (+depth.value / 100)); lfoScope.draw();
           needle.draw(wv * (+depth.value / 100));
