@@ -726,14 +726,18 @@
       AO.textContent = fmtMs(+A.value); DO.textContent = fmtMs(+D.value);
       SO.textContent = S.value + ' %'; RO.textContent = fmtMs(+R.value);
     }
-    // Envelope value (0..1) at elapsed seconds, for the scope.
+    // Envelope height (0..1) at elapsed seconds, for the left shape panel.
+    // Matches the audio: exponential ramps, normalized to a peak of 1.
     function envAt(t, a, d, s, r) {
-      if (t < a) { return t / a; }
-      if (t < a + d) { return 1 - (1 - s) * ((t - a) / d); }
-      if (t < a + d + HOLD) { return s; }
-      const rt = t - (a + d + HOLD);
-      if (rt < r) { return s * (1 - rt / r); }
-      return 0;
+      const FL = 0.0005 / PEAK, sus = Math.max(FL, s);
+      const tD = a + d, tHold = tD + HOLD, tEnd = tHold + r;
+      function seg(x, x0, x1, v0, v1) { return v0 * Math.pow(v1 / v0, (x - x0) / (x1 - x0)); }
+      if (t <= 0) { return FL; }
+      if (t < a) { return seg(t, 0, a, FL, 1); }
+      if (t < tD) { return seg(t, a, tD, 1, sus); }
+      if (t < tHold) { return sus; }
+      if (t < tEnd) { return seg(t, tHold, tEnd, sus, FL); }
+      return FL;
     }
     function drawShape() {
       const a = +A.value / 1000, d = +D.value / 1000, s = +S.value / 100, r = +R.value / 1000;
@@ -767,11 +771,15 @@
       pad = buildPad(ctx, BASE, 'sawtooth', tone);
       tone.connect(amp); amp.connect(lim); lim.connect(analyser); analyser.connect(ctx.destination);
       const now = ctx.currentTime;
-      amp.gain.setValueAtTime(0, now);
-      amp.gain.linearRampToValueAtTime(PEAK, now + a);
-      amp.gain.linearRampToValueAtTime(PEAK * s, now + a + d);
-      amp.gain.setValueAtTime(PEAK * s, now + a + d + HOLD);
-      amp.gain.linearRampToValueAtTime(0, now + a + d + HOLD + r);
+      // dB-even ramps: loudness change spreads evenly across each stage,
+      // so attack-time differences are audible. Floor stands in for zero.
+      const FLOOR = 0.0005, sus = Math.max(FLOOR, PEAK * s);
+      amp.gain.setValueAtTime(FLOOR, now);
+      amp.gain.exponentialRampToValueAtTime(PEAK, now + a);
+      amp.gain.exponentialRampToValueAtTime(sus, now + a + d);
+      amp.gain.setValueAtTime(sus, now + a + d + HOLD);
+      amp.gain.exponentialRampToValueAtTime(FLOOR, now + a + d + HOLD + r);
+      amp.gain.setValueAtTime(0, now + a + d + HOLD + r + 0.001);
       dur = a + d + HOLD + r;
       pad.oscs.forEach(function(o) { o.start(now); o.stop(now + dur + 0.05); });
       t0 = now; playing = true; wave.reset();
