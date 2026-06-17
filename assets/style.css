@@ -476,6 +476,13 @@ th {
 
 audio { width: 100%; }
 
+.audio-note {
+  font-size: 0.88rem;
+  color: var(--ink-soft);
+  margin: 1rem auto 0;
+  line-height: 1.5;
+}
+
 /* ----- Footer: end-of-file marker -------------------------------------- */
 
 .handout-footer {
