@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Editing &amp; Envelope · music-production</title>
+  <link rel="stylesheet" href="../assets/style.css">
+  <style>
+    /* Reading-specific tweaks (mirrors module-02-week-02 styles) */
+    figure {
+      margin: 2rem 0;
+      text-align: center;
+    }
+    figure svg {
+      max-width: 100%;
+      height: auto;
+    }
+    figcaption {
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--ink-soft);
+      margin-top: 0.75rem;
+    }
+
+    /* Audio comparison block: a labeled group of audio players */
+    .audio-compare {
+      background: var(--bg-alt);
+      border: 1px solid var(--rule);
+      border-radius: 4px;
+      padding: 1.5rem;
+      margin: 2rem 0;
+    }
+    .audio-compare-title {
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+      margin-bottom: 1.25rem;
+    }
+    .audio-row {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      margin: 0.75rem 0;
+      padding: 0.5rem 0;
+    }
+    .audio-row + .audio-row {
+      border-top: 1px dashed var(--rule);
+      padding-top: 1.1rem;
+    }
+    .audio-label {
+      font-family: var(--mono);
+      font-size: 0.92rem;
+      color: var(--ink);
+      flex: 0 0 9.5rem;
+    }
+    .audio-label-sub {
+      display: block;
+      font-size: 0.78rem;
+      color: var(--ink-soft);
+      margin-top: 0.15rem;
+    }
+    .audio-row audio {
+      flex: 1;
+      min-width: 0;
+      height: 36px;
+    }
+    .audio-row audio::-webkit-media-controls-panel {
+      background: var(--bg);
+    }
+    .audio-note {
+      font-size: 0.88rem;
+      color: var(--ink-soft);
+      margin: 1rem 0 0;
+      line-height: 1.5;
+    }
+
+    /* Envelope explorer tool (Section 1) */
+    .env-tool {
+      background: var(--bg-alt);
+      border: 1px solid var(--rule);
+      border-radius: 4px;
+      padding: 1.5rem;
+      margin: 2rem 0;
+    }
+    .env-tool-title {
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+      margin-bottom: 1.25rem;
+    }
+    .env-preview {
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      margin-bottom: 1.25rem;
+      background: var(--bg);
+      border-radius: 3px;
+    }
+    .env-sliders {
+      display: grid;
+      grid-template-columns: 5.5rem 1fr 4.5rem;
+      gap: 0.75rem 1rem;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+    .env-slider-label {
+      font-family: var(--mono);
+      font-size: 0.92rem;
+      color: var(--ink);
+    }
+    .env-slider-input {
+      width: 100%;
+      accent-color: var(--accent);
+    }
+    .env-slider-readout {
+      font-family: var(--mono);
+      font-size: 0.92rem;
+      color: var(--ink);
+      text-align: right;
+    }
+    .env-controls {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .env-button {
+      font-family: var(--mono);
+      font-size: 0.92rem;
+      padding: 0.55rem 1.5rem;
+      background: var(--accent);
+      color: var(--bg);
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      min-width: 5.5rem;
+    }
+    .env-button:hover { background: var(--accent-soft); }
+    .env-button.playing { background: var(--ink); }
+    .env-button.reset {
+      background: transparent;
+      color: var(--ink-soft);
+      border: 1px solid var(--rule);
+    }
+    .env-button.reset:hover { background: var(--bg); color: var(--ink); }
+    .env-note {
+      font-size: 0.88rem;
+      color: var(--ink-soft);
+      margin: 1.25rem 0 0;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 540px) {
+      .env-sliders {
+        grid-template-columns: 5rem 1fr 4rem;
+        gap: 0.5rem 0.75rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header class="handout-header">
+  <span class="course">~/music-production/foundations</span>
+  <span class="meta">editing-envelope</span>
+</header>
+
+<div class="title-block">
+  <div class="module-tag">Foundations</div>
+  <h1>Editing concepts &amp; envelope</h1>
+  <div class="subtitle">Editing as a vocabulary, and the shape of sound over time.</div>
+</div>
+
+<p class="lede">Digital audio is a list of numbers measured at a rate, each one stored with some precision. This reading steps back from any particular software to talk about <strong>what edits actually do to sound</strong>, and to introduce a vocabulary you'll reach for constantly: the <strong>envelope</strong> of a sound. That vocabulary is how you describe the sounds you want, find what you need in a sample library, and shape what you make.</p>
+
+
+<hr>
+
+<h2>1 · The envelope of a sound</h2>
+
+<p>Every sound has a shape over time. It starts somewhere, exists for some duration, and ends. The way it does each of these things is part of what makes the sound recognizable, and a property your ears use almost unconsciously to identify what you're hearing.</p>
+
+<p>Consider three different sounds:</p>
+
+<ul>
+  <li>A wood block struck once: a sharp impact, a fraction of a second, gone</li>
+  <li>A bowed violin note held for several seconds, ending when the bow stops</li>
+  <li>The sound of a stream: continuous, evolving, with no clear beginning or end</li>
+</ul>
+
+<p>These sounds have very different shapes over time. We call this shape the <strong>envelope</strong> of the sound, and we describe it using three stages: <strong>attack</strong>, <strong>sustain</strong>, and <strong>release</strong>.</p>
+
+<figure>
+  <svg viewBox="0 0 600 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Envelope diagram showing attack, sustain, and release stages">
+    <rect width="600" height="220" fill="var(--bg-alt)"/>
+
+    <!-- Time axis -->
+    <line x1="60" y1="180" x2="540" y2="180" stroke="var(--ink)" stroke-width="1.5"/>
+    <text x="300" y="205" font-family="DM Mono, monospace" font-size="10" fill="var(--ink-soft)" text-anchor="middle">time →</text>
+
+    <!-- Amplitude axis (left vertical) -->
+    <line x1="60" y1="40" x2="60" y2="180" stroke="var(--ink)" stroke-width="1.5"/>
+    <text x="50" y="40" font-family="DM Mono, monospace" font-size="10" fill="var(--ink-soft)" text-anchor="end">loud</text>
+    <text x="50" y="183" font-family="DM Mono, monospace" font-size="10" fill="var(--ink-soft)" text-anchor="end">silent</text>
+    <!-- Amplitude axis label, rotated -->
+    <text x="18" y="110" font-family="DM Mono, monospace" font-size="10" fill="var(--ink-soft)" text-anchor="middle" transform="rotate(-90, 18, 110)">← amplitude →</text>
+
+    <!-- The envelope curve: a generic ASR shape.
+         Attack: from (60,180) ramping up to (180,55), quick rise
+         Sustain: from (180,55) to (380,75), a slowly drooping plateau
+         Release: from (380,75) curving down to (520,180), gradual fade -->
+    <path d="M 60 180 Q 100 70, 180 55 L 380 75 Q 460 90, 520 180"
+          fill="none" stroke="var(--accent)" stroke-width="2.5"/>
+
+    <!-- Section dividers (vertical dashed lines) -->
+    <line x1="180" y1="40" x2="180" y2="180" stroke="var(--ink-soft)" stroke-width="0.8" stroke-dasharray="3,3"/>
+    <line x1="380" y1="40" x2="380" y2="180" stroke="var(--ink-soft)" stroke-width="0.8" stroke-dasharray="3,3"/>
+
+    <!-- Stage labels with paired descriptions -->
+    <text x="120" y="22" font-family="DM Mono, monospace" font-size="11" fill="var(--accent)" text-anchor="middle" font-weight="500" letter-spacing="0.5">ATTACK</text>
+    <text x="120" y="35" font-family="DM Sans, sans-serif" font-size="10" fill="var(--ink-soft)" text-anchor="middle" font-style="italic">how it begins</text>
+
+    <text x="280" y="22" font-family="DM Mono, monospace" font-size="11" fill="var(--accent)" text-anchor="middle" font-weight="500" letter-spacing="0.5">SUSTAIN</text>
+    <text x="280" y="35" font-family="DM Sans, sans-serif" font-size="10" fill="var(--ink-soft)" text-anchor="middle" font-style="italic">how it continues</text>
+
+    <text x="450" y="22" font-family="DM Mono, monospace" font-size="11" fill="var(--accent)" text-anchor="middle" font-weight="500" letter-spacing="0.5">RELEASE</text>
+    <text x="450" y="35" font-family="DM Sans, sans-serif" font-size="10" fill="var(--ink-soft)" text-anchor="middle" font-style="italic">how it ends</text>
+  </svg>
+  <figcaption>The three stages of a sound's envelope. Real envelopes vary widely in the duration and shape of each stage, but most sounds can be described in these terms.</figcaption>
+</figure>
+
+<h3>Attack</h3>
+
+<p>The attack is how a sound begins. A wood block struck with a mallet has a <em>sharp</em> attack: the sound goes from silence to full volume almost instantly. A bowed violin note has a <em>slow</em> attack: the bow catches the string gradually and the sound swells in. A note swelled with a volume pedal can have an even slower attack, taking several seconds to reach full volume.</p>
+
+<p>Attack is one of the most important cues your ear uses to identify what kind of sound you're hearing. A piano and a violin playing the same note at the same volume sound completely different, largely because their attacks are different. Reverse a piano note (take the recording and play it backward) and it stops sounding like a piano almost entirely, because the attack now has the shape of a piano release.</p>
+
+<h3>Sustain</h3>
+
+<p>The sustain is what happens during the body of the sound, after the attack and before the release. Some sounds have <em>steady</em> sustains: an organ note holds at roughly the same volume and timbre for as long as the key is pressed. Some have <em>evolving</em> sustains: a vocal "ahhh" wavers and shifts, or a bowed string note has subtle changes in pressure and bow speed that show up in the sound.</p>
+
+<p>Many sounds have very <em>short</em> sustains, or none at all. A wood block has effectively no sustain, there's an attack and then almost immediately the release. A handclap is similar. Pure percussion is mostly attack-and-release with no sustain in between.</p>
+
+<h3>Release</h3>
+
+<p>The release is how a sound ends. Some releases are <em>abrupt</em>: a recording stops, a finger lifts off a piano key with the damper engaged, a clap dies out instantly. Some are <em>gradual</em>: a piano note rings on after the key is released, decaying slowly. A reverberant space adds to the release of every sound in it. A single hand clap in a cathedral has a release of several seconds, even though the original clap was instant.</p>
+
+<p>Release is also where you can hear the medium most clearly. A short tape loop's release is shaped by the splice; a digital file's release is exactly as long as the data. The same source sound can have a different release in different recordings or in different rooms.</p>
+
+<h3>Listen: three contrasting envelopes</h3>
+
+<p>Listen to each of the following with the envelope vocabulary in mind. Try to describe each one in terms of its attack, sustain, and release.</p>
+
+<div class="audio-compare">
+  <div class="audio-compare-title">Three envelope shapes</div>
+  <div class="audio-row">
+    <span class="audio-label">Sharp attack
+      <span class="audio-label-sub">no sustain, fast release</span>
+    </span>
+    <audio controls preload="metadata" src="../assets/audio/editing-envelope/env-sharp.wav"></audio>
+  </div>
+  <div class="audio-row">
+    <span class="audio-label">Slow attack
+      <span class="audio-label-sub">long sustain, gradual release</span>
+    </span>
+    <audio controls preload="metadata" src="../assets/audio/editing-envelope/env-sustained.wav"></audio>
+  </div>
+  <div class="audio-row">
+    <span class="audio-label">Evolving texture
+      <span class="audio-label-sub">no clear boundaries</span>
+    </span>
+    <audio controls preload="metadata" src="../assets/audio/editing-envelope/env-evolving.wav"></audio>
+  </div>
+  <p class="audio-note">The first sound is mostly attack and release with no sustain in between. The second has a gradual swell into a sustained body, then a gentle decay. The third has no clear stages at all: the envelope is continuous and the sound is constantly changing within itself. Many sounds in the world fall into this third category, and it's worth noticing that the three-stage model isn't a perfect fit for every sound. It's a useful starting point, not a constraint.</p>
+</div>
+
+<h3>A note on synthesis vocabulary</h3>
+
+<p>You may have heard the acronym <strong>ADSR</strong>: attack, decay, sustain, release. This is the four-stage version of the envelope used in synthesizers. <strong>Decay</strong> is a new stage that sits between the attack peak and the held sustain level: it shapes how the sound settles down to the level it holds while a key is pressed. Here we're working with recorded sounds, so the three-stage version (attack, sustain, release) is enough.</p>
+
+<h3>Try it: shape an envelope</h3>
+
+<p>Use the three sliders below to shape an envelope, then press play. The source is a fixed sine tone at 330 Hz; only the envelope changes. Try the extremes: a very short attack with no sustain (you'll get something percussive), a long attack with no release (it ends abruptly even though it began gradually), a balanced shape with all three stages clearly present. Notice how much the same source tone changes character based only on its envelope.</p>
+
+<div class="env-tool" id="envTool">
+  <div class="env-tool-title">Envelope Explorer</div>
+
+  <svg class="env-preview" id="envPreview" viewBox="0 0 600 160" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Envelope preview, updates as sliders change">
+    <rect width="600" height="160" fill="var(--bg)"/>
+    <!-- Time axis -->
+    <line x1="40" y1="130" x2="560" y2="130" stroke="var(--ink)" stroke-width="1"/>
+    <!-- Amplitude axis -->
+    <line x1="40" y1="20" x2="40" y2="130" stroke="var(--ink)" stroke-width="1"/>
+    <!-- Curve will be drawn here by JS -->
+    <path id="envCurve" d="" fill="none" stroke="var(--accent)" stroke-width="2.5"/>
+    <!-- Stage region dividers (drawn by JS) -->
+    <line id="envDivA" x1="0" y1="20" x2="0" y2="130" stroke="var(--ink-soft)" stroke-width="0.8" stroke-dasharray="3,3"/>
+    <line id="envDivB" x1="0" y1="20" x2="0" y2="130" stroke="var(--ink-soft)" stroke-width="0.8" stroke-dasharray="3,3"/>
+    <!-- Stage labels (positioned by JS) -->
+    <text id="envLabelA" x="0" y="14" font-family="DM Mono, monospace" font-size="9" fill="var(--accent)" text-anchor="middle" letter-spacing="0.5">A</text>
+    <text id="envLabelS" x="0" y="14" font-family="DM Mono, monospace" font-size="9" fill="var(--accent)" text-anchor="middle" letter-spacing="0.5">S</text>
+    <text id="envLabelR" x="0" y="14" font-family="DM Mono, monospace" font-size="9" fill="var(--accent)" text-anchor="middle" letter-spacing="0.5">R</text>
+    <!-- Total time readout -->
+    <text id="envTotalTime" x="556" y="148" font-family="DM Mono, monospace" font-size="9" fill="var(--ink-soft)" text-anchor="end">0.00s</text>
+  </svg>
+
+  <div class="env-sliders">
+    <span class="env-slider-label">Attack</span>
+    <input type="range" id="envAttack" class="env-slider-input" min="5" max="2000" step="5" value="100">
+    <span class="env-slider-readout" id="envAttackReadout">100 ms</span>
+
+    <span class="env-slider-label">Sustain</span>
+    <input type="range" id="envSustain" class="env-slider-input" min="0" max="2000" step="10" value="600">
+    <span class="env-slider-readout" id="envSustainReadout">600 ms</span>
+
+    <span class="env-slider-label">Release</span>
+    <input type="range" id="envRelease" class="env-slider-input" min="5" max="2000" step="5" value="400">
+    <span class="env-slider-readout" id="envReleaseReadout">400 ms</span>
+  </div>
+
+  <div class="env-controls">
+    <button id="envPlay" class="env-button">Play</button>
+    <button id="envReset" class="env-button reset">Reset</button>
+  </div>
+
+  <p class="env-note"><strong>Keep your headphones at low volume before pressing Play.</strong> The source is a 330 Hz sine tone, played at a conservative level. Try setting attack to its minimum and sustain to zero for a percussive sound, or attack at 1500 ms and sustain at 1500 ms for a long swell.</p>
+</div>
+
+<script>
+(function() {
+  const tool = document.getElementById('envTool');
+  if (!tool) return;
+
+  const attackSlider = document.getElementById('envAttack');
+  const sustainSlider = document.getElementById('envSustain');
+  const releaseSlider = document.getElementById('envRelease');
+  const attackReadout = document.getElementById('envAttackReadout');
+  const sustainReadout = document.getElementById('envSustainReadout');
+  const releaseReadout = document.getElementById('envReleaseReadout');
+  const playButton = document.getElementById('envPlay');
+  const resetButton = document.getElementById('envReset');
+
+  const curvePath = document.getElementById('envCurve');
+  const divA = document.getElementById('envDivA');
+  const divB = document.getElementById('envDivB');
+  const labelA = document.getElementById('envLabelA');
+  const labelS = document.getElementById('envLabelS');
+  const labelR = document.getElementById('envLabelR');
+  const totalTimeReadout = document.getElementById('envTotalTime');
+
+  const DEFAULTS = { attack: 100, sustain: 600, release: 400 };
+  const FREQ_HZ = 330;
+  const PEAK_GAIN = 0.12;  // conservative, sine tones are fatiguing
+
+  // Preview SVG geometry: drawing area is x=40..560 (520 wide), y=20..130 (110 tall)
+  const X0 = 40, X1 = 560, Y_TOP = 20, Y_BOTTOM = 130;
+  const X_WIDTH = X1 - X0;
+
+  let audioCtx = null;
+  let oscillator = null;
+  let gainNode = null;
+  let currentlyPlaying = false;
+  let endTimeoutId = null;
+
+  function formatMs(ms) {
+    if (ms < 1000) return Math.round(ms) + ' ms';
+    return (ms / 1000).toFixed(2) + ' s';
+  }
+
+  function readSliders() {
+    return {
+      attack: parseFloat(attackSlider.value),
+      sustain: parseFloat(sustainSlider.value),
+      release: parseFloat(releaseSlider.value)
+    };
+  }
+
+  function updateReadouts() {
+    const v = readSliders();
+    attackReadout.textContent = formatMs(v.attack);
+    sustainReadout.textContent = formatMs(v.sustain);
+    releaseReadout.textContent = formatMs(v.release);
+  }
+
+  function updatePreview() {
+    const v = readSliders();
+    const total = v.attack + v.sustain + v.release;
+    if (total === 0) {
+      curvePath.setAttribute('d', '');
+      return;
+    }
+    const xAttackEnd = X0 + (v.attack / total) * X_WIDTH;
+    const xSustainEnd = X0 + ((v.attack + v.sustain) / total) * X_WIDTH;
+    const xReleaseEnd = X1;
+
+    // Build path: silent at start, ramp to full, hold, ramp to silent
+    const d = [
+      'M', X0, Y_BOTTOM,
+      'L', xAttackEnd, Y_TOP,
+      'L', xSustainEnd, Y_TOP,
+      'L', xReleaseEnd, Y_BOTTOM
+    ].join(' ');
+    curvePath.setAttribute('d', d);
+
+    // Update dividers
+    divA.setAttribute('x1', xAttackEnd);
+    divA.setAttribute('x2', xAttackEnd);
+    divB.setAttribute('x1', xSustainEnd);
+    divB.setAttribute('x2', xSustainEnd);
+
+    // Position stage labels at the midpoint of each stage region
+    labelA.setAttribute('x', (X0 + xAttackEnd) / 2);
+    labelS.setAttribute('x', (xAttackEnd + xSustainEnd) / 2);
+    labelR.setAttribute('x', (xSustainEnd + xReleaseEnd) / 2);
+
+    // Hide labels for stages that are too narrow to fit text
+    labelA.style.opacity = (xAttackEnd - X0) > 18 ? 1 : 0;
+    labelS.style.opacity = (xSustainEnd - xAttackEnd) > 18 ? 1 : 0;
+    labelR.style.opacity = (xReleaseEnd - xSustainEnd) > 18 ? 1 : 0;
+
+    // Total time readout
+    totalTimeReadout.textContent = (total / 1000).toFixed(2) + 's';
+  }
+
+  function stopCurrent() {
+    if (endTimeoutId) {
+      clearTimeout(endTimeoutId);
+      endTimeoutId = null;
+    }
+    if (oscillator) {
+      try { oscillator.stop(); } catch (e) { /* already stopped */ }
+      oscillator = null;
+    }
+    gainNode = null;
+    currentlyPlaying = false;
+    playButton.textContent = 'Play';
+    playButton.classList.remove('playing');
+  }
+
+  function play() {
+    if (currentlyPlaying) {
+      stopCurrent();
+      return;
+    }
+    if (!audioCtx) {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+
+    const v = readSliders();
+    const attackS = v.attack / 1000;
+    const sustainS = v.sustain / 1000;
+    const releaseS = v.release / 1000;
+    const totalS = attackS + sustainS + releaseS;
+
+    if (totalS < 0.01) return;  // nothing to play
+
+    const now = audioCtx.currentTime;
+
+    oscillator = audioCtx.createOscillator();
+    gainNode = audioCtx.createGain();
+    oscillator.type = 'sine';
+    oscillator.frequency.value = FREQ_HZ;
+
+    // Schedule the envelope on the gain node.
+    // setValueAtTime + linearRampToValueAtTime gives us a clean piecewise ramp.
+    gainNode.gain.setValueAtTime(0, now);
+    gainNode.gain.linearRampToValueAtTime(PEAK_GAIN, now + attackS);
+    if (sustainS > 0) {
+      gainNode.gain.linearRampToValueAtTime(PEAK_GAIN, now + attackS + sustainS);
+    }
+    gainNode.gain.linearRampToValueAtTime(0, now + totalS);
+
+    oscillator.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+
+    oscillator.start(now);
+    oscillator.stop(now + totalS + 0.05);
+
+    currentlyPlaying = true;
+    playButton.textContent = 'Stop';
+    playButton.classList.add('playing');
+
+    endTimeoutId = setTimeout(() => {
+      stopCurrent();
+    }, totalS * 1000 + 50);
+  }
+
+  function reset() {
+    stopCurrent();
+    attackSlider.value = DEFAULTS.attack;
+    sustainSlider.value = DEFAULTS.sustain;
+    releaseSlider.value = DEFAULTS.release;
+    updateReadouts();
+    updatePreview();
+  }
+
+  // Wire up
+  [attackSlider, sustainSlider, releaseSlider].forEach(s => {
+    s.addEventListener('input', () => {
+      updateReadouts();
+      updatePreview();
+    });
+  });
+  playButton.addEventListener('click', play);
+  resetButton.addEventListener('click', reset);
+
+  // Initial render
+  updateReadouts();
+  updatePreview();
+})();
+
+// Vocabulary-video speed controls.
+// Each .vocab-video figure has a <video> and a row of .speed-btn buttons.
+// Clicking a speed button sets that video's playbackRate and toggles
+// the .active class within its own controls group.
+(function() {
+  document.addEventListener('click', function(e) {
+    const btn = e.target.closest('.speed-btn');
+    if (!btn) return;
+    const figure = btn.closest('.vocab-video');
+    if (!figure) return;
+    const video = figure.querySelector('video');
+    if (!video) return;
+    const rate = parseFloat(btn.dataset.rate);
+    if (!isFinite(rate)) return;
+    video.playbackRate = rate;
+    // Update active state within this controls group only
+    const controls = btn.parentElement;
+    controls.querySelectorAll('.speed-btn').forEach(function(b) {
+      b.classList.toggle('active', b === btn);
+    });
+  });
+})();
+</script>
+
+<hr>
+
+<h2>2 · Editing as a vocabulary</h2>
+
+<p>A basic cut is a single move from a much larger vocabulary. Composers in the musique concrète tradition used these moves with razor blades and tape; you'll use them with a mouse and software. The principle is the same.</p>
+
+<p>The fundamental insight is that <strong>recorded sound is material you can shape</strong>, not a fixed performance. Once a sound is recorded, you can cut it, repeat it, reverse it, slow it down, layer it, splice it next to other sounds. Each of these moves is a creative choice. The vocabulary below is what those moves are called.</p>
+
+<dl class="vocab">
+  <dt>Cut</dt>
+  <dd>
+    <p>Remove a selected region. The audio on either side of the cut closes the gap. Like deleting a phrase from the middle of a sentence.</p>
+    <figure class="vocab-video vocab-video--narrow">
+      <video controls preload="metadata" muted playsinline>
+        <source src="../assets/videos/editing-envelope/cut.mp4" type="video/mp4">
+      </video>
+      <div class="vocab-video-controls">
+        <span class="speed-label">speed</span>
+        <button type="button" class="speed-btn" data-rate="0.5">0.5×</button>
+        <button type="button" class="speed-btn active" data-rate="1">1×</button>
+        <button type="button" class="speed-btn" data-rate="2">2×</button>
+      </div>
+    </figure>
+  </dd>
+
+  <dt>Trim</dt>
+  <dd>
+    <p>Keep a selected region and remove everything else. The opposite of cut. Useful for isolating a single sound from a longer recording.</p>
+    <figure class="vocab-video vocab-video--narrow">
+      <video controls preload="metadata" muted playsinline>
+        <source src="../assets/videos/editing-envelope/trim.mp4" type="video/mp4">
+      </video>
+      <div class="vocab-video-controls">
+        <span class="speed-label">speed</span>
+        <button type="button" class="speed-btn" data-rate="0.5">0.5×</button>
+        <button type="button" class="speed-btn active" data-rate="1">1×</button>
+        <button type="button" class="speed-btn" data-rate="2">2×</button>
+      </div>
+    </figure>
+  </dd>
+
+  <dt>Splice / arrange</dt>
+  <dd>
+    <p>Place sounds next to each other in time. The fundamental musique concrète move: take a fragment of one recording, place a fragment of another after it, and a third after that. The arrangement is the composition.</p>
+    <figure class="vocab-video vocab-video--narrow">
+      <video controls preload="metadata" muted playsinline>
+        <source src="../assets/videos/editing-envelope/splice.mp4" type="video/mp4">
+      </video>
+      <div class="vocab-video-controls">
+        <span class="speed-label">speed</span>
+        <button type="button" class="speed-btn" data-rate="0.5">0.5×</button>
+        <button type="button" class="speed-btn active" data-rate="1">1×</button>
+        <button type="button" class="speed-btn" data-rate="2">2×</button>
+      </div>
+    </figure>
+  </dd>
+
+  <dt>Fade in / fade out</dt>
+  <dd>
+    <p>A volume ramp at the boundary of an edit. A fade-in starts from silence and ramps up to full volume over some short duration; a fade-out is the reverse. Even very short fades (10 to 50 milliseconds) prevent click pops at edit boundaries. Use fades on every edit.</p>
+    <figure class="vocab-video vocab-video--narrow">
+      <video controls preload="metadata" muted playsinline>
+        <source src="../assets/videos/editing-envelope/fades.mp4" type="video/mp4">
+      </video>
+      <div class="vocab-video-controls">
+        <span class="speed-label">speed</span>
+        <button type="button" class="speed-btn" data-rate="0.5">0.5×</button>
+        <button type="button" class="speed-btn active" data-rate="1">1×</button>
+        <button type="button" class="speed-btn" data-rate="2">2×</button>
+      </div>
+    </figure>
+  </dd>
+
+  <dt>Crossfade</dt>
+  <dd>
+    <p>The overlap of a fade-out and a fade-in: one sound fades out as another fades in. The seam between two sounds becomes smooth instead of abrupt. Crossfades are how editors make hard cuts disappear.</p>
+    <figure class="vocab-video vocab-video--narrow">
+      <video controls preload="metadata" muted playsinline>
+        <source src="../assets/videos/editing-envelope/crossfade.mp4" type="video/mp4">
+      </video>
+      <div class="vocab-video-controls">
+        <span class="speed-label">speed</span>
+        <button type="button" class="speed-btn" data-rate="0.5">0.5×</button>
+        <button type="button" class="speed-btn active" data-rate="1">1×</button>
+        <button type="button" class="speed-btn" data-rate="2">2×</button>
+      </div>
+    </figure>
+  </dd>
+
+  <dt>Loop</dt>
+  <dd>
+    <p>A region played repeatedly. Useful as a working aid (loop a section while you adjust an effect) or as a compositional move (a tape-loop pattern that becomes the rhythmic backbone of a piece). In Audacity, you achieve this two ways: as a playback feature (the loop button in the transport, which repeats the selected region while you listen, without changing the audio), or by copying an audio clip and pasting it in succession within the track. Looping is far more central in DAWs built around it, like Ableton.</p>
+  </dd>
+
+  <dt>Reverse</dt>
+  <dd>
+    <p>Play a sound backward. The recording is the same, but its envelope is flipped: the attack becomes the release, and the release becomes the attack. A piano note played backward swells in instead of striking; a struck cymbal played backward sounds like a swelling rush of air. Reverse changes the direction of the sound through time, not its duration or its pitch. It's one of the iconic moves of musique concrète: Schaeffer didn't have software, so he played tape backward by physically reversing the reel, and the resulting sounds became part of the language of the genre.</p>
+    <figure class="vocab-video vocab-video--narrow">
+      <video controls preload="metadata" muted playsinline>
+        <source src="../assets/videos/editing-envelope/reverse.mp4" type="video/mp4">
+      </video>
+      <div class="vocab-video-controls">
+        <span class="speed-label">speed</span>
+        <button type="button" class="speed-btn" data-rate="0.5">0.5×</button>
+        <button type="button" class="speed-btn active" data-rate="1">1×</button>
+        <button type="button" class="speed-btn" data-rate="2">2×</button>
+      </div>
+    </figure>
+  </dd>
+</dl>
+
+<hr class="dotted">
+
+<p>So far, every move in this list is fairly intuitive: you cut, you keep, you arrange, you fade, you blend, you repeat, you reverse. The next two moves are different. They both come out of a quirk of physics: in recorded sound, time and pitch aren't independent. To understand them you first have to understand that.</p>
+
+<h3>A pause: time and pitch are coupled</h3>
+
+<p>In the physical world, time and pitch are not independent. If you take a tape recording and play it back at <em>half-speed</em>, two things happen at once:</p>
+
+<ul>
+  <li>The recording takes <strong>twice as long</strong> to play (longer in time)</li>
+  <li>Every pitch in it drops by <strong>one octave</strong> (lower in pitch)</li>
+</ul>
+
+<p>Speed it up to <em>double-speed</em>, and the opposite happens: it plays in half the time, and every pitch rises by an octave. This isn't a coincidence and it isn't a quirk of tape; it's a consequence of what sound is. A sound's pitch is determined by how often the waveform repeats per second; if you stretch the waveform out in time, each cycle takes longer, and the pitch drops in proportion.</p>
+
+<p>The diagram below shows a sine wave played at three speeds, because a sine wave's cycles are visible at a glance. Notice that the cycles in the slowed version are wider, and the cycles in the sped-up version are narrower. The total length of the sound changes too: the slowed version takes twice as long; the sped-up version takes half as long.</p>
+
+<figure>
+  <svg viewBox="0 0 600 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Three sine waves showing source, half-speed (longer and lower), and double-speed (shorter and higher)">
+    <rect width="600" height="240" fill="var(--bg-alt)"/>
+
+    <!-- Row 1: SOURCE (1.5s, 6 cycles in 240 px). Center y = 35 -->
+    <text x="20" y="32" font-family="DM Mono, monospace" font-size="10" fill="var(--ink)" font-weight="500">SOURCE</text>
+    <text x="20" y="44" font-family="DM Mono, monospace" font-size="9" fill="var(--ink-soft)">1×, 1.5 s</text>
+    <line x1="100" y1="35" x2="340" y2="35" stroke="var(--ink-soft)" stroke-width="0.5" stroke-dasharray="2,2"/>
+    <path d="M100.0,35.0 L102.2,28.2 L104.4,22.1 L106.7,17.7 L108.9,15.3 L111.1,15.3 L113.3,17.7 L115.6,22.1 L117.8,28.2 L120.0,35.0 L122.2,41.8 L124.4,47.9 L126.7,52.3 L128.9,54.7 L131.1,54.7 L133.3,52.3 L135.6,47.9 L137.8,41.8 L140.0,35.0 L142.2,28.2 L144.4,22.1 L146.7,17.7 L148.9,15.3 L151.1,15.3 L153.3,17.7 L155.6,22.1 L157.8,28.2 L160.0,35.0 L162.2,41.8 L164.4,47.9 L166.7,52.3 L168.9,54.7 L171.1,54.7 L173.3,52.3 L175.6,47.9 L177.8,41.8 L180.0,35.0 L182.2,28.2 L184.4,22.1 L186.7,17.7 L188.9,15.3 L191.1,15.3 L193.3,17.7 L195.6,22.1 L197.8,28.2 L200.0,35.0 L202.2,41.8 L204.4,47.9 L206.7,52.3 L208.9,54.7 L211.1,54.7 L213.3,52.3 L215.6,47.9 L217.8,41.8 L220.0,35.0 L222.2,28.2 L224.4,22.1 L226.7,17.7 L228.9,15.3 L231.1,15.3 L233.3,17.7 L235.6,22.1 L237.8,28.2 L240.0,35.0 L242.2,41.8 L244.4,47.9 L246.7,52.3 L248.9,54.7 L251.1,54.7 L253.3,52.3 L255.6,47.9 L257.8,41.8 L260.0,35.0 L262.2,28.2 L264.4,22.1 L266.7,17.7 L268.9,15.3 L271.1,15.3 L273.3,17.7 L275.6,22.1 L277.8,28.2 L280.0,35.0 L282.2,41.8 L284.4,47.9 L286.7,52.3 L288.9,54.7 L291.1,54.7 L293.3,52.3 L295.6,47.9 L297.8,41.8 L300.0,35.0 L302.2,28.2 L304.4,22.1 L306.7,17.7 L308.9,15.3 L311.1,15.3 L313.3,17.7 L315.6,22.1 L317.8,28.2 L320.0,35.0 L322.2,41.8 L324.4,47.9 L326.7,52.3 L328.9,54.7 L331.1,54.7 L333.3,52.3 L335.6,47.9 L337.8,41.8 L340.0,35.0" fill="none" stroke="var(--accent)" stroke-width="1.5"/>
+
+    <!-- Row 2: SLOW (3.0s, 6 cycles in 480 px = twice as wide). Center y = 105 -->
+    <text x="20" y="102" font-family="DM Mono, monospace" font-size="10" fill="var(--ink)" font-weight="500">SLOW</text>
+    <text x="20" y="114" font-family="DM Mono, monospace" font-size="9" fill="var(--ink-soft)">½×, 3.0 s</text>
+    <line x1="100" y1="105" x2="580" y2="105" stroke="var(--ink-soft)" stroke-width="0.5" stroke-dasharray="2,2"/>
+    <path d="M100.0,105.0 L104.4,98.2 L108.9,92.1 L113.3,87.7 L117.8,85.3 L122.2,85.3 L126.7,87.7 L131.1,92.1 L135.6,98.2 L140.0,105.0 L144.4,111.8 L148.9,117.9 L153.3,122.3 L157.8,124.7 L162.2,124.7 L166.7,122.3 L171.1,117.9 L175.6,111.8 L180.0,105.0 L184.4,98.2 L188.9,92.1 L193.3,87.7 L197.8,85.3 L202.2,85.3 L206.7,87.7 L211.1,92.1 L215.6,98.2 L220.0,105.0 L224.4,111.8 L228.9,117.9 L233.3,122.3 L237.8,124.7 L242.2,124.7 L246.7,122.3 L251.1,117.9 L255.6,111.8 L260.0,105.0 L264.4,98.2 L268.9,92.1 L273.3,87.7 L277.8,85.3 L282.2,85.3 L286.7,87.7 L291.1,92.1 L295.6,98.2 L300.0,105.0 L304.4,111.8 L308.9,117.9 L313.3,122.3 L317.8,124.7 L322.2,124.7 L326.7,122.3 L331.1,117.9 L335.6,111.8 L340.0,105.0 L344.4,98.2 L348.9,92.1 L353.3,87.7 L357.8,85.3 L362.2,85.3 L366.7,87.7 L371.1,92.1 L375.6,98.2 L380.0,105.0 L384.4,111.8 L388.9,117.9 L393.3,122.3 L397.8,124.7 L402.2,124.7 L406.7,122.3 L411.1,117.9 L415.6,111.8 L420.0,105.0 L424.4,98.2 L428.9,92.1 L433.3,87.7 L437.8,85.3 L442.2,85.3 L446.7,87.7 L451.1,92.1 L455.6,98.2 L460.0,105.0 L464.4,111.8 L468.9,117.9 L473.3,122.3 L477.8,124.7 L482.2,124.7 L486.7,122.3 L491.1,117.9 L495.6,111.8 L500.0,105.0 L504.4,98.2 L508.9,92.1 L513.3,87.7 L517.8,85.3 L522.2,85.3 L526.7,87.7 L531.1,92.1 L535.6,98.2 L540.0,105.0 L544.4,111.8 L548.9,117.9 L553.3,122.3 L557.8,124.7 L562.2,124.7 L566.7,122.3 L571.1,117.9 L575.6,111.8 L580.0,105.0" fill="none" stroke="var(--accent)" stroke-width="1.5"/>
+
+    <!-- Row 3: FAST (0.75s, 6 cycles in 120 px = half as wide). Center y = 175 -->
+    <text x="20" y="172" font-family="DM Mono, monospace" font-size="10" fill="var(--ink)" font-weight="500">FAST</text>
+    <text x="20" y="184" font-family="DM Mono, monospace" font-size="9" fill="var(--ink-soft)">2×, 0.75 s</text>
+    <line x1="100" y1="175" x2="220" y2="175" stroke="var(--ink-soft)" stroke-width="0.5" stroke-dasharray="2,2"/>
+    <path d="M100.0,175.0 L101.1,168.2 L102.2,162.1 L103.3,157.7 L104.4,155.3 L105.6,155.3 L106.7,157.7 L107.8,162.1 L108.9,168.2 L110.0,175.0 L111.1,181.8 L112.2,187.9 L113.3,192.3 L114.4,194.7 L115.6,194.7 L116.7,192.3 L117.8,187.9 L118.9,181.8 L120.0,175.0 L121.1,168.2 L122.2,162.1 L123.3,157.7 L124.4,155.3 L125.6,155.3 L126.7,157.7 L127.8,162.1 L128.9,168.2 L130.0,175.0 L131.1,181.8 L132.2,187.9 L133.3,192.3 L134.4,194.7 L135.6,194.7 L136.7,192.3 L137.8,187.9 L138.9,181.8 L140.0,175.0 L141.1,168.2 L142.2,162.1 L143.3,157.7 L144.4,155.3 L145.6,155.3 L146.7,157.7 L147.8,162.1 L148.9,168.2 L150.0,175.0 L151.1,181.8 L152.2,187.9 L153.3,192.3 L154.4,194.7 L155.6,194.7 L156.7,192.3 L157.8,187.9 L158.9,181.8 L160.0,175.0 L161.1,168.2 L162.2,162.1 L163.3,157.7 L164.4,155.3 L165.6,155.3 L166.7,157.7 L167.8,162.1 L168.9,168.2 L170.0,175.0 L171.1,181.8 L172.2,187.9 L173.3,192.3 L174.4,194.7 L175.6,194.7 L176.7,192.3 L177.8,187.9 L178.9,181.8 L180.0,175.0 L181.1,168.2 L182.2,162.1 L183.3,157.7 L184.4,155.3 L185.6,155.3 L186.7,157.7 L187.8,162.1 L188.9,168.2 L190.0,175.0 L191.1,181.8 L192.2,187.9 L193.3,192.3 L194.4,194.7 L195.6,194.7 L196.7,192.3 L197.8,187.9 L198.9,181.8 L200.0,175.0 L201.1,168.2 L202.2,162.1 L203.3,157.7 L204.4,155.3 L205.6,155.3 L206.7,157.7 L207.8,162.1 L208.9,168.2 L210.0,175.0 L211.1,181.8 L212.2,187.9 L213.3,192.3 L214.4,194.7 L215.6,194.7 L216.7,192.3 L217.8,187.9 L218.9,181.8 L220.0,175.0" fill="none" stroke="var(--accent)" stroke-width="1.5"/>
+
+    <!-- Time axis below all three -->
+    <line x1="100" y1="215" x2="580" y2="215" stroke="var(--ink)" stroke-width="0.8"/>
+    <!-- Time tick marks: 0s, 1s, 2s, 3s. Scale: 240 px = 1.5 s, so 1 s = 160 px -->
+    <line x1="100" y1="212" x2="100" y2="218" stroke="var(--ink)" stroke-width="0.8"/>
+    <line x1="260" y1="212" x2="260" y2="218" stroke="var(--ink)" stroke-width="0.8"/>
+    <line x1="420" y1="212" x2="420" y2="218" stroke="var(--ink)" stroke-width="0.8"/>
+    <line x1="580" y1="212" x2="580" y2="218" stroke="var(--ink)" stroke-width="0.8"/>
+    <text x="100" y="230" font-family="DM Mono, monospace" font-size="9" fill="var(--ink-soft)" text-anchor="middle">0 s</text>
+    <text x="260" y="230" font-family="DM Mono, monospace" font-size="9" fill="var(--ink-soft)" text-anchor="middle">1 s</text>
+    <text x="420" y="230" font-family="DM Mono, monospace" font-size="9" fill="var(--ink-soft)" text-anchor="middle">2 s</text>
+    <text x="580" y="230" font-family="DM Mono, monospace" font-size="9" fill="var(--ink-soft)" text-anchor="middle">3 s</text>
+  </svg>
+  <figcaption>The same waveform played at three speeds. The slowed version's cycles are wider, so it takes longer and its pitch drops; the sped-up version's cycles are narrower, so it's shorter and higher. Time and pitch shift together. The audio below applies the same operation to a voice recording, at a gentler ratio.</figcaption>
+</figure>
+
+<div class="audio-compare">
+  <div class="audio-compare-title">Time and pitch coupled (tape physics)</div>
+  <div class="audio-row">
+    <span class="audio-label">Source
+      <span class="audio-label-sub">1×, ~5.7 s</span>
+    </span>
+    <audio controls preload="metadata" src="../assets/audio/editing-envelope/tape-source.wav"></audio>
+  </div>
+  <div class="audio-row">
+    <span class="audio-label">Slow (0.75×)
+      <span class="audio-label-sub">~7.6 s, ~5 semitones lower</span>
+    </span>
+    <audio controls preload="metadata" src="../assets/audio/editing-envelope/tape-slow.wav"></audio>
+  </div>
+  <div class="audio-row">
+    <span class="audio-label">Fast (1.33×)
+      <span class="audio-label-sub">~4.3 s, ~5 semitones higher</span>
+    </span>
+    <audio controls preload="metadata" src="../assets/audio/editing-envelope/tape-fast.wav"></audio>
+  </div>
+  <p class="audio-note">All three are the same voice recording. The slow version is exactly 4/3 the duration of the source and exactly 3/4 of its pitch (about 5 semitones lower); the fast version is exactly 3/4 the duration and 4/3 of the pitch (about 5 semitones higher).</p>
+</div>
+
+<p>This is the world before signal processing. If you wanted a recording to be longer, you slowed it down, but it also went lower. If you wanted to raise its pitch, you sped it up, but it also got shorter. Schaeffer worked entirely in this world. So did every studio recording made before about 1990.</p>
+
+<p>Modern software lets us <em>decouple</em> these two properties. With clever digital signal processing, you can change one without the other. The two terms below name the two halves of that decoupling:</p>
+
+<dl class="vocab">
+  <dt>Time-stretch</dt>
+  <dd>Make a sound longer or shorter <em>without</em> changing its pitch. Modern software analyzes the recording and rebuilds it at the new duration, holding the pitch constant. The opposite of what tape would do: when you slow a sound down with time-stretch, you keep the pitch where it was.</dd>
+
+  <dt>Pitch-shift</dt>
+  <dd>Move a sound up or down in pitch <em>without</em> changing its duration. The complement to time-stretch.</dd>
+</dl>
+
+<p>Both are processing-intensive operations and both produce artifacts at extreme settings. Subtle shifts (a few semitones, a 10-20% time change) usually sound clean; dramatic ones (an octave up, doubling the duration) often sound digitally manipulated. The artifacts can be a bug or a feature, depending on what you're after.</p>
+
+<h3>Same moves, different tools</h3>
+
+<p>The tradition is consistent across tools. Cut, splice, loop, reverse, time-and-pitch via tape speed: these moves all started with razor blades and tape machines. What software has added is speed (a click instead of a razor cut), reversibility (an undo button instead of starting over), and the ability to separate things, like time and pitch, that physical tape kept locked together.</p>
+
+<hr>
+
+<h2>3 · Editing changes envelope</h2>
+
+<p>The envelope vocabulary and the editing vocabulary are connected. Almost every edit you can make on a sound changes its envelope in some way. This is worth seeing explicitly.</p>
+
+<p>Take a single source sound: a plucked string, lasting about three seconds. Sharp attack at the moment of the pluck, a sustained body that decays gradually, a natural release as the string's energy dissipates.</p>
+
+<div class="audio-compare">
+  <div class="audio-compare-title">One source, four envelopes</div>
+  <div class="audio-row">
+    <span class="audio-label">Source
+      <span class="audio-label-sub">plucked, full duration</span>
+    </span>
+    <audio controls preload="metadata" src="../assets/audio/editing-envelope/edit-source.wav"></audio>
+  </div>
+  <div class="audio-row">
+    <span class="audio-label">Truncated
+      <span class="audio-label-sub">cut at 0.5 seconds</span>
+    </span>
+    <audio controls preload="metadata" src="../assets/audio/editing-envelope/edit-truncated.wav"></audio>
+  </div>
+  <div class="audio-row">
+    <span class="audio-label">Reversed
+      <span class="audio-label-sub">played backward</span>
+    </span>
+    <audio controls preload="metadata" src="../assets/audio/editing-envelope/edit-reversed.wav"></audio>
+  </div>
+  <div class="audio-row">
+    <span class="audio-label">Faded in
+      <span class="audio-label-sub">1-second fade applied</span>
+    </span>
+    <audio controls preload="metadata" src="../assets/audio/editing-envelope/edit-fade-in.wav"></audio>
+  </div>
+  <p class="audio-note">All four are the same recording. The source has a complete attack-sustain-release shape. The truncated version cuts off the release; the sound is the same up to 0.5 seconds, but instead of decaying naturally it ends abruptly. The reversed version flips the envelope: a sound that began with a sharp attack now begins with a slow swell. The fade-in version replaces the original sharp attack with a gradual one. None of these involves a different recording. They are all the same source, transformed by editing.</p>
+</div>
+
+<h3>Edit boundaries are envelope problems</h3>
+
+<p>When you place two sounds next to each other in a piece, the seam between them is a small envelope problem. Sound A has a release; sound B has an attack. If you simply cut A off and start B, you might hear a click pop at the boundary, because the waveform of A doesn't end at zero and the waveform of B doesn't start at zero. The mismatch is audible.</p>
+
+<p>Two solutions. The first: a small fade-out on A and a small fade-in on B. Each waveform now starts and ends at zero, so there's no jump. The second: a crossfade, where A and B overlap briefly. The result is smoother still: the seam is not just silent at the boundary, it's an active blend.</p>
+
+<div class="audio-compare">
+  <div class="audio-compare-title">Two sounds, two seams</div>
+  <div class="audio-row">
+    <span class="audio-label">Hard cut
+      <span class="audio-label-sub">no fade at the boundary</span>
+    </span>
+    <audio controls preload="metadata" src="../assets/audio/editing-envelope/seam-hardcut.wav"></audio>
+  </div>
+  <div class="audio-row">
+    <span class="audio-label">Crossfade
+      <span class="audio-label-sub">200 ms overlap</span>
+    </span>
+    <audio controls preload="metadata" src="../assets/audio/editing-envelope/seam-crossfade.wav"></audio>
+  </div>
+  <p class="audio-note">Listen for the moment of transition in each. The hard cut produces an audible click as the waveforms collide. The crossfade smooths the seam to the point that, depending on the source material, you might not notice it as a transition at all. The principle: in editing, the seams are where listeners catch you out. Fades and crossfades are how you make seams invisible.</p>
+</div>
+
+<hr>
+
+<h2>4 · Listening with the vocabulary</h2>
+
+<p>Now turn this back on some real music. As you listen to Schaeffer's <em>Étude aux chemins de fer</em> and Henry's <em>Variations pour une porte et un soupir</em>, listen with two questions in mind:</p>
+
+<ul>
+  <li><strong>What are the envelopes of the source sounds?</strong> Are the trains in Schaeffer mostly sharp attacks, mostly long sustains, or some mix? What about Henry's doors and sighs?</li>
+  <li><strong>What edit moves do you hear?</strong> Cuts, fades, crossfades, loops, reversals, speed changes. Try to identify at least three specific edit moves in each piece you listen to.</li>
+</ul>
+
+<p>For example: when you hear a sustained train whistle in Schaeffer suddenly cut off, ask yourself which it is. Is that a hard edit, with the recording chopped at that moment? A fast fade-out? Or a natural release the source happened to have? Sometimes you can tell, sometimes you can't, and being uncertain is part of the listening practice. The vocabulary doesn't promise certainty; it gives you a way to articulate what you're hearing and what you suspect, even when you're not sure.</p>
+
+<p>You won't always be sure. The whole point of musique concrète is that the source sounds are transformed past the point of obvious recognition. But you can train your ear to notice these moves over time, and that ear will serve you when you start making your own pieces.</p>
+
+<hr>
+
+<h2>Vocabulary</h2>
+
+<dl class="vocab">
+  <dt>Envelope</dt>
+  <dd>The shape of a sound over time, described in three stages: attack, sustain, release.</dd>
+
+  <dt>Attack</dt>
+  <dd>How a sound begins. The transition from silence to the body of the sound. Sharp attacks happen quickly; slow attacks happen gradually.</dd>
+
+  <dt>Sustain</dt>
+  <dd>The body of a sound, after the attack. Can be steady (an organ note) or evolving (a vocal "ahhh"); some sounds have very short sustains or none at all.</dd>
+
+  <dt>Release</dt>
+  <dd>How a sound ends. The transition from the body of the sound back to silence. Can be abrupt (cut off) or gradual (decay).</dd>
+
+  <dt>ADSR</dt>
+  <dd>Attack, Decay, Sustain, Release. The four-stage envelope used in synthesizers. Decay sits between the attack peak and the held sustain level: it shapes how the sound settles down to the level it holds while a key is pressed. You'll meet this again in synthesizers, including Ableton's.</dd>
+
+  <dt>Cut</dt>
+  <dd>Remove a selected region of audio.</dd>
+
+  <dt>Trim</dt>
+  <dd>Keep a selected region and remove everything else.</dd>
+
+  <dt>Splice</dt>
+  <dd>Place audio fragments next to each other in time. The original musique concrète move, named after the physical splicing of magnetic tape.</dd>
+
+  <dt>Fade</dt>
+  <dd>A volume ramp at the boundary of an edit. Prevents click pops and shapes how a sound enters or leaves.</dd>
+
+  <dt>Crossfade</dt>
+  <dd>An overlap of a fade-out and a fade-in. The seam between two sounds becomes a blend.</dd>
+
+  <dt>Loop</dt>
+  <dd>A region played repeatedly. Useful as a working aid or as a compositional element.</dd>
+
+  <dt>Time-pitch coupling</dt>
+  <dd>The physical relationship between time and pitch in recorded sound: changing playback speed changes both at once. Slowing a recording makes it longer <em>and</em> lower; speeding it up makes it shorter <em>and</em> higher. This is what tape did and what every recording medium did before digital signal processing.</dd>
+
+  <dt>Time-stretch</dt>
+  <dd>Change the duration of a sound without changing its pitch. A modern signal-processing operation that decouples what tape kept coupled.</dd>
+
+  <dt>Pitch-shift</dt>
+  <dd>Change the pitch of a sound without changing its duration. The complement to time-stretch.</dd>
+
+  <dt>Reverse</dt>
+  <dd>Play a sound backward. The envelope flips: attack becomes release, release becomes attack.</dd>
+</dl>
+
+<hr>
+
+<h2>Putting it to work</h2>
+
+<p>When you audition a sound from a library, you can ask: what's its envelope? When you decide where to place it in a piece, you're making a choice about how its envelope sits next to other sounds. When you reverse a sound, time-stretch it, or apply a fade, you're changing its envelope deliberately. The vocabulary lets you describe the choices you're making, which is the prerequisite to making them well.</p>
+
+<footer class="handout-footer">
+  <span>music-production</span>
+  <span>EOF</span>
+</footer>
+
+</body>
+</html>
