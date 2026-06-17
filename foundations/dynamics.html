@@ -411,7 +411,34 @@
     .status.error {
       color: var(--accent);
     }
-  </style>
+  
+    /* Reference-link cards for the Read more section (house .manual-link pattern) */
+    .manual-link {
+      display: flex; align-items: center; gap: 1rem;
+      padding: 0.9rem 1.25rem; margin: 0.75rem 0;
+      background: var(--bg-alt);
+      border: 1px solid var(--rule);
+      border-left: 3px solid var(--accent);
+      border-radius: 4px;
+      text-decoration: none; color: var(--ink);
+      transition: background 0.15s ease, border-color 0.15s ease;
+    }
+    .manual-link:hover { background: var(--bg); border-color: var(--accent); }
+    .manual-link:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    .manual-link .manual-icon {
+      flex: 0 0 auto; width: 34px; height: 34px; border-radius: 50%;
+      background: var(--accent); color: var(--bg);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--mono); font-size: 1.05rem; line-height: 1;
+    }
+    .manual-link .manual-body { flex: 1 1 auto; min-width: 0; }
+    .manual-link .manual-title { font-weight: 600; font-size: 0.95rem; line-height: 1.35; color: var(--ink); }
+    .manual-link .manual-scope {
+      font-family: var(--mono); font-size: 0.74rem; text-transform: uppercase;
+      letter-spacing: 0.05em; color: var(--ink-soft); margin-top: 0.25rem;
+    }
+    .manual-link .manual-arrow { flex: 0 0 auto; font-family: var(--mono); font-size: 1rem; color: var(--ink-soft); }
+</style>
 </head>
 <body>
 
@@ -15796,8 +15823,52 @@ ADYAGAA2ACkAQQAnAEEAGgA+ABIAPAAEADQA8/8iAOj/EgDf/woA0v/v/8//8f/M//H/z//4/87/AgDR
 
 <h2>Read more</h2>
 
-<!-- Useful links / further reading. To be populated. -->
-<p>Links and further reading to come.</p>
+<p>Sound on Sound on compression, from what the controls actually do to the techniques you build with them.</p>
+
+<a class="manual-link" href="https://www.soundonsound.com/techniques/using-your-daws-compressors-limiters" target="_blank" rel="noopener noreferrer">
+  <span class="manual-icon" aria-hidden="true">&#167;</span>
+  <span class="manual-body">
+    <span class="manual-title">Using Your DAW’s Compressors &amp; Limiters</span>
+    <span class="manual-scope">What the controls actually do</span>
+  </span>
+  <span class="manual-arrow" aria-hidden="true">&#8599;</span>
+</a>
+
+<a class="manual-link" href="https://www.soundonsound.com/techniques/compressors" target="_blank" rel="noopener noreferrer">
+  <span class="manual-icon" aria-hidden="true">&#167;</span>
+  <span class="manual-body">
+    <span class="manual-title">Compressors</span>
+    <span class="manual-scope">How a compressor works</span>
+  </span>
+  <span class="manual-arrow" aria-hidden="true">&#8599;</span>
+</a>
+
+<a class="manual-link" href="https://www.soundonsound.com/techniques/advanced-compression-techniques-part-1" target="_blank" rel="noopener noreferrer">
+  <span class="manual-icon" aria-hidden="true">&#167;</span>
+  <span class="manual-body">
+    <span class="manual-title">Advanced Compression Techniques: Part 1</span>
+    <span class="manual-scope">Gain-control elements</span>
+  </span>
+  <span class="manual-arrow" aria-hidden="true">&#8599;</span>
+</a>
+
+<a class="manual-link" href="https://www.soundonsound.com/techniques/advanced-compression-techniques-part-2" target="_blank" rel="noopener noreferrer">
+  <span class="manual-icon" aria-hidden="true">&#167;</span>
+  <span class="manual-body">
+    <span class="manual-title">Advanced Compression Techniques: Part 2</span>
+    <span class="manual-scope">Mastering &amp; multiband</span>
+  </span>
+  <span class="manual-arrow" aria-hidden="true">&#8599;</span>
+</a>
+
+<a class="manual-link" href="https://www.soundonsound.com/techniques/parallel-compression" target="_blank" rel="noopener noreferrer">
+  <span class="manual-icon" aria-hidden="true">&#167;</span>
+  <span class="manual-body">
+    <span class="manual-title">Parallel Compression</span>
+    <span class="manual-scope">Blend the compressed with the dry</span>
+  </span>
+  <span class="manual-arrow" aria-hidden="true">&#8599;</span>
+</a>
 
 <footer class="handout-footer">
   <span>music-production</span>
