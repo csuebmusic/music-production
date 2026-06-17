@@ -199,12 +199,46 @@ ol, ul { margin: 1.15rem auto; padding-left: 1.5rem; }
 li { margin: 0.5rem 0; }
 li::marker { color: var(--accent); font-family: var(--mono); }
 
+/* Numbered step list: mono leading-zero counters in a boxed chip. */
+ol.steps {
+  list-style: none;
+  counter-reset: step;
+  padding-left: 0;
+}
+ol.steps > li {
+  counter-increment: step;
+  position: relative;
+  padding-left: 2.5rem;
+  margin-bottom: 1rem;
+  min-height: 1.6rem;
+}
+ol.steps > li::before {
+  content: counter(step, decimal-leading-zero);
+  position: absolute;
+  left: 0;
+  top: 0.05rem;
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--accent);
+  background: var(--bg-alt);
+  border: 1px solid var(--rule);
+  padding: 0.1em 0.45em;
+  border-radius: 2px;
+  min-width: 1.8rem;
+  text-align: center;
+}
+
 /* ----- Rules ----------------------------------------------------------- */
 
 hr {
   border: none;
   border-top: 1px dashed var(--rule);
   margin: 2.5rem auto;
+}
+hr.dotted {
+  border-top: 1px dotted var(--rule);
+  margin: 2rem auto;
 }
 
 /* ----- Callout: a bracketed terminal panel ----------------------------- */
@@ -300,6 +334,81 @@ figcaption {
   letter-spacing: 0.06em;
   color: var(--ink-faint);
   margin-top: 0.75rem;
+}
+
+/* ----- Walkthrough videos --------------------------------------------- */
+/* Short screen-recording demos embedded inline. The figure caps the
+   width so the native-resolution video scales down into the column;
+   without this the raw MP4 renders at its encoded pixel width. Use the
+   --narrow modifier for the smaller annotation-alongside demos. */
+
+figure.vocab-video {
+  margin: 0.75rem auto 1.25rem;
+  max-width: 100%;
+}
+figure.vocab-video.vocab-video--narrow {
+  max-width: 480px;
+}
+figure.vocab-video video {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: var(--bg-alt);
+  border: 1px solid var(--rule);
+}
+figure.vocab-video figcaption {
+  color: var(--ink-faint);
+  margin-top: 0.6rem;
+  line-height: 1.5;
+}
+
+/* Speed-control row beneath a walkthrough video: slowing playback makes
+   the edit easier to see. */
+.vocab-video-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.4rem;
+  font-family: var(--mono);
+  font-size: 0.78rem;
+}
+.vocab-video-controls .speed-label {
+  color: var(--ink-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-right: 0.25rem;
+}
+.vocab-video-controls .speed-btn {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  background: transparent;
+  color: var(--ink-soft);
+  border: 1px solid var(--rule);
+  padding: 0.2rem 0.55rem;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: background 0.12s, color 0.12s, border-color 0.12s;
+}
+.vocab-video-controls .speed-btn:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+.vocab-video-controls .speed-btn.active {
+  background: var(--accent);
+  color: var(--bg);
+  border-color: var(--accent);
+}
+
+/* ----- Signal-flow / form diagrams ------------------------------------- */
+figure.form-diagram {
+  margin: 1.75rem auto;
+  text-align: center;
+}
+figure.form-diagram figcaption {
+  color: var(--ink-faint);
+  margin-top: 0.75rem;
+  text-align: center;
+  line-height: 1.5;
 }
 
 /* ----- Code ------------------------------------------------------------ */
