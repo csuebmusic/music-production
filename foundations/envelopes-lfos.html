@@ -744,6 +744,41 @@
       const total = a + d + HOLD + r;
       shape.draw(function(x) { return envAt(x * total, a, d, s, r); });
     }
+
+    const FLOOR = 0.0005;
+    // dB-even envelope, used identically by live playback and offline calibration.
+    function scheduleEnv(param, start, a, d, s, r) {
+      const sus = Math.max(FLOOR, PEAK * s);
+      param.setValueAtTime(FLOOR, start);
+      param.exponentialRampToValueAtTime(PEAK, start + a);
+      param.exponentialRampToValueAtTime(sus, start + a + d);
+      param.setValueAtTime(sus, start + a + d + HOLD);
+      param.exponentialRampToValueAtTime(FLOOR, start + a + d + HOLD + r);
+      param.setValueAtTime(0, start + a + d + HOLD + r + 0.001);
+    }
+    function buildChain(ctx, dest) {
+      const tone = ctx.createBiquadFilter(); tone.type = 'lowpass'; tone.frequency.value = 2400;
+      const g = ctx.createGain(); g.gain.value = FLOOR;
+      const lim = limiter(ctx);
+      const pd = buildPad(ctx, BASE, 'sawtooth', tone);
+      tone.connect(g); g.connect(lim); lim.connect(dest);
+      return { pad: pd, amp: g };
+    }
+    // Render the patch offline to find the real full-amplitude peak, so the live
+    // display normalizes against the actual signal instead of a guessed constant.
+    function calibrate(a, d, s, r, total, sr) {
+      const OAC = window.OfflineAudioContext || window.webkitOfflineAudioContext;
+      if (!OAC) { return Promise.resolve(0.45); }
+      const off = new OAC(1, Math.max(1, Math.ceil(sr * total)), sr);
+      const c = buildChain(off, off.destination);
+      scheduleEnv(c.amp.gain, 0, a, d, s, r);
+      c.pad.oscs.forEach(function(o) { o.start(0); o.stop(total + 0.05); });
+      return off.startRendering().then(function(b) {
+        const data = b.getChannelData(0); let pk = 0;
+        for (let i = 0; i < data.length; i++) { const v = Math.abs(data[i]); if (v > pk) { pk = v; } }
+        return pk > 1e-4 ? pk : 0.45;
+      });
+    }
     function endAudio() {
       if (pad) { pad.oscs.forEach(function(o) { try { o.stop(); } catch (e) {} }); pad = null; }
       amp = null; analyser = null; buf = null;
@@ -764,35 +799,28 @@
       if (playing) { stop(); return; }
       const ctx = ensureCtx();
       const a = +A.value / 1000, d = +D.value / 1000, s = +S.value / 100, r = +R.value / 1000;
-      const tone = ctx.createBiquadFilter(); tone.type = 'lowpass'; tone.frequency.value = 2400;
-      amp = ctx.createGain(); amp.gain.value = 0;
-      const lim = limiter(ctx);
-      analyser = ctx.createAnalyser(); analyser.fftSize = 1024; buf = new Float32Array(analyser.fftSize);
-      pad = buildPad(ctx, BASE, 'sawtooth', tone);
-      tone.connect(amp); amp.connect(lim); lim.connect(analyser); analyser.connect(ctx.destination);
-      const now = ctx.currentTime;
-      // dB-even ramps: loudness change spreads evenly across each stage,
-      // so attack-time differences are audible. Floor stands in for zero.
-      const FLOOR = 0.0005, sus = Math.max(FLOOR, PEAK * s);
-      amp.gain.setValueAtTime(FLOOR, now);
-      amp.gain.exponentialRampToValueAtTime(PEAK, now + a);
-      amp.gain.exponentialRampToValueAtTime(sus, now + a + d);
-      amp.gain.setValueAtTime(sus, now + a + d + HOLD);
-      amp.gain.exponentialRampToValueAtTime(FLOOR, now + a + d + HOLD + r);
-      amp.gain.setValueAtTime(0, now + a + d + HOLD + r + 0.001);
       dur = a + d + HOLD + r;
-      pad.oscs.forEach(function(o) { o.start(now); o.stop(now + dur + 0.05); });
-      t0 = now; playing = true; wave.reset();
-      playBtn.textContent = 'Stop'; playBtn.classList.add('playing');
-      (function loop() {
-        const t = ensureCtx().currentTime - t0;
-        analyser.getFloatTimeDomainData(buf);
-        let pk = 0; for (let i = 0; i < buf.length; i++) { const v = Math.abs(buf[i]); if (v > pk) { pk = v; } }
-        if (t <= dur) { wave.set(t / dur, Math.min(1, pk / 0.18)); }
-        wave.draw(true);
-        if (t >= dur) { finish(); return; }
-        raf = requestAnimationFrame(loop);
-      })();
+      playing = true; playBtn.textContent = 'Stop'; playBtn.classList.add('playing'); wave.reset();
+      calibrate(a, d, s, r, dur, ctx.sampleRate).then(function(K) {
+        if (!playing) { return; }
+        analyser = ctx.createAnalyser(); analyser.fftSize = 1024; buf = new Float32Array(analyser.fftSize);
+        const chain = buildChain(ctx, analyser);
+        analyser.connect(ctx.destination);
+        pad = chain.pad; amp = chain.amp;
+        const now = ctx.currentTime;
+        scheduleEnv(amp.gain, now, a, d, s, r);
+        pad.oscs.forEach(function(o) { o.start(now); o.stop(now + dur + 0.05); });
+        t0 = now;
+        (function loop() {
+          const t = ensureCtx().currentTime - t0;
+          analyser.getFloatTimeDomainData(buf);
+          let pk = 0; for (let i = 0; i < buf.length; i++) { const v = Math.abs(buf[i]); if (v > pk) { pk = v; } }
+          if (t <= dur) { wave.set(t / dur, Math.min(1, pk / K)); }
+          wave.draw(true);
+          if (t >= dur) { finish(); return; }
+          raf = requestAnimationFrame(loop);
+        })();
+      });
     }
     function reset() {
       stop();
