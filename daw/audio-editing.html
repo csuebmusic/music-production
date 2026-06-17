@@ -230,7 +230,7 @@
 
 <p>Two controls in Clip View are worth a close look.</p>
 
-<p>Notice the clip's pitch control. Changing the pitch also changes the clip's length, the way speeding up or slowing down tape does. That is specific to repitching a clip this way. When you play sounds from a sampling instrument, you repitch them a different way. Set it back to zero when you are done looking, so it does not shift the sound in your arrangement.</p>
+<p>Notice the clip's pitch control. On one of your short hits, changing the pitch also changes the clip's length, the way speeding up or slowing down tape does. That is specific to repitching a clip this way. When you play sounds from a sampling instrument, you repitch them a different way. Set it back to zero when you are done looking, so it does not shift the sound in your arrangement.</p>
 
 <p>Now the gain slider. Drag it and watch the waveform in the clip grow and shrink. That gain belongs to the clip, and it is the first of several places you set level in Live.</p>
 
@@ -291,7 +291,15 @@
 
 <p>Before you experiment with warping, branch your arrangement: run <strong>File &rarr; Save As</strong> and name the copy something new. Do all your warping in the copy, so the original keeps the arrangement exactly as you built it. Saving a fresh version before you experiment is a habit worth keeping, since it lets you try anything and still walk back.</p>
 
-<p>Warping is how Live stretches a clip to match the Set's tempo. Try it both ways on two different sounds. Take a rhythmic loop and turn <strong>Warp on</strong>: the loop locks to the Set tempo and stays in time if you change the tempo. Take a one-shot, a single hit with no built-in rhythm, and turn <strong>Warp off</strong>: it plays at its recorded speed. Loops usually want Warp on, one-shots usually want it off.</p>
+<p>You already met one way to stretch a sound. Turning a clip's pitch control sped it up or slowed it down, and the pitch rose or fell along with it, the way a tape plays higher when it runs fast and lower when it runs slow. Speed and pitch move together there: one move, both results.</p>
+
+<p>Warping is the other way. Live stretches the timing of a clip to match the Set's tempo and holds the pitch where it was. A loop recorded at one speed can play faster or slower to sit in time with your project, and it stays at its original pitch the whole time. Speed and pitch come apart: the timing bends to the tempo, the pitch stays put. That separation is the point of warping, and it is the thing tape could never do.</p>
+
+<p>Live tries to do this for you. Drag certain sounds in and it guesses their tempo and warps them on the spot to lock them to your Set. That guess helps for some sounds and gets in the way for others, and at this stage you want to take the wheel yourself. Open Live's preferences (<strong>Live &rarr; Preferences</strong>, or <strong>Cmd-,</strong>) and choose the <strong>Record/Warp/Launch</strong> tab. In the Warp section, set <strong>Loop/Warp Short Samples</strong> to <strong>Unwarped One Shot</strong> and set <strong>Auto-Warp Long Samples</strong> to <strong>Off</strong>.</p>
+
+<p>With those off, every sound you import plays at its own recorded speed and ignores the Set tempo until you decide otherwise. Warping becomes a choice you make one clip at a time, on the clips that want it.</p>
+
+<p>Now try it. Take a rhythmic loop and turn <strong>Warp on</strong> for that clip: it locks to the Set tempo, and if you change the tempo in the transport bar the loop follows and stays in time, its pitch unchanged. Take a one-shot, a single hit with no built-in rhythm, and leave <strong>Warp off</strong>: it plays at its recorded speed, indifferent to the tempo. Loops usually want Warp on, one-shots usually want it off.</p>
 
 <a class="video-link" href="https://www.youtube.com/watch?v=tlsRVC72hx4" target="_blank" rel="noopener noreferrer">
   <span class="res-icon" aria-hidden="true">&#9654;</span>
