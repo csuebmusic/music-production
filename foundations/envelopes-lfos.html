@@ -800,27 +800,28 @@
       const ctx = ensureCtx();
       const a = +A.value / 1000, d = +D.value / 1000, s = +S.value / 100, r = +R.value / 1000;
       dur = a + d + HOLD + r;
-      playing = true; playBtn.textContent = 'Stop'; playBtn.classList.add('playing'); wave.reset();
-      calibrate(a, d, s, r, dur, ctx.sampleRate).then(function(K) {
-        if (!playing) { return; }
-        analyser = ctx.createAnalyser(); analyser.fftSize = 1024; buf = new Float32Array(analyser.fftSize);
-        const chain = buildChain(ctx, analyser);
-        analyser.connect(ctx.destination);
-        pad = chain.pad; amp = chain.amp;
-        const now = ctx.currentTime;
-        scheduleEnv(amp.gain, now, a, d, s, r);
-        pad.oscs.forEach(function(o) { o.start(now); o.stop(now + dur + 0.05); });
-        t0 = now;
-        (function loop() {
-          const t = ensureCtx().currentTime - t0;
-          analyser.getFloatTimeDomainData(buf);
-          let pk = 0; for (let i = 0; i < buf.length; i++) { const v = Math.abs(buf[i]); if (v > pk) { pk = v; } }
-          if (t <= dur) { wave.set(t / dur, Math.min(1, pk / K)); }
-          wave.draw(true);
-          if (t >= dur) { finish(); return; }
-          raf = requestAnimationFrame(loop);
-        })();
-      });
+      // Start the live audio synchronously, inside the click, so sound is guaranteed.
+      analyser = ctx.createAnalyser(); analyser.fftSize = 1024; buf = new Float32Array(analyser.fftSize);
+      const chain = buildChain(ctx, analyser);
+      analyser.connect(ctx.destination);
+      pad = chain.pad; amp = chain.amp;
+      const now = ctx.currentTime;
+      scheduleEnv(amp.gain, now, a, d, s, r);
+      pad.oscs.forEach(function(o) { o.start(now); o.stop(now + dur + 0.05); });
+      t0 = now; playing = true; wave.reset();
+      playBtn.textContent = 'Stop'; playBtn.classList.add('playing');
+      // Find the real full-amplitude peak in parallel; until it lands, use an estimate.
+      let K = 0.45;
+      calibrate(a, d, s, r, dur, ctx.sampleRate).then(function(k) { K = k; }).catch(function() {});
+      (function loop() {
+        const t = ensureCtx().currentTime - t0;
+        analyser.getFloatTimeDomainData(buf);
+        let pk = 0; for (let i = 0; i < buf.length; i++) { const v = Math.abs(buf[i]); if (v > pk) { pk = v; } }
+        if (t <= dur) { wave.set(t / dur, Math.min(1, pk / K)); }
+        wave.draw(true);
+        if (t >= dur) { finish(); return; }
+        raf = requestAnimationFrame(loop);
+      })();
     }
     function reset() {
       stop();
