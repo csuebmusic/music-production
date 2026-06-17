@@ -395,7 +395,7 @@
 
 <p>A 2 Hz LFO, just barely too low to hear as a pitch, already puts a peak under your finger 120 times a minute. Most expressive LFO motion lives well below that, from a fraction of a hertz up to a few hertz.</p>
 
-<p>Now point an LFO at something. Pick a shape and rate, then send it to pitch or to stereo position. Send it to pitch and the slider sets how far the note rises above its base, in semitones. Send it to pan and the slider sets how wide the sound swings between your ears. Either way the LFO on the left grows with the slider, so a small amount draws a small wave.</p>
+<p>Now point an LFO at something. Pick a shape and rate, then send it to pitch or to its stereo position, called pan in software. The slider sets how far it reaches, and the LFO on the left grows with it.</p>
 
 <div class="synth-tool" id="toolLfo">
   <div class="synth-tool-title">Tool 3 · LFO to pitch or pan</div>
@@ -440,7 +440,7 @@
     <button class="synth-btn" id="lfoPlay">Play</button>
     <span class="synth-info" id="lfoInfo">Press play. The pad holds while the LFO moves underneath it.</span>
   </div>
-  <p class="synth-note">On pitch, a slow sine is a gentle vibrato; a square jumps between two pitches. On pan, the same shapes walk the sound between your ears. The rate readout doubles as a tempo: multiply by 60 for BPM.</p>
+  <p class="synth-note">On pitch, a slow sine is a gentle vibrato; a square jumps between two pitches. On pan, the same shapes walk the sound between your ears. Remember, the rate readout doubles as a tempo: multiply by 60 for BPM.</p>
 </div>
 
 <hr>
@@ -543,7 +543,8 @@
   <li><strong>Sustain level</strong>: the held height of a note, not a length of time.</li>
   <li><strong>LFO</strong>: a low frequency oscillator, a wave generator running below hearing, used to move a control.</li>
   <li><strong>Rate</strong>: how fast an LFO cycles, in Hz; multiply by 60 for BPM.</li>
-  <li><strong>Depth</strong>: how far the modulation pushes its destination.</li>
+  <li><strong>Depth</strong>: how far a modulation reaches toward its full effect, usually given as a percentage.</li>
+  <li><strong>Range</strong>: depth measured in musical units. For pitch, the range is how many semitones the modulation travels at its peak.</li>
   <li><strong>Cutoff</strong>: the frequency where a low-pass filter starts turning sound down.</li>
   <li><strong>Resonance</strong>: a boost right at the cutoff.</li>
   <li><strong>Modulation</strong>: a source shape moving a destination control over time.</li>
