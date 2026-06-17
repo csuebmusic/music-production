@@ -300,7 +300,16 @@
 
 <div class="synth-tool" id="toolPitch">
   <div class="synth-tool-title">Tool 2 · ADSR to pitch</div>
-  <canvas class="synth-scope" id="pitScope"></canvas>
+  <div class="synth-viz">
+    <div class="synth-viz-panel">
+      <div class="synth-viz-title">Control shape</div>
+      <canvas class="synth-canvas" id="pitShape"></canvas>
+    </div>
+    <div class="synth-viz-panel">
+      <div class="synth-viz-title">Pitch output (semitones)</div>
+      <canvas class="synth-canvas" id="pitWave"></canvas>
+    </div>
+  </div>
   <div class="synth-sliders">
     <span class="synth-slider-label">Attack</span>
     <input type="range" class="synth-slider-input" id="pitA" min="2" max="2000" step="2" value="180">
@@ -674,6 +683,53 @@
     return { set: set, draw: draw, reset: reset };
   }
 
+  // Right panel: a value-over-time line on a fixed timeline, with a playhead.
+  function makeTrace(canvas, lo, hi, colorVar) {
+    const g = canvas.getContext('2d');
+    const COLS = 320;
+    let vals = new Array(COLS).fill(null), head = -1;
+    function size() {
+      const r = canvas.getBoundingClientRect();
+      canvas.width = Math.max(260, Math.floor(r.width));
+      canvas.height = 150;
+    }
+    size();
+    window.addEventListener('resize', size);
+    function color() { return (getComputedStyle(canvas).getPropertyValue(colorVar) || '#3a6b7a').trim(); }
+    function soft() { return (getComputedStyle(canvas).getPropertyValue('--ink-soft') || '#51604c').trim(); }
+    function val2y(v) {
+      const t = Math.max(0, Math.min(1, (v - lo) / (hi - lo)));
+      return (canvas.height - 10) - t * (canvas.height - 20);
+    }
+    function set(frac, v) {
+      const i = Math.max(0, Math.min(COLS - 1, Math.floor(frac * COLS)));
+      vals[i] = v; head = i;
+    }
+    function draw(showHead) {
+      const w = canvas.width, h = canvas.height;
+      g.clearRect(0, 0, w, h);
+      const base = (lo < 0 && hi > 0) ? 0 : lo;
+      g.strokeStyle = 'rgba(127,127,127,0.3)'; g.lineWidth = 1;
+      g.beginPath(); g.moveTo(0, val2y(base)); g.lineTo(w, val2y(base)); g.stroke();
+      g.strokeStyle = color(); g.lineWidth = 2.5;
+      g.beginPath();
+      let started = false;
+      for (let i = 0; i < COLS; i++) {
+        if (vals[i] == null) { continue; }
+        const x = (i + 0.5) / COLS * w, y = val2y(vals[i]);
+        if (!started) { g.moveTo(x, y); started = true; } else { g.lineTo(x, y); }
+      }
+      g.stroke();
+      if (showHead && head >= 0) {
+        const x = (head + 0.5) / COLS * w;
+        g.strokeStyle = soft(); g.lineWidth = 1.5;
+        g.beginPath(); g.moveTo(x, 0); g.lineTo(x, h); g.stroke();
+      }
+    }
+    function reset() { vals = new Array(COLS).fill(null); head = -1; draw(false); }
+    return { set: set, draw: draw, reset: reset };
+  }
+
   // Build a pad: three oscillators summed into one gain. Caller starts/stops oscs.
   function buildPad(ctx, base, type, dest) {
     const sum = ctx.createGain();
@@ -854,7 +910,8 @@
           SO = document.getElementById('pitSOut'), RO = document.getElementById('pitROut'),
           RGO = document.getElementById('pitRangeOut');
     const playBtn = document.getElementById('pitPlay'), resetBtn = document.getElementById('pitReset');
-    const scope = makeScope(document.getElementById('pitScope'), 0, 12);
+    const shape = makeShape(document.getElementById('pitShape'), 0, 1);
+    const wave = makeTrace(document.getElementById('pitWave'), 0, 12, '--cable-xlr');
     const DEFAULTS = { a: 180, d: 260, s: 40, r: 400, rg: 7 };
     const HOLD = 0.5, PEAK = 0.2;
     let pad = null, raf = null, t0 = 0, dur = 0, playing = false, curRange = 7;
@@ -864,7 +921,7 @@
       SO.textContent = S.value + ' %'; RO.textContent = fmtMs(+R.value);
       RGO.textContent = RG.value + ' st';
     }
-    // Pitch offset in semitones at elapsed seconds.
+    // Pitch offset in semitones at elapsed seconds (range = 1 gives the bare shape).
     function pitchAt(t, a, d, s, r, range) {
       if (t < a) { return range * (t / a); }
       if (t < a + d) { return range * (1 - (1 - s) * ((t - a) / d)); }
@@ -873,59 +930,75 @@
       if (rt < r) { return range * s * (1 - rt / r); }
       return 0;
     }
-    function stop() {
-      if (raf) { cancelAnimationFrame(raf); raf = null; }
-      if (pad) { pad.oscs.forEach(function(o) { try { o.stop(); } catch (e) {} }); pad = null; }
-      playing = false;
-      playBtn.textContent = 'Play'; playBtn.classList.remove('playing');
-      if (scope) { scope.clear(); scope.draw(); }
+    function params() {
+      return { a: +A.value / 1000, d: +D.value / 1000, s: +S.value / 100, r: +R.value / 1000 };
     }
-    function play() {
-      if (playing) { stop(); return; }
-      const ctx = ensureCtx();
-      const a = +A.value / 1000, d = +D.value / 1000, s = +S.value / 100, r = +R.value / 1000;
-      curRange = +RG.value;
+    function drawShape() {
+      const p = params(), total = p.a + p.d + HOLD + p.r;
+      shape.draw(function(x) { return pitchAt(x * total, p.a, p.d, p.s, p.r, 1); });
+    }
+    function startVoice(ctx) {
+      const p = params(); curRange = +RG.value;
+      dur = p.a + p.d + HOLD + p.r;
       const tone = ctx.createBiquadFilter(); tone.type = 'lowpass'; tone.frequency.value = 2400;
       const amp = ctx.createGain(); amp.gain.value = 0;
       const lim = limiter(ctx);
       pad = buildPad(ctx, BASE, 'sawtooth', tone);
       tone.connect(amp); amp.connect(lim); lim.connect(ctx.destination);
       const now = ctx.currentTime;
-      dur = a + d + HOLD + r;
       // Loudness: a plain soft gate so the pitch shape is what you hear.
       amp.gain.setValueAtTime(0, now);
       amp.gain.linearRampToValueAtTime(PEAK, now + 0.02);
       amp.gain.setValueAtTime(PEAK, now + dur - 0.08);
       amp.gain.linearRampToValueAtTime(0, now + dur);
-      // Pitch: schedule detune (cents) along the ADSR shape, on every voice.
+      // Pitch: detune in cents along the ADSR shape, on every voice. Cents are
+      // already perceptual, so a linear ramp glides evenly. No exponential needed.
       pad.oscs.forEach(function(o) {
         const dt = o.detune;
         dt.setValueAtTime(0, now);
-        dt.linearRampToValueAtTime(curRange * 100, now + a);
-        dt.linearRampToValueAtTime(curRange * 100 * s, now + a + d);
-        dt.setValueAtTime(curRange * 100 * s, now + a + d + HOLD);
+        dt.linearRampToValueAtTime(curRange * 100, now + p.a);
+        dt.linearRampToValueAtTime(curRange * 100 * p.s, now + p.a + p.d);
+        dt.setValueAtTime(curRange * 100 * p.s, now + p.a + p.d + HOLD);
         dt.linearRampToValueAtTime(0, now + dur);
         o.start(now); o.stop(now + dur + 0.05);
       });
-      t0 = now; playing = true;
-      playBtn.textContent = 'Stop'; playBtn.classList.add('playing');
+      t0 = now; wave.reset();
       (function loop() {
         const t = ensureCtx().currentTime - t0;
-        scope.push(pitchAt(t, a, d, s, r, curRange)); scope.draw();
+        if (t <= dur) { wave.set(t / dur, pitchAt(t, p.a, p.d, p.s, p.r, curRange)); }
+        wave.draw(true);
         if (t >= dur + TAIL) { stop(); return; }
         raf = requestAnimationFrame(loop);
       })();
+    }
+    function stop() {
+      if (raf) { cancelAnimationFrame(raf); raf = null; }
+      if (pad) { pad.oscs.forEach(function(o) { try { o.stop(); } catch (e) {} }); pad = null; }
+      playing = false;
+      playBtn.textContent = 'Play'; playBtn.classList.remove('playing');
+      wave.reset(); drawShape();
+    }
+    function play() {
+      if (playing) { stop(); return; }
+      playing = true;
+      playBtn.textContent = 'Stop'; playBtn.classList.add('playing');
+      const ctx = ensureCtx();
+      ctx.resume().then(function() {
+        if (playing) { startVoice(ctx); }
+      }).catch(function() {
+        playing = false; playBtn.textContent = 'Play'; playBtn.classList.remove('playing');
+      });
     }
     function reset() {
       stop();
       A.value = DEFAULTS.a; D.value = DEFAULTS.d; S.value = DEFAULTS.s;
       R.value = DEFAULTS.r; RG.value = DEFAULTS.rg;
-      readouts();
+      readouts(); drawShape();
     }
-    [A, D, S, R, RG].forEach(function(el) { el.addEventListener('input', readouts); });
+    [A, D, S, R, RG].forEach(function(el) { el.addEventListener('input', function() { readouts(); drawShape(); }); });
     playBtn.addEventListener('click', play);
     resetBtn.addEventListener('click', reset);
-    readouts(); scope.draw();
+    readouts(); drawShape(); wave.draw(false);
   })();
 
   // ---------- Tool 3: LFO to pitch or pan ----------
