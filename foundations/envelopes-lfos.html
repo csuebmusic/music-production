@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>More on Envelopes &amp; LFOs · music-production</title>
+  <link rel="stylesheet" href="../assets/style.css">
+  <style>
+    figure { margin: 2rem 0; text-align: center; }
+    figure svg { max-width: 100%; height: auto; }
+    figcaption {
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--ink-soft);
+      margin-top: 0.75rem;
+    }
+
+    /* Interactive synth tool */
+    .synth-tool {
+      background: var(--bg-alt);
+      border: 1px solid var(--rule);
+      border-radius: 4px;
+      padding: 1.5rem;
+      margin: 2rem 0;
+    }
+    .synth-tool-title {
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+      margin-bottom: 1.25rem;
+    }
+    .synth-scope {
+      width: 100%;
+      height: 150px;
+      display: block;
+      background: var(--bg);
+      border-radius: 3px;
+      margin-bottom: 1.25rem;
+    }
+    .synth-selects {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.25rem;
+      margin-bottom: 1.25rem;
+    }
+    .synth-select {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .synth-select label {
+      font-family: var(--mono);
+      font-size: 0.92rem;
+      color: var(--ink);
+    }
+    .synth-select select {
+      font-family: var(--mono);
+      font-size: 0.9rem;
+      color: var(--ink);
+      background: var(--bg);
+      border: 1px solid var(--rule);
+      border-radius: 3px;
+      padding: 0.4rem 0.6rem;
+    }
+    .synth-sliders {
+      display: grid;
+      grid-template-columns: 6.5rem 1fr 6rem;
+      gap: 0.75rem 1rem;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+    .synth-slider-label {
+      font-family: var(--mono);
+      font-size: 0.92rem;
+      color: var(--ink);
+    }
+    .synth-slider-input { width: 100%; accent-color: var(--accent); }
+    .synth-slider-readout {
+      font-family: var(--mono);
+      font-size: 0.92rem;
+      color: var(--ink);
+      text-align: right;
+    }
+    .synth-controls { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+    .synth-btn {
+      font-family: var(--mono);
+      font-size: 0.92rem;
+      padding: 0.55rem 1.5rem;
+      background: var(--accent);
+      color: var(--bg);
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      min-width: 5.5rem;
+    }
+    .synth-btn:hover { background: var(--accent-soft); }
+    .synth-btn.playing { background: var(--ink); }
+    .synth-btn.reset {
+      background: transparent;
+      color: var(--ink-soft);
+      border: 1px solid var(--rule);
+    }
+    .synth-btn.reset:hover { background: var(--bg); color: var(--ink); }
+    .synth-info {
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      color: var(--ink-soft);
+      flex: 1;
+      min-width: 0;
+    }
+    .synth-note {
+      font-size: 0.88rem;
+      color: var(--ink-soft);
+      margin: 1.25rem 0 0;
+      line-height: 1.5;
+    }
+
+    /* The four basic shapes, shown as a row of cards */
+    .wave-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+    .wave-card {
+      background: var(--bg-alt);
+      border: 1px solid var(--rule);
+      border-radius: 4px;
+      padding: 1rem;
+      text-align: center;
+    }
+    .wave-card svg { width: 100%; height: auto; display: block; }
+    .wave-card-name {
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--accent);
+      margin-top: 0.6rem;
+    }
+
+    /* Hz to BPM conversion block */
+    .formula {
+      background: var(--bg-alt);
+      border: 1px solid var(--rule);
+      border-left: 3px solid var(--accent);
+      border-radius: 4px;
+      padding: 1.25rem 1.5rem;
+      margin: 2rem 0;
+      font-family: var(--mono);
+    }
+    .formula-line {
+      font-size: 1.05rem;
+      color: var(--ink);
+      letter-spacing: 0.02em;
+    }
+    .formula-line .op { color: var(--accent); }
+    .formula-eg {
+      font-size: 0.85rem;
+      color: var(--ink-soft);
+      margin-top: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Reference-link card (house .manual-link pattern) */
+    .manual-link {
+      display: flex; align-items: center; gap: 1rem;
+      padding: 0.9rem 1.25rem; margin: 1.25rem 0;
+      background: var(--bg-alt);
+      border: 1px solid var(--rule);
+      border-left: 3px solid var(--accent);
+      border-radius: 4px;
+      text-decoration: none; color: var(--ink);
+      transition: background 0.15s ease, border-color 0.15s ease;
+    }
+    .manual-link:hover { background: var(--bg); border-color: var(--accent); }
+    .manual-link:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    .manual-link .manual-icon {
+      flex: 0 0 auto; width: 34px; height: 34px; border-radius: 50%;
+      background: var(--accent); color: var(--bg);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--mono); font-size: 1.05rem; line-height: 1;
+    }
+    .manual-link .manual-body { flex: 1 1 auto; min-width: 0; }
+    .manual-link .manual-title { font-weight: 600; font-size: 0.95rem; line-height: 1.35; color: var(--ink); }
+    .manual-link .manual-scope {
+      font-family: var(--mono); font-size: 0.74rem; text-transform: uppercase;
+      letter-spacing: 0.05em; color: var(--ink-soft); margin-top: 0.25rem;
+    }
+    .manual-link .manual-arrow { flex: 0 0 auto; font-family: var(--mono); font-size: 1rem; color: var(--ink-soft); }
+
+    @media (max-width: 600px) {
+      .synth-sliders { grid-template-columns: 5.5rem 1fr 5rem; gap: 0.5rem 0.75rem; }
+      .wave-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+<header class="handout-header">
+  <span class="course">~/music-production/foundations</span>
+  <span class="meta">envelopes-lfos</span>
+</header>
+
+<div class="title-block">
+  <div class="module-tag">Foundations</div>
+  <h1>More on envelopes &amp; LFOs</h1>
+  <div class="subtitle">An envelope is a shape. A shape can steer almost anything.</div>
+</div>
+
+<p class="lede">You already met the envelope as the way a sound rises and falls over time. The move worth making now is to stop thinking of that shape as belonging to loudness. It is just a shape, and a shape can be pointed at other controls: pitch, position, brightness. Once that clicks, a second question opens up, and the answer to it is the <strong>LFO</strong>.</p>
+
+<hr>
+
+<h2>1 · The envelope is a shape</h2>
+
+<p>The envelope you shaped before had three moves: a rise into the sound, a held middle, and a fall back to silence. The full version producers reach for has four, and the new one sits right after the attack.</p>
+
+<h3>The four stages: A, D, S, R</h3>
+
+<p>Attack is the rise from silence to the loudest point. <strong>Decay</strong> is the fall from that peak down to a held level. <strong>Sustain</strong> is that held level, and this is the one that trips people up: sustain is not a length of time, it is a height. It is how loud the sound stays while you hold the note. Release is the fall back to silence once the note ends. Plucked and struck sounds spike on the attack, drop fast through the decay, and sit low. Pads do the opposite: a slow attack, a gentle decay, a high sustain, a long release.</p>
+
+<p>Here is the same idea you shaped before, now with all four stages, driving the loudness of a pad. Move the sliders, press play, and watch the shape in the scope as you hear it.</p>
+
+<div class="synth-tool" id="toolAmp">
+  <div class="synth-tool-title">Tool 1 · ADSR to amplitude</div>
+  <canvas class="synth-scope" id="ampScope"></canvas>
+  <div class="synth-sliders">
+    <span class="synth-slider-label">Attack</span>
+    <input type="range" class="synth-slider-input" id="ampA" min="2" max="2000" step="2" value="300">
+    <span class="synth-slider-readout" id="ampAOut">300 ms</span>
+
+    <span class="synth-slider-label">Decay</span>
+    <input type="range" class="synth-slider-input" id="ampD" min="2" max="2000" step="2" value="350">
+    <span class="synth-slider-readout" id="ampDOut">350 ms</span>
+
+    <span class="synth-slider-label">Sustain</span>
+    <input type="range" class="synth-slider-input" id="ampS" min="0" max="100" step="1" value="65">
+    <span class="synth-slider-readout" id="ampSOut">65 %</span>
+
+    <span class="synth-slider-label">Release</span>
+    <input type="range" class="synth-slider-input" id="ampR" min="2" max="3000" step="2" value="600">
+    <span class="synth-slider-readout" id="ampROut">600 ms</span>
+  </div>
+  <div class="synth-controls">
+    <button class="synth-btn" id="ampPlay">Play</button>
+    <button class="synth-btn reset" id="ampReset">Reset</button>
+    <span class="synth-info" id="ampInfo">The note holds at the sustain level for a fixed moment, then releases.</span>
+  </div>
+  <p class="synth-note"><strong>Keep headphones at a low volume before you press play.</strong> Try a fast attack with a low sustain for something plucked, then a slow attack with a high sustain for a pad that swells in. The sound is the same three notes throughout. Only the shape changes.</p>
+</div>
+
+<hr>
+
+<h2>2 · The same shape, on pitch</h2>
+
+<p>Nothing about that shape says loudness. It is a line that goes up, settles, and comes back. So point it somewhere else.</p>
+
+<h3>A quick word on pitch</h3>
+
+<p>Pitch is how fast a wave repeats. Speed the wave up and the pitch rises; slow it down and it drops. Raising a sound by twelve <strong>semitones</strong> (the small steps between piano keys, twelve to an octave) doubles how fast it repeats. The useful part here is that pitch can move over the life of a single note, gliding up and back down, and a shape is exactly how you describe that motion.</p>
+
+<p>Same four sliders, same scope. This time the shape drives pitch instead of loudness. The <em>Range</em> slider sets how far the pitch travels at the peak, in semitones. Watch the line climb and fall, and hear the note bend with it.</p>
+
+<div class="synth-tool" id="toolPitch">
+  <div class="synth-tool-title">Tool 2 · ADSR to pitch</div>
+  <canvas class="synth-scope" id="pitScope"></canvas>
+  <div class="synth-sliders">
+    <span class="synth-slider-label">Attack</span>
+    <input type="range" class="synth-slider-input" id="pitA" min="2" max="2000" step="2" value="180">
+    <span class="synth-slider-readout" id="pitAOut">180 ms</span>
+
+    <span class="synth-slider-label">Decay</span>
+    <input type="range" class="synth-slider-input" id="pitD" min="2" max="2000" step="2" value="260">
+    <span class="synth-slider-readout" id="pitDOut">260 ms</span>
+
+    <span class="synth-slider-label">Sustain</span>
+    <input type="range" class="synth-slider-input" id="pitS" min="0" max="100" step="1" value="40">
+    <span class="synth-slider-readout" id="pitSOut">40 %</span>
+
+    <span class="synth-slider-label">Release</span>
+    <input type="range" class="synth-slider-input" id="pitR" min="2" max="3000" step="2" value="400">
+    <span class="synth-slider-readout" id="pitROut">400 ms</span>
+
+    <span class="synth-slider-label">Range</span>
+    <input type="range" class="synth-slider-input" id="pitRange" min="1" max="12" step="1" value="7">
+    <span class="synth-slider-readout" id="pitRangeOut">7 st</span>
+  </div>
+  <div class="synth-controls">
+    <button class="synth-btn" id="pitPlay">Play</button>
+    <button class="synth-btn reset" id="pitReset">Reset</button>
+    <span class="synth-info" id="pitInfo">The loudness is a plain soft gate here. The shape is steering pitch.</span>
+  </div>
+  <p class="synth-note">A short attack with a high range gives you a quick upward chirp. A long attack is a slow scoop into the note. The same shape you used for loudness is now an instruction for pitch.</p>
+</div>
+
+<hr>
+
+<h2>3 · If one shape can steer, can I have more?</h2>
+
+<p>You just used one shape, drawn by hand with four sliders, and sent it to two different controls. So the real question is whether you can have a shape that draws itself and keeps going. Yes. The most common shape maker in any synth or DAW is the <strong>LFO</strong>: a low frequency oscillator.</p>
+
+<h3>An oscillator you do not hear</h3>
+
+<p>An oscillator makes a wave. The ones that make sound repeat fast, hundreds or thousands of times a second, inside the range your ears register: roughly 20 Hz at the low end up to 20 kHz at the top. An LFO is the same kind of wave generator running far slower than that, under 20 Hz, below the bottom of hearing. You never hear the LFO itself. Its wave is still being drawn, cycle after cycle, and that moving shape is the point. You aim it at a control and let its rise and fall move that control for you.</p>
+
+<p>The shapes an LFO draws are the building blocks every oscillator uses. You have met the sine; here it is again alongside its three companions.</p>
+
+<div class="wave-grid">
+  <div class="wave-card">
+    <svg viewBox="0 0 120 60" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Sine wave: a smooth rise and fall">
+      <line x1="0" y1="30" x2="120" y2="30" stroke="var(--rule)" stroke-width="1"/>
+      <path d="M0,30 C10,8 20,8 30,30 C40,52 50,52 60,30 C70,8 80,8 90,30 C100,52 110,52 120,30" fill="none" stroke="var(--accent)" stroke-width="2.5"/>
+    </svg>
+    <div class="wave-card-name">Sine</div>
+  </div>
+  <div class="wave-card">
+    <svg viewBox="0 0 120 60" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Triangle wave: a straight rise and fall">
+      <line x1="0" y1="30" x2="120" y2="30" stroke="var(--rule)" stroke-width="1"/>
+      <path d="M0,42 L30,12 L60,42 L90,12 L120,42" fill="none" stroke="var(--accent)" stroke-width="2.5"/>
+    </svg>
+    <div class="wave-card-name">Triangle</div>
+  </div>
+  <div class="wave-card">
+    <svg viewBox="0 0 120 60" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Sawtooth wave: a ramp up then a sharp reset">
+      <line x1="0" y1="30" x2="120" y2="30" stroke="var(--rule)" stroke-width="1"/>
+      <path d="M4,42 L58,12 L58,42 L112,12 L112,42" fill="none" stroke="var(--accent)" stroke-width="2.5"/>
+    </svg>
+    <div class="wave-card-name">Sawtooth</div>
+  </div>
+  <div class="wave-card">
+    <svg viewBox="0 0 120 60" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Square wave: jumps between a high and a low level">
+      <line x1="0" y1="30" x2="120" y2="30" stroke="var(--rule)" stroke-width="1"/>
+      <path d="M0,12 L30,12 L30,48 L60,48 L60,12 L90,12 L90,48 L120,48" fill="none" stroke="var(--accent)" stroke-width="2.5"/>
+    </svg>
+    <div class="wave-card-name">Square</div>
+  </div>
+</div>
+
+<p>Because these waves sit below hearing, you read them differently. The peaks and valleys are not sound anymore. They are positions: high, low, and everything between, arriving in time. A sine glides smoothly up and down. A triangle does the same with straight lines. A sawtooth ramps and snaps back. A square sits high, then jumps to low, with nothing in between.</p>
+
+<h3>Frequency becomes rate</h3>
+
+<p>When a wave is fast enough to hear, its frequency is pitch. When it is too slow to hear, that same frequency is felt as a rate: how often the thing happens. A slow LFO is a slow wobble. A faster LFO is a faster wobble. To put a number on it, convert the frequency to a tempo.</p>
+
+<div class="formula">
+  <div class="formula-line">rate in Hz <span class="op">&times;</span> 60 <span class="op">=</span> beats per minute</div>
+  <div class="formula-eg">Example: 2 Hz &times; 60 = 120 BPM. Two cycles a second lands a peak on every beat at 120, which is quick.</div>
+</div>
+
+<p>That conversion is worth keeping close. A 2 Hz LFO, just barely too low to hear as a pitch, already puts a peak under your finger 120 times a minute. Most expressive LFO motion lives well below that, a fraction of a hertz up to a few hertz, which is why the controls below start slow.</p>
+
+<p>Now point an LFO at something. Pick a shape, set the rate, and choose whether it steers pitch or stereo position. The scope shows the LFO output, the shape it is drawing in real time, while your ears track what it does to the sound.</p>
+
+<div class="synth-tool" id="toolLfo">
+  <div class="synth-tool-title">Tool 3 · LFO to pitch or pan</div>
+  <canvas class="synth-scope" id="lfoScope"></canvas>
+  <div class="synth-selects">
+    <div class="synth-select">
+      <label for="lfoShape">Shape</label>
+      <select id="lfoShape">
+        <option value="sine">Sine</option>
+        <option value="triangle">Triangle</option>
+        <option value="sawtooth">Sawtooth</option>
+        <option value="square">Square</option>
+      </select>
+    </div>
+    <div class="synth-select">
+      <label for="lfoTarget">Target</label>
+      <select id="lfoTarget">
+        <option value="pitch">Pitch</option>
+        <option value="pan">Pan</option>
+      </select>
+    </div>
+  </div>
+  <div class="synth-sliders">
+    <span class="synth-slider-label">Rate</span>
+    <input type="range" class="synth-slider-input" id="lfoRate" min="0.1" max="8" step="0.1" value="2">
+    <span class="synth-slider-readout" id="lfoRateOut">2.0 Hz</span>
+
+    <span class="synth-slider-label">Depth</span>
+    <input type="range" class="synth-slider-input" id="lfoDepth" min="0" max="100" step="1" value="40">
+    <span class="synth-slider-readout" id="lfoDepthOut">40 %</span>
+  </div>
+  <div class="synth-controls">
+    <button class="synth-btn" id="lfoPlay">Play</button>
+    <span class="synth-info" id="lfoInfo">Press play. The pad holds while the LFO moves underneath it.</span>
+  </div>
+  <p class="synth-note">On pitch, a slow sine is a gentle vibrato; a square jumps between two pitches. On pan, the same shapes walk the sound between your ears. The rate readout doubles as a tempo: multiply by 60 for BPM.</p>
+</div>
+
+<hr>
+
+<h2>4 · A filter, and an LFO to drive it</h2>
+
+<p>So far the shape has moved things you hear directly: how loud, how high, where in the field. The last step is the one that makes modulation feel like production. A shape can move a <em>control on another tool</em>, and let that tool change the sound. The classic pairing is an LFO and a filter.</p>
+
+<h3>What a filter does</h3>
+
+<p>A filter sets which frequencies pass through and which get turned down. A <strong>low-pass</strong> filter lets the low frequencies through and turns down everything above a point called the <strong>cutoff frequency</strong>. Slide the cutoff down and the sound gets darker and rounder as the highs leave. Slide it up and the brightness returns. <strong>Resonance</strong> adds a small boost right at the cutoff, a focused emphasis that makes a sweep sing.</p>
+
+<figure>
+  <svg viewBox="0 0 600 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Low-pass filter response: flat through the low frequencies, with a small resonant bump at the cutoff, then a roll-off through the highs">
+    <rect width="600" height="240" fill="var(--bg)"/>
+    <line x1="60" y1="200" x2="560" y2="200" stroke="var(--ink)" stroke-width="1"/>
+    <line x1="60" y1="30" x2="60" y2="200" stroke="var(--ink)" stroke-width="1"/>
+    <text x="60" y="222" font-family="DM Mono, monospace" font-size="11" fill="var(--ink-soft)" text-anchor="start">low</text>
+    <text x="560" y="222" font-family="DM Mono, monospace" font-size="11" fill="var(--ink-soft)" text-anchor="end">high</text>
+    <text x="305" y="234" font-family="DM Mono, monospace" font-size="11" fill="var(--ink-soft)" text-anchor="middle" letter-spacing="0.5">FREQUENCY</text>
+    <line x1="360" y1="30" x2="360" y2="200" stroke="var(--ink-soft)" stroke-width="0.8" stroke-dasharray="4,4"/>
+    <text x="360" y="22" font-family="DM Mono, monospace" font-size="11" fill="var(--accent)" text-anchor="middle">cutoff</text>
+    <path d="M60,80 L300,80 Q345,80 360,58 Q375,80 400,110 L470,170 L560,192" fill="none" stroke="var(--accent)" stroke-width="2.5"/>
+    <text x="180" y="68" font-family="DM Mono, monospace" font-size="11" fill="var(--ink-soft)" text-anchor="middle">passes through</text>
+    <text x="490" y="150" font-family="DM Mono, monospace" font-size="11" fill="var(--ink-soft)" text-anchor="middle">rolled off</text>
+  </svg>
+  <figcaption>A low-pass filter: lows pass, the cutoff marks where the roll-off starts, and resonance is the small bump at the cutoff.</figcaption>
+</figure>
+
+<p>Sweeping the cutoff by hand opens and closes a sound. But the cutoff is just a control with a value, and a shape can move a control. Aim an LFO at the cutoff and the filter sweeps on its own, in time, forever. This is what Ableton's Auto Filter is built around: a filter with a cutoff, resonance, and an LFO wired to drive the cutoff for you.</p>
+
+<a class="manual-link" href="https://www.ableton.com/en/live-manual/12/live-audio-effect-reference/#auto-filter" target="_blank" rel="noopener noreferrer">
+  <span class="manual-icon" aria-hidden="true">&#167;</span>
+  <span class="manual-body">
+    <span class="manual-title">Auto Filter</span>
+    <span class="manual-scope">Live 12 audio effect reference</span>
+  </span>
+  <span class="manual-arrow" aria-hidden="true">&#8599;</span>
+</a>
+
+<p>Here is the whole chain: the pad, a low-pass filter on it, and an LFO connected to the cutoff. Set the base cutoff and resonance, then pick the LFO shape, rate, and depth and listen to the filter move. The scope traces the cutoff value as the LFO walks it up and down.</p>
+
+<div class="synth-tool" id="toolFilter">
+  <div class="synth-tool-title">Tool 4 · LFO to filter cutoff</div>
+  <canvas class="synth-scope" id="filScope"></canvas>
+  <div class="synth-selects">
+    <div class="synth-select">
+      <label for="filShape">LFO shape</label>
+      <select id="filShape">
+        <option value="sine">Sine</option>
+        <option value="triangle">Triangle</option>
+        <option value="sawtooth">Sawtooth</option>
+        <option value="square">Square</option>
+      </select>
+    </div>
+  </div>
+  <div class="synth-sliders">
+    <span class="synth-slider-label">Cutoff</span>
+    <input type="range" class="synth-slider-input" id="filCut" min="120" max="6000" step="10" value="900">
+    <span class="synth-slider-readout" id="filCutOut">900 Hz</span>
+
+    <span class="synth-slider-label">Resonance</span>
+    <input type="range" class="synth-slider-input" id="filQ" min="0.5" max="14" step="0.1" value="6">
+    <span class="synth-slider-readout" id="filQOut">6.0</span>
+
+    <span class="synth-slider-label">LFO rate</span>
+    <input type="range" class="synth-slider-input" id="filRate" min="0.1" max="8" step="0.1" value="1">
+    <span class="synth-slider-readout" id="filRateOut">1.0 Hz</span>
+
+    <span class="synth-slider-label">LFO depth</span>
+    <input type="range" class="synth-slider-input" id="filDepth" min="0" max="100" step="1" value="60">
+    <span class="synth-slider-readout" id="filDepthOut">60 %</span>
+  </div>
+  <div class="synth-controls">
+    <button class="synth-btn" id="filPlay">Play</button>
+    <span class="synth-info" id="filInfo">Press play. The LFO is moving the cutoff, not the sound itself.</span>
+  </div>
+  <p class="synth-note">The pad never changes. The LFO never reaches your ears. All it does is move the cutoff, and the filter does the rest. That gap, a shape steering a control that shapes the sound, is the engine behind most movement you hear in electronic music.</p>
+</div>
+
+<hr>
+
+<h2>Where this goes</h2>
+
+<p>Modulation is one idea used over and over: a source that makes a shape, a destination that the shape moves. Envelopes and LFOs are the two sources you will reach for most. Once you are comfortable routing them, the rest of a synth stops looking like a wall of knobs and starts looking like a small set of sources pointed at a small set of destinations.</p>
+
+<h2>Vocabulary</h2>
+
+<ul>
+  <li><strong>Decay</strong>: the fall from the attack peak down to the sustain level.</li>
+  <li><strong>Sustain level</strong>: the held height of a note, not a length of time.</li>
+  <li><strong>LFO</strong>: a low frequency oscillator, a wave generator running below hearing, used to move a control.</li>
+  <li><strong>Rate</strong>: how fast an LFO cycles, in Hz; multiply by 60 for BPM.</li>
+  <li><strong>Depth</strong>: how far the modulation pushes its destination.</li>
+  <li><strong>Cutoff</strong>: the frequency where a low-pass filter starts turning sound down.</li>
+  <li><strong>Resonance</strong>: a boost right at the cutoff.</li>
+  <li><strong>Modulation</strong>: a source shape moving a destination control over time.</li>
+</ul>
+
+<hr>
+
+<h2>Read more</h2>
+
+<!-- Useful links / further reading. To be populated. -->
+<p>Links and further reading to come.</p>
+
+<footer class="handout-footer">
+  <span>music-production</span>
+  <span>EOF</span>
+</footer>
+
+<script>
+(function() {
+  const AC = window.AudioContext || window.webkitAudioContext;
+  if (!AC) { return; }
+
+  let actx = null;
+  function ensureCtx() {
+    if (!actx) { actx = new AC(); }
+    if (actx.state === 'suspended') { actx.resume(); }
+    return actx;
+  }
+
+  // Pad chord: root, fifth, octave. Warm and stable under modulation.
+  function chordFreqs(base) { return [base, base * 1.5, base * 2]; }
+
+  // Normalized wave value in [-1, 1] for a phase in cycles.
+  function waveAt(shape, phase) {
+    const p = phase - Math.floor(phase);
+    if (shape === 'square') { return p < 0.5 ? 1 : -1; }
+    if (shape === 'sawtooth') { return 2 * p - 1; }
+    if (shape === 'triangle') { return p < 0.5 ? (4 * p - 1) : (3 - 4 * p); }
+    return Math.sin(2 * Math.PI * p);
+  }
+
+  // Scrolling scope that plots control values pushed each frame.
+  function makeScope(canvas, lo, hi) {
+    const g = canvas.getContext('2d');
+    const N = 260;
+    const buf = [];
+    function size() {
+      const r = canvas.getBoundingClientRect();
+      canvas.width = Math.max(320, Math.floor(r.width));
+      canvas.height = 150;
+    }
+    size();
+    window.addEventListener('resize', size);
+    function val2y(v) {
+      const t = (v - lo) / (hi - lo);
+      const clamped = Math.max(0, Math.min(1, t));
+      return canvas.height - 12 - clamped * (canvas.height - 24);
+    }
+    function push(v) { buf.push(v); if (buf.length > N) { buf.shift(); } }
+    function clear() { buf.length = 0; }
+    function draw() {
+      const w = canvas.width, h = canvas.height;
+      g.clearRect(0, 0, w, h);
+      // zero or mid reference line
+      const mid = (lo < 0 && hi > 0) ? 0 : (lo + hi) / 2;
+      g.strokeStyle = 'rgba(127,127,127,0.35)';
+      g.lineWidth = 1;
+      g.beginPath();
+      g.moveTo(0, val2y(mid));
+      g.lineTo(w, val2y(mid));
+      g.stroke();
+      // trace
+      g.strokeStyle = getComputedStyle(canvas).getPropertyValue('--accent') || '#b5532a';
+      g.lineWidth = 2;
+      g.beginPath();
+      for (let i = 0; i < buf.length; i++) {
+        const x = w - (buf.length - 1 - i) * (w / N);
+        const y = val2y(buf[i]);
+        if (i === 0) { g.moveTo(x, y); } else { g.lineTo(x, y); }
+      }
+      g.stroke();
+    }
+    return { push: push, draw: draw, clear: clear };
+  }
+
+  // Build a pad: three oscillators summed into one gain. Caller starts/stops oscs.
+  function buildPad(ctx, base, type, dest) {
+    const sum = ctx.createGain();
+    sum.gain.value = 0.9;
+    const oscs = chordFreqs(base).map(function(f) {
+      const o = ctx.createOscillator();
+      o.type = type || 'sawtooth';
+      o.frequency.value = f;
+      o.connect(sum);
+      return o;
+    });
+    sum.connect(dest);
+    return { oscs: oscs, sum: sum };
+  }
+
+  function limiter(ctx) {
+    const c = ctx.createDynamicsCompressor();
+    c.threshold.value = -6;
+    c.knee.value = 2;
+    c.ratio.value = 12;
+    c.attack.value = 0.003;
+    c.release.value = 0.12;
+    return c;
+  }
+
+  function fmtMs(ms) {
+    if (ms < 1000) { return Math.round(ms) + ' ms'; }
+    return (ms / 1000).toFixed(2) + ' s';
+  }
+
+  const BASE = 174.6; // F3, a calm root for the pad
+
+  // ---------- Tool 1: ADSR to amplitude ----------
+  (function() {
+    const root = document.getElementById('toolAmp');
+    if (!root) { return; }
+    const A = document.getElementById('ampA'), D = document.getElementById('ampD'),
+          S = document.getElementById('ampS'), R = document.getElementById('ampR');
+    const AO = document.getElementById('ampAOut'), DO = document.getElementById('ampDOut'),
+          SO = document.getElementById('ampSOut'), RO = document.getElementById('ampROut');
+    const playBtn = document.getElementById('ampPlay'), resetBtn = document.getElementById('ampReset');
+    const scope = makeScope(document.getElementById('ampScope'), 0, 1);
+    const DEFAULTS = { a: 300, d: 350, s: 65, r: 600 };
+    const HOLD = 0.6, PEAK = 0.22;
+    let pad = null, amp = null, raf = null, t0 = 0, dur = 0, playing = false;
+
+    function readouts() {
+      AO.textContent = fmtMs(+A.value); DO.textContent = fmtMs(+D.value);
+      SO.textContent = S.value + ' %'; RO.textContent = fmtMs(+R.value);
+    }
+    // Envelope value (0..1) at elapsed seconds, for the scope.
+    function envAt(t, a, d, s, r) {
+      if (t < a) { return t / a; }
+      if (t < a + d) { return 1 - (1 - s) * ((t - a) / d); }
+      if (t < a + d + HOLD) { return s; }
+      const rt = t - (a + d + HOLD);
+      if (rt < r) { return s * (1 - rt / r); }
+      return 0;
+    }
+    function stop() {
+      if (raf) { cancelAnimationFrame(raf); raf = null; }
+      if (pad) { pad.oscs.forEach(function(o) { try { o.stop(); } catch (e) {} }); pad = null; }
+      amp = null; playing = false;
+      playBtn.textContent = 'Play'; playBtn.classList.remove('playing');
+      scope.clear(); scope.draw();
+    }
+    function play() {
+      if (playing) { stop(); return; }
+      const ctx = ensureCtx();
+      const a = +A.value / 1000, d = +D.value / 1000, s = +S.value / 100, r = +R.value / 1000;
+      const tone = ctx.createBiquadFilter(); tone.type = 'lowpass'; tone.frequency.value = 2400;
+      amp = ctx.createGain(); amp.gain.value = 0;
+      const lim = limiter(ctx);
+      pad = buildPad(ctx, BASE, 'sawtooth', tone);
+      tone.connect(amp); amp.connect(lim); lim.connect(ctx.destination);
+      const now = ctx.currentTime;
+      amp.gain.setValueAtTime(0, now);
+      amp.gain.linearRampToValueAtTime(PEAK, now + a);
+      amp.gain.linearRampToValueAtTime(PEAK * s, now + a + d);
+      amp.gain.setValueAtTime(PEAK * s, now + a + d + HOLD);
+      amp.gain.linearRampToValueAtTime(0, now + a + d + HOLD + r);
+      dur = a + d + HOLD + r;
+      pad.oscs.forEach(function(o) { o.start(now); o.stop(now + dur + 0.05); });
+      t0 = now; playing = true;
+      playBtn.textContent = 'Stop'; playBtn.classList.add('playing');
+      (function loop() {
+        const t = ensureCtx().currentTime - t0;
+        scope.push(envAt(t, a, d, s, r)); scope.draw();
+        if (t >= dur) { stop(); return; }
+        raf = requestAnimationFrame(loop);
+      })();
+    }
+    function reset() {
+      stop();
+      A.value = DEFAULTS.a; D.value = DEFAULTS.d; S.value = DEFAULTS.s; R.value = DEFAULTS.r;
+      readouts();
+    }
+    [A, D, S, R].forEach(function(el) { el.addEventListener('input', readouts); });
+    playBtn.addEventListener('click', play);
+    resetBtn.addEventListener('click', reset);
+    readouts(); scope.draw();
+  })();
+
+  // ---------- Tool 2: ADSR to pitch ----------
+  (function() {
+    const root = document.getElementById('toolPitch');
+    if (!root) { return; }
+    const A = document.getElementById('pitA'), D = document.getElementById('pitD'),
+          S = document.getElementById('pitS'), R = document.getElementById('pitR'),
+          RG = document.getElementById('pitRange');
+    const AO = document.getElementById('pitAOut'), DO = document.getElementById('pitDOut'),
+          SO = document.getElementById('pitSOut'), RO = document.getElementById('pitROut'),
+          RGO = document.getElementById('pitRangeOut');
+    const playBtn = document.getElementById('pitPlay'), resetBtn = document.getElementById('pitReset');
+    const scope = makeScope(document.getElementById('pitScope'), 0, 12);
+    const DEFAULTS = { a: 180, d: 260, s: 40, r: 400, rg: 7 };
+    const HOLD = 0.5, PEAK = 0.2;
+    let pad = null, raf = null, t0 = 0, dur = 0, playing = false, curRange = 7;
+
+    function readouts() {
+      AO.textContent = fmtMs(+A.value); DO.textContent = fmtMs(+D.value);
+      SO.textContent = S.value + ' %'; RO.textContent = fmtMs(+R.value);
+      RGO.textContent = RG.value + ' st';
+    }
+    // Pitch offset in semitones at elapsed seconds.
+    function pitchAt(t, a, d, s, r, range) {
+      if (t < a) { return range * (t / a); }
+      if (t < a + d) { return range * (1 - (1 - s) * ((t - a) / d)); }
+      if (t < a + d + HOLD) { return range * s; }
+      const rt = t - (a + d + HOLD);
+      if (rt < r) { return range * s * (1 - rt / r); }
+      return 0;
+    }
+    function stop() {
+      if (raf) { cancelAnimationFrame(raf); raf = null; }
+      if (pad) { pad.oscs.forEach(function(o) { try { o.stop(); } catch (e) {} }); pad = null; }
+      playing = false;
+      playBtn.textContent = 'Play'; playBtn.classList.remove('playing');
+      if (scope) { scope.clear(); scope.draw(); }
+    }
+    function play() {
+      if (playing) { stop(); return; }
+      const ctx = ensureCtx();
+      const a = +A.value / 1000, d = +D.value / 1000, s = +S.value / 100, r = +R.value / 1000;
+      curRange = +RG.value;
+      const tone = ctx.createBiquadFilter(); tone.type = 'lowpass'; tone.frequency.value = 2400;
+      const amp = ctx.createGain(); amp.gain.value = 0;
+      const lim = limiter(ctx);
+      pad = buildPad(ctx, BASE, 'sawtooth', tone);
+      tone.connect(amp); amp.connect(lim); lim.connect(ctx.destination);
+      const now = ctx.currentTime;
+      dur = a + d + HOLD + r;
+      // Loudness: a plain soft gate so the pitch shape is what you hear.
+      amp.gain.setValueAtTime(0, now);
+      amp.gain.linearRampToValueAtTime(PEAK, now + 0.02);
+      amp.gain.setValueAtTime(PEAK, now + dur - 0.08);
+      amp.gain.linearRampToValueAtTime(0, now + dur);
+      // Pitch: schedule detune (cents) along the ADSR shape, on every voice.
+      pad.oscs.forEach(function(o) {
+        const dt = o.detune;
+        dt.setValueAtTime(0, now);
+        dt.linearRampToValueAtTime(curRange * 100, now + a);
+        dt.linearRampToValueAtTime(curRange * 100 * s, now + a + d);
+        dt.setValueAtTime(curRange * 100 * s, now + a + d + HOLD);
+        dt.linearRampToValueAtTime(0, now + dur);
+        o.start(now); o.stop(now + dur + 0.05);
+      });
+      t0 = now; playing = true;
+      playBtn.textContent = 'Stop'; playBtn.classList.add('playing');
+      (function loop() {
+        const t = ensureCtx().currentTime - t0;
+        scope.push(pitchAt(t, a, d, s, r, curRange)); scope.draw();
+        if (t >= dur) { stop(); return; }
+        raf = requestAnimationFrame(loop);
+      })();
+    }
+    function reset() {
+      stop();
+      A.value = DEFAULTS.a; D.value = DEFAULTS.d; S.value = DEFAULTS.s;
+      R.value = DEFAULTS.r; RG.value = DEFAULTS.rg;
+      readouts();
+    }
+    [A, D, S, R, RG].forEach(function(el) { el.addEventListener('input', readouts); });
+    playBtn.addEventListener('click', play);
+    resetBtn.addEventListener('click', reset);
+    readouts(); scope.draw();
+  })();
+
+  // ---------- Tool 3: LFO to pitch or pan ----------
+  (function() {
+    const root = document.getElementById('toolLfo');
+    if (!root) { return; }
+    const shapeSel = document.getElementById('lfoShape'), targetSel = document.getElementById('lfoTarget');
+    const rate = document.getElementById('lfoRate'), depth = document.getElementById('lfoDepth');
+    const rateOut = document.getElementById('lfoRateOut'), depthOut = document.getElementById('lfoDepthOut');
+    const info = document.getElementById('lfoInfo'), playBtn = document.getElementById('lfoPlay');
+    const scope = makeScope(document.getElementById('lfoScope'), -1, 1);
+    let pad = null, amp = null, panner = null, lfo = null, lfoGain = null, raf = null, t0 = 0, playing = false;
+
+    function depthLabel() {
+      if (targetSel.value === 'pitch') {
+        const semis = (+depth.value / 100) * 7;
+        depthOut.textContent = '\u00b1' + semis.toFixed(1) + ' st';
+      } else {
+        depthOut.textContent = depth.value + ' %';
+      }
+    }
+    function readouts() {
+      rateOut.textContent = (+rate.value).toFixed(1) + ' Hz (' + Math.round(+rate.value * 60) + ' BPM)';
+      depthLabel();
+    }
+    function routeLfo() {
+      if (!lfo) { return; }
+      try { lfoGain.disconnect(); } catch (e) {}
+      if (targetSel.value === 'pitch') {
+        if (panner) { panner.pan.setValueAtTime(0, ensureCtx().currentTime); }
+        lfoGain.gain.value = (+depth.value / 100) * 700; // cents
+        pad.oscs.forEach(function(o) { lfoGain.connect(o.detune); });
+        info.textContent = 'The LFO is bending pitch. Watch the shape, hear the wobble.';
+      } else {
+        pad.oscs.forEach(function(o) { o.detune.setValueAtTime(0, ensureCtx().currentTime); });
+        lfoGain.gain.value = (+depth.value / 100); // pan units, max 1
+        lfoGain.connect(panner.pan);
+        info.textContent = 'The LFO is moving stereo position between your ears.';
+      }
+    }
+    function stop() {
+      if (raf) { cancelAnimationFrame(raf); raf = null; }
+      const ctx = actx;
+      if (amp && ctx) {
+        const now = ctx.currentTime;
+        amp.gain.cancelScheduledValues(now);
+        amp.gain.setValueAtTime(amp.gain.value, now);
+        amp.gain.linearRampToValueAtTime(0, now + 0.2);
+      }
+      const oldPad = pad, oldLfo = lfo;
+      setTimeout(function() {
+        if (oldPad) { oldPad.oscs.forEach(function(o) { try { o.stop(); } catch (e) {} }); }
+        if (oldLfo) { try { oldLfo.stop(); } catch (e) {} }
+      }, 260);
+      pad = null; amp = null; panner = null; lfo = null; lfoGain = null;
+      playing = false;
+      playBtn.textContent = 'Play'; playBtn.classList.remove('playing');
+      scope.clear(); scope.draw();
+    }
+    function play() {
+      if (playing) { stop(); return; }
+      const ctx = ensureCtx();
+      const tone = ctx.createBiquadFilter(); tone.type = 'lowpass'; tone.frequency.value = 2200;
+      panner = ctx.createStereoPanner();
+      amp = ctx.createGain(); amp.gain.value = 0;
+      const lim = limiter(ctx);
+      pad = buildPad(ctx, BASE, 'sawtooth', tone);
+      tone.connect(panner); panner.connect(amp); amp.connect(lim); lim.connect(ctx.destination);
+      const now = ctx.currentTime;
+      amp.gain.setValueAtTime(0, now);
+      amp.gain.linearRampToValueAtTime(0.18, now + 0.3);
+      lfo = ctx.createOscillator(); lfo.type = shapeSel.value; lfo.frequency.value = +rate.value;
+      lfoGain = ctx.createGain();
+      lfo.connect(lfoGain);
+      pad.oscs.forEach(function(o) { o.start(now); });
+      lfo.start(now);
+      routeLfo();
+      t0 = now; playing = true;
+      playBtn.textContent = 'Stop'; playBtn.classList.add('playing');
+      (function loop() {
+        const t = ensureCtx().currentTime - t0;
+        scope.push(waveAt(shapeSel.value, t * (+rate.value))); scope.draw();
+        raf = requestAnimationFrame(loop);
+      })();
+    }
+    shapeSel.addEventListener('change', function() { if (lfo) { lfo.type = shapeSel.value; } });
+    targetSel.addEventListener('change', function() { depthLabel(); routeLfo(); });
+    rate.addEventListener('input', function() { readouts(); if (lfo) { lfo.frequency.setValueAtTime(+rate.value, ensureCtx().currentTime); } });
+    depth.addEventListener('input', function() { depthLabel(); if (lfoGain) { routeLfo(); } });
+    playBtn.addEventListener('click', play);
+    readouts(); scope.draw();
+  })();
+
+  // ---------- Tool 4: LFO to filter cutoff ----------
+  (function() {
+    const root = document.getElementById('toolFilter');
+    if (!root) { return; }
+    const shapeSel = document.getElementById('filShape');
+    const cut = document.getElementById('filCut'), q = document.getElementById('filQ'),
+          rate = document.getElementById('filRate'), depth = document.getElementById('filDepth');
+    const cutOut = document.getElementById('filCutOut'), qOut = document.getElementById('filQOut'),
+          rateOut = document.getElementById('filRateOut'), depthOut = document.getElementById('filDepthOut');
+    const playBtn = document.getElementById('filPlay');
+    const scope = makeScope(document.getElementById('filScope'), 0, 6000);
+    let pad = null, amp = null, filt = null, lfo = null, lfoGain = null, raf = null, t0 = 0, playing = false;
+
+    function depthHz() { return (+depth.value / 100) * (+cut.value) * 0.9; }
+    function readouts() {
+      cutOut.textContent = Math.round(+cut.value) + ' Hz';
+      qOut.textContent = (+q.value).toFixed(1);
+      rateOut.textContent = (+rate.value).toFixed(1) + ' Hz (' + Math.round(+rate.value * 60) + ' BPM)';
+      depthOut.textContent = depth.value + ' %';
+    }
+    function applyLfoGain() { if (lfoGain) { lfoGain.gain.value = depthHz(); } }
+    function stop() {
+      if (raf) { cancelAnimationFrame(raf); raf = null; }
+      const ctx = actx;
+      if (amp && ctx) {
+        const now = ctx.currentTime;
+        amp.gain.cancelScheduledValues(now);
+        amp.gain.setValueAtTime(amp.gain.value, now);
+        amp.gain.linearRampToValueAtTime(0, now + 0.2);
+      }
+      const oldPad = pad, oldLfo = lfo;
+      setTimeout(function() {
+        if (oldPad) { oldPad.oscs.forEach(function(o) { try { o.stop(); } catch (e) {} }); }
+        if (oldLfo) { try { oldLfo.stop(); } catch (e) {} }
+      }, 260);
+      pad = null; amp = null; filt = null; lfo = null; lfoGain = null;
+      playing = false;
+      playBtn.textContent = 'Play'; playBtn.classList.remove('playing');
+      scope.clear(); scope.draw();
+    }
+    function play() {
+      if (playing) { stop(); return; }
+      const ctx = ensureCtx();
+      filt = ctx.createBiquadFilter(); filt.type = 'lowpass';
+      filt.frequency.value = +cut.value; filt.Q.value = +q.value;
+      amp = ctx.createGain(); amp.gain.value = 0;
+      const lim = limiter(ctx);
+      pad = buildPad(ctx, BASE, 'sawtooth', filt);
+      filt.connect(amp); amp.connect(lim); lim.connect(ctx.destination);
+      const now = ctx.currentTime;
+      amp.gain.setValueAtTime(0, now);
+      amp.gain.linearRampToValueAtTime(0.2, now + 0.3);
+      lfo = ctx.createOscillator(); lfo.type = shapeSel.value; lfo.frequency.value = +rate.value;
+      lfoGain = ctx.createGain(); applyLfoGain();
+      lfo.connect(lfoGain); lfoGain.connect(filt.frequency);
+      pad.oscs.forEach(function(o) { o.start(now); });
+      lfo.start(now);
+      t0 = now; playing = true;
+      playBtn.textContent = 'Stop'; playBtn.classList.add('playing');
+      (function loop() {
+        const t = ensureCtx().currentTime - t0;
+        const base = +cut.value;
+        scope.push(base + depthHz() * waveAt(shapeSel.value, t * (+rate.value)));
+        scope.draw();
+        raf = requestAnimationFrame(loop);
+      })();
+    }
+    shapeSel.addEventListener('change', function() { if (lfo) { lfo.type = shapeSel.value; } });
+    cut.addEventListener('input', function() { readouts(); if (filt) { filt.frequency.setValueAtTime(+cut.value, ensureCtx().currentTime); } applyLfoGain(); });
+    q.addEventListener('input', function() { readouts(); if (filt) { filt.Q.setValueAtTime(+q.value, ensureCtx().currentTime); } });
+    rate.addEventListener('input', function() { readouts(); if (lfo) { lfo.frequency.setValueAtTime(+rate.value, ensureCtx().currentTime); } });
+    depth.addEventListener('input', function() { readouts(); applyLfoGain(); });
+    playBtn.addEventListener('click', play);
+    readouts(); scope.draw();
+  })();
+
+})();
+</script>
+
+</body>
+</html>
