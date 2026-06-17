@@ -602,6 +602,7 @@
   }
 
   const BASE = 174.6; // F3, a calm root for the pad
+  const TAIL = 3; // seconds of silence after a one-shot, so the trace keeps scrolling
 
   // ---------- Tool 1: ADSR to amplitude ----------
   (function() {
@@ -659,7 +660,7 @@
       (function loop() {
         const t = ensureCtx().currentTime - t0;
         scope.push(envAt(t, a, d, s, r)); scope.draw();
-        if (t >= dur) { stop(); return; }
+        if (t >= dur + TAIL) { stop(); return; }
         raf = requestAnimationFrame(loop);
       })();
     }
@@ -743,7 +744,7 @@
       (function loop() {
         const t = ensureCtx().currentTime - t0;
         scope.push(pitchAt(t, a, d, s, r, curRange)); scope.draw();
-        if (t >= dur) { stop(); return; }
+        if (t >= dur + TAIL) { stop(); return; }
         raf = requestAnimationFrame(loop);
       })();
     }
