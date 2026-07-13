@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The production portfolio · music-production</title>
+  <meta name="description" content="A guide to the production portfolio: what it holds, what formats to save your tracks in, how to organize your files, and how to submit it. By Inés Thiebaut, CSU East Bay.">
+  <link rel="stylesheet" href="assets/style.css">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <style>
+    .byline {
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      letter-spacing: 0.03em;
+      color: var(--ink-faint);
+      margin-top: 0.7rem;
+    }
+    pre.tree {
+      background: var(--bg-alt);
+      border: 1px solid var(--rule);
+      border-left: 3px solid var(--accent);
+      padding: 1.1rem 1.3rem;
+      overflow-x: auto;
+      font-family: var(--mono);
+      font-size: 0.82rem;
+      line-height: 1.5;
+      color: var(--ink);
+    }
+  </style>
+</head>
+<body>
+
+<header class="handout-header">
+  <span class="course"><a href="index.html" title="Back to index">~/music-production</a></span>
+  <span class="meta">portfolio</span>
+</header>
+
+<div class="title-block">
+  <div class="module-tag">Guide</div>
+  <h1>The production portfolio</h1>
+  <div class="subtitle">What to build, how to save it, how to organize it, and how to hand it in.</div>
+  <div class="byline">Inés Thiebaut · CSU East Bay</div>
+</div>
+
+<p class="lede">Your portfolio is the collected body of finished work you make while you study, kept in one organized place and added to every semester. It is how your progress is reviewed, and it is the first professional record of what you can do: the thing you show to artists you want to work with, to labels, and to schools after you leave.</p>
+
+<!--
+  PROGRAM-SPECIFIC REVIEW POLICY GOES HERE.
+  Inés: the composition guide is load-bearing on the jury structure (levels 6a-6d,
+  the capstone). I don't know the producer equivalent, so I left the "what it is"
+  section general and did NOT invent a required number of tracks or a review cadence.
+  Drop the actual requirement (how it's reviewed, how often, how much is expected
+  each semester) in a section here, and I'll match the surrounding voice.
+-->
+
+<h2>What your portfolio contains</h2>
+
+<p>Two things travel with every track: the finished master, and a short note about it. Alongside the tracks, the portfolio always holds a current short biography.</p>
+
+<h3>Every track</h3>
+
+<p>For each piece, include the finished master: the final stereo mixdown, exported as lossless audio (the formats are below). This is the version someone would hear if they played your track anywhere. Keep your DAW project file for the track as well, since that is the real master you go back to when you revise or re-export.</p>
+
+<p>Include a short production note with each track, saved as a PDF. A producer's work has no score to submit, so this note takes its place. Keep it brief: the tempo, key, and duration; the instruments and plugins you used; where your sounds came from and whether any sample is cleared or royalty-free; and who did what, with each person's ownership percentage if you made it with others. That last part is your split sheet, and writing it down while the track is fresh saves the argument later.</p>
+
+<h3>Always in the portfolio</h3>
+
+<p>A short biography in two parts: a short paragraph introducing you as a producer, and one or two sentences that say what your music is and who it is for. Save it as a PDF and update it as your work grows.</p>
+
+<h2>File types and formats</h2>
+
+<p>The portfolio is an archive, so its files need to last and to open cleanly on any machine. Two formats do most of the work: lossless audio for the tracks, and PDF for anything on the page.</p>
+
+<h3>Masters as lossless audio</h3>
+
+<p>Save each finished master in a lossless format. Lossless means the file keeps the full recording with nothing thrown away, and it comes in two kinds, both fine for the portfolio. Uncompressed lossless, WAV and AIFF, stores the audio at full size. Compressed lossless, FLAC and ALAC (Apple Lossless), shrinks the file and rebuilds the exact original signal when it plays, so you save space and lose nothing. Export a stereo file at 48 kHz, 24-bit.</p>
+
+<p>What to keep out of the portfolio is lossy audio, MP3 and AAC, which makes the file small by permanently discarding sound the format guesses you will not miss. That loss cannot be undone. Keep an MP3 only for casual sharing, and let the lossless file be the copy that lives in the portfolio.</p>
+
+<div class="callout">
+  <div class="callout-label">A word on loudness</div>
+  <p>Streaming platforms turn every track up or down to a shared loudness when they play it, so squashing your master as loud as it will go wins nothing and costs you dynamics. Master so the track sounds right, not so the meter reads highest. Keep the archived master at its natural level and let the platform do the leveling.</p>
+</div>
+
+<h3>Project files as your working master</h3>
+
+<p>Keep your DAW project file for every track, in your DAW's own format, alongside the exported master. The lossless file is what people hear; the project file is what you edit. Keeping both means you can always come back and change a mix, bounce a new version, or pull a stem, months later.</p>
+
+<h3>Your biography as PDF</h3>
+
+<p>Save your biography as a PDF, so the formatting stays put wherever it opens. Keep the editable original, the Word or Pages file, so you can update it each semester and export a fresh PDF when you do.</p>
+
+<div class="callout">
+  <div class="callout-label">Easy to get wrong</div>
+  <p>Two things trip people up. Save your masters as lossless audio, WAV or FLAC, rather than MP3. Keep the project file next to each master, not just the exported audio. Both keep the portfolio at a quality you can build on.</p>
+</div>
+
+<h2>Organizing your files</h2>
+
+<p>A portfolio is only as useful as it is easy to open and read in order. Keep one folder for the whole portfolio, one subfolder per track, numbered so they sort the way you want them seen. Name every file so its owner, its track, and what it is are clear from the name alone.</p>
+
+<p>The naming rule is the same one you learned on your first day: lowercase, hyphens instead of spaces, and none of the characters that break on other systems (no slashes, colons, quotes, or apostrophes). A workable structure looks like this:</p>
+
+<pre class="tree">lastname-portfolio/
+  01-track-title/
+    lastname-track-title-master.wav
+    lastname-track-title-project.als
+    lastname-track-title-notes.pdf
+  02-track-title/
+    lastname-track-title-master.wav
+    lastname-track-title-project.als
+    lastname-track-title-notes.pdf
+  bio/
+    lastname-bio.pdf</pre>
+
+<p>A few habits keep the names clean and sortable. Number each track folder with two digits (01, 02, 10) so they hold their order, since a single digit would put 10 ahead of 2. Put the same information in every file name, in the same order: your last name, the track, and what the file is. Keep spelling and capitalization steady, so a title reads the same way everywhere it appears.</p>
+
+<h2>Submitting your portfolio</h2>
+
+<p>Submit the whole portfolio as a single compressed file, a zip. Zipping bundles the entire folder into one file you upload in one step, and it keeps your folder structure and file names intact for whoever opens it.</p>
+
+<h3>Make the zip</h3>
+
+<p>On a Mac, right-click the top portfolio folder and choose Compress. On Windows, right-click the folder and choose Send to, then Compressed (zipped) folder. Either one makes a single .zip next to your folder. Name it with your last name, the word portfolio, and the semester, for example <code>lastname-portfolio-fall2026.zip</code>.</p>
+
+<h3>Check it before you hand it in</h3>
+
+<p>Open your own zip before you submit it. Unzip it somewhere new and confirm that every track is there, every master plays, and every note opens. A zip missing a file, or holding a master that will not play, is the most common problem at submission, and testing your own copy first catches it. Keep your organized portfolio folder on your own computer, and back it up somewhere else as well.</p>
+
+<h2>Keeping it current</h2>
+
+<p>Update the portfolio as you go, not the night before it is due. When you finish a track, add its master, its project file, and its note right away, while the files are in front of you. Keep your project files in their native format so you can revise and re-export later.</p>
+
+<p>Treat the portfolio as a public document, because it becomes one. The same organized, clearly labeled, well-made set of tracks that carries you through your studies is what you send to artists, labels, and schools when you leave.</p>
+
+<footer class="handout-footer">
+  <span>music-production</span>
+  <span>EOF</span>
+</footer>
+
+</body>
+</html>
