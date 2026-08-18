@@ -2,7 +2,7 @@
 
 Handouts and browser-based tools for the music producers Inés Thiebaut works with in private lessons, independent of any single course. Where MUS 381 ([`csuebmusic/mus381`](https://github.com/csuebmusic/mus381)) is built around one course's arc and hands off to a graduate TA, this repository follows the producer: beat-making, mixing, arrangement, DAW production, and the craft questions that come up across projects rather than inside a syllabus.
 
-Material here can borrow from the 381 handouts as a starting point, adapted for an audience that can go a step deeper than the course baseline and reframed away from course scaffolding such as the lab session routines, the NAS sync workflow, and the TA teaching notes.
+Material here can borrow from the 381 handouts as a starting point, adapted for an audience that can go a step deeper than the course baseline and reframed away from course scaffolding such as the lab session routines, the class server sync workflow, and the TA teaching notes.
 
 The landing page holds everything in one place: **[csuebmusic.github.io/music-production](https://csuebmusic.github.io/music-production/)** (built from `index.html` at the repo root).
 
