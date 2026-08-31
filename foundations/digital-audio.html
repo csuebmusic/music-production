@@ -639,7 +639,7 @@
 
 <h2>4 · Bit depth</h2>
 
-<p>If sample rate is about <em>when</em> we measure, <strong>bit depth</strong> is about <em>how precisely</em>. Each sample isn't just a number; it's a number with finite resolution. Bit depth tells you how many possible values that number can take. Each sample is stored as a binary number, and bit depth is how many digits long that number is.</p>
+<p>If sample rate is about <em>when</em> we measure, <strong>bit depth</strong> is about <em>how precisely</em>. Each sample is a number with finite resolution. Bit depth tells you how many possible values that number can take. Each sample is stored as a binary number, and bit depth is how many digits long that number is.</p>
 
 <p>An 8-bit sample can take 256 possible values (because 2 to the power of 8 is 256). A 16-bit sample can take 65,536 values. A 24-bit sample can take over 16 million values. The more bits, the finer the gradations of amplitude available: the more precisely each sample can describe the actual height of the wave at that moment.</p>
 
@@ -773,7 +773,7 @@
 
 <p>Aliasing is genuinely strange-sounding. It produces inharmonic whistles, sliding tones, and a kind of sour, "off" quality on bright sounds. Once you hear it, you recognize it.</p>
 
-<p>This is why <strong>every digital audio system applies an anti-alias filter before sampling</strong>. The filter removes any content above the Nyquist limit before the ADC sees it, so there's nothing left to fold back. Your audio interface does this automatically; so does an audio editor like Audacity when it resamples a file to a lower rate; so do all professional ADCs. You don't have to think about it as long as you stay inside the standard tools. But knowing the filter exists tells you why "above Nyquist" isn't just a number: it's the boundary of what reality the digital system can hold.</p>
+<p>This is why <strong>every digital audio system applies an anti-alias filter before sampling</strong>. The filter removes any content above the Nyquist limit before the ADC sees it, so there's nothing left to fold back. Your audio interface does this automatically; so does an audio editor like Audacity when it resamples a file to a lower rate; so do all professional ADCs. You don't have to think about it as long as you stay inside the standard tools. But knowing the filter exists tells you what "above Nyquist" marks: the boundary of what reality the digital system can hold.</p>
 
 <div class="audio-compare">
   <div class="audio-compare-title">Listen: with vs. without anti-alias filtering</div>
@@ -808,7 +808,7 @@
   <li><strong>32-bit:</strong> ~192 dB SNR (vastly more than human hearing can resolve)</li>
 </ul>
 
-<p>For comparison, here's how those numbers sit alongside the dynamic range of unamplified music:</p>
+<p>For comparison, alongside the dynamic range of unamplified music:</p>
 
 <figure>
   <svg viewBox="0 0 600 320" xmlns="http://www.w3.org/2000/svg">
@@ -892,7 +892,7 @@
 
 <p>This is why CDs settled on 16-bit: it covers the full dynamic range of unamplified music with a small margin to spare. It's also why professional recording uses 24-bit even when delivering at 16-bit: the extra headroom protects you from accidentally clipping during recording or losing detail during processing. <strong>You record with margin, then commit to less margin only at the final mixdown.</strong></p>
 
-<p>That principle (record with headroom, commit later) is one of the most important practices in audio. It matters most the moment you start recording your own sources.</p>
+<p>That principle (record with headroom, commit later) recurs throughout audio work. It matters most the moment you start recording your own sources.</p>
 
 <div class="callout">
   <div class="callout-label">Dither: the noise you add on purpose</div>
@@ -959,7 +959,7 @@
 <ul>
   <li><strong>Always work in WAV.</strong> Convert to MP3 only at the very end and only when needed.</li>
   <li><strong>Aim for 48 kHz</strong> whenever your gear allows it. It's what most DAWs and interfaces assume, and it keeps a project at one rate from start to finish.</li>
-  <li><strong>Bit depth can be 24-bit or 32-bit</strong> without much consequence: 24-bit is plenty for recording and editing, 32-bit adds headroom. The best you can set, hardware permitting, is <strong>48 kHz, 32-bit</strong>.</li>
+  <li><strong>Bit depth can be 24-bit or 32-bit</strong> without much consequence: 24-bit is plenty for recording and editing, 32-bit adds headroom. The setting to use where hardware permits is <strong>48 kHz, 32-bit</strong>.</li>
   <li><strong>Lower sample rates and bit depths have an aesthetic.</strong> "Lo-fi" is often literally that: files at low sample rates and bit depths, on purpose.</li>
   <li><strong>The numbers don't make the music.</strong> A great recording at 44.1 kHz / 16-bit will outlast a mediocre one at 192 kHz / 24-bit. Focus on what you're capturing and how, not on chasing the highest specs.</li>
 </ul>
