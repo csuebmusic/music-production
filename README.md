@@ -40,6 +40,10 @@ Live pages, grouped by section. The learning arc runs concepts to capture to pro
 
 Producer-facing material uses a retro-geek look distinct from 381: a light terminal/printout aesthetic on a white page, near-black green-tinted ink, a burnt-amber accent, and DM Mono for the chrome (a status-bar header, bracketed `[ LABEL ]` callouts, `//` and `▸` markers, an EOF footer). It reads like a vintage software manual rather than 381's warm cream and rust. Everything is self-contained and browser-only. The CSS custom properties (`--bg`, `--bg-alt`, `--ink`, `--ink-soft`, `--accent`, `--rule`, and the meter / gain-reduction / cable families) are always referenced by name, never written as raw hex in component CSS. `assets/style.css` defines the system and is owned by this repo.
 
+## Conventions
+
+This repo has no conventions files of its own. Naming, document chrome, dates, and the visual system follow [`mus381/under-the-hood/meta/build-conventions.md`](https://github.com/csuebmusic/mus381/blob/main/under-the-hood/meta/build-conventions.md). The palette above and the audio standard stated on the pages are this repo's own.
+
 ## Structure
 
 A root `index.html` is the landing page and the GitHub Pages entry point; it links to every page. Topic-named files live under topic folders, with the course-style order numbers and `reading-` / `handout-` / `tool-` prefixes dropped (for example `foundations/digital-audio.html`). Per-topic media lives under `assets/audio/<topic>/`, `assets/images/<topic>/`, and `assets/videos/<topic>/`. The layout grows as materials are added.
