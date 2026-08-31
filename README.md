@@ -38,7 +38,7 @@ Producer-facing material uses a retro-geek look that is deliberately distinct fr
 
 ## Structure
 
-A root `index.html` is the landing page and the GitHub Pages entry point; it links to every page. Topic-named files live under topic folders, with the course-style order numbers and `reading-` / `handout-` / `tool-` prefixes dropped (for example `foundations/digital-audio.html`). Per-topic media lives under `assets/audio/<topic>/`, `assets/images/<topic>/`, and `assets/videos/<topic>/`. The layout grows as materials land rather than being imposed up front.
+A root `index.html` is the landing page and the GitHub Pages entry point; it links to every page. Topic-named files live under topic folders, with the course-style order numbers and `reading-` / `handout-` / `tool-` prefixes dropped (for example `foundations/digital-audio.html`). Per-topic media lives under `assets/audio/<topic>/`, `assets/images/<topic>/`, and `assets/videos/<topic>/`. The layout grows as materials are added rather than being imposed up front.
 
 ```
 music-production/

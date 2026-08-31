@@ -392,7 +392,7 @@
 
 <div class="formula">
   <div class="formula-line">rate in Hz <span class="op">&times;</span> 60 <span class="op">=</span> beats per minute</div>
-  <div class="formula-eg">Example: 2 Hz &times; 60 = 120 BPM. Two cycles a second lands a peak on every beat at 120, which is quick.</div>
+  <div class="formula-eg">Example: 2 Hz &times; 60 = 120 BPM. Two cycles a second puts a peak on every beat at 120, which is quick.</div>
 </div>
 
 <p>A 2 Hz LFO, just barely too low to hear as a pitch, already puts a peak under your finger 120 times a minute. Most expressive LFO motion lives well below that, from a fraction of a hertz up to a few hertz.</p>
@@ -1054,7 +1054,7 @@
       scheduleEnv(amp.gain, now, a, d, s, r);
       pad.oscs.forEach(function(o) { o.start(now); o.stop(now + dur + 0.05); });
       t0 = now; wave.reset();
-      // Find the real full-amplitude peak in parallel; until it lands, use an estimate.
+      // Find the real full-amplitude peak in parallel; until it settles, use an estimate.
       let K = 0.45;
       calibrate(a, d, s, r, dur, ctx.sampleRate).then(function(k) { K = k; }).catch(function() {});
       (function loop() {
