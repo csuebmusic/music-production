@@ -83,7 +83,7 @@ html, body {
    horizontally, so audio players, tool panels, and figures all stay in
    the measure. */
 body {
-  max-width: 46rem;
+  max-width: 60rem;
   margin: 0 auto;
   padding: 2.5rem 1.5rem 5rem;
 }
