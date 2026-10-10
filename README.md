@@ -6,6 +6,6 @@ The landing page, [csuebmusic.github.io/music-production](https://csuebmusic.git
 
 ## conventions
 
-The rules in [`mus381/under-the-hood/meta/build-conventions.md`](https://github.com/csuebmusic/mus381/blob/main/under-the-hood/meta/build-conventions.md) apply here, except for file naming, page chrome, the palette, and the audio standard, which are this repo's own.
+The rules in [`mus381/under-the-hood/meta/build-conventions.md`](https://github.com/csuebmusic/mus381/blob/main/under-the-hood/meta/build-conventions.md) apply here, except for file naming, page chrome, heading case, the palette, and the audio standard, which are this repo's own.
 
-Pages are topic-named files in topic folders, without course numbers or type prefixes: `foundations/digital-audio.html`. Media for a topic is in `assets/audio/<topic>/`, `assets/images/<topic>/`, and `assets/videos/<topic>/`. Page chrome and the palette are defined in this repo's `assets/style.css`. The audio standard is stated on the pages.
+Pages are topic-named files in topic folders, without course numbers or type prefixes: `foundations/digital-audio.html`. Media for a topic is in `assets/audio/<topic>/`, `assets/images/<topic>/`, and `assets/videos/<topic>/`. Headings and page titles start with a capital letter. Page chrome and the palette are defined in this repo's `assets/style.css`. The audio standard is stated on the pages.
